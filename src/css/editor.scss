@@ -1,0 +1,357 @@
+/* ============================================
+   Global Editor Styles
+   Procedural 3D Editor - Dark Theme
+   ============================================ */
+
+:root {
+  --editor-bg-primary: #1a1a2e;
+  --editor-bg-secondary: #16213e;
+  --editor-bg-tertiary: #0f3460;
+  --editor-bg-panel: #1e1e3a;
+  --editor-bg-toolbar: #141428;
+  --editor-bg-input: #252545;
+  --editor-bg-hover: #2a2a50;
+  --editor-bg-active: #3a3a6a;
+  --editor-bg-selected: #4a4a8a;
+  --editor-border: #2a2a4a;
+  --editor-border-active: #5352ed;
+  --editor-text-primary: #e0e0f0;
+  --editor-text-secondary: #9090b0;
+  --editor-text-muted: #6060a0;
+  --editor-accent: #5352ed;
+  --editor-accent-light: #7c7cf8;
+  --editor-accent-dim: #3a3aaa;
+  --editor-warn: #ff6b6b;
+  --editor-success: #51cf66;
+  --editor-info: #339af0;
+  --editor-mode-object: #339af0;
+  --editor-mode-procedural: #fcc419;
+  --editor-mode-independent: #51cf66;
+  --editor-gizmo-move: #339af0;
+  --editor-gizmo-rotate: #fcc419;
+  --editor-gizmo-scale: #51cf66;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Roboto', 'Segoe UI', sans-serif;
+  font-size: 13px;
+  color: var(--editor-text-primary);
+  background: var(--editor-bg-primary);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--editor-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--editor-bg-active);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--editor-accent);
+}
+
+/* Quasar Dark Overrides */
+.q-dark {
+  color: var(--editor-text-primary);
+}
+
+.q-btn {
+  font-size: 12px;
+}
+
+.q-toolbar {
+  background: var(--editor-bg-toolbar);
+  min-height: 36px;
+  padding: 0 8px;
+}
+
+.q-drawer {
+  background: var(--editor-bg-panel);
+  border-color: var(--editor-border);
+}
+
+.q-menu {
+  background: var(--editor-bg-panel);
+  border: 1px solid var(--editor-border);
+}
+
+.q-item {
+  color: var(--editor-text-primary);
+  min-height: 32px;
+  font-size: 12px;
+}
+
+.q-item:hover {
+  background: var(--editor-bg-hover);
+}
+
+.q-separator {
+  background: var(--editor-border);
+}
+
+.q-input {
+  font-size: 12px;
+}
+
+/* Editor Layout */
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.editor-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.editor-viewport-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.editor-bottom-area {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--editor-border);
+  background: var(--editor-bg-panel);
+}
+
+/* Panel Styles */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--editor-bg-toolbar);
+  border-bottom: 1px solid var(--editor-border);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--editor-text-secondary);
+  user-select: none;
+}
+
+.panel-header-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.panel-content {
+  padding: 8px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Tool Button Styles */
+.tool-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: var(--editor-text-secondary);
+  border: 1px solid transparent;
+}
+
+.tool-btn:hover {
+  background: var(--editor-bg-hover);
+  color: var(--editor-text-primary);
+}
+
+.tool-btn.active {
+  background: var(--editor-bg-active);
+  color: var(--editor-accent-light);
+  border-color: var(--editor-accent);
+}
+
+.tool-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 6px;
+}
+
+.tool-btn-group-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--editor-text-muted);
+  padding: 4px 6px 2px;
+  text-align: center;
+}
+
+/* Mode Indicator */
+.mode-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mode-indicator .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+
+.mode-object { color: var(--editor-mode-object); }
+.mode-object .dot { background: var(--editor-mode-object); }
+.mode-procedural { color: var(--editor-mode-procedural); }
+.mode-procedural .dot { background: var(--editor-mode-procedural); }
+.mode-independent { color: var(--editor-mode-independent); }
+.mode-independent .dot { background: var(--editor-mode-independent); }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Resize Handle */
+.resize-handle {
+  position: absolute;
+  z-index: 100;
+  transition: background 0.15s;
+}
+
+.resize-handle:hover {
+  background: var(--editor-accent);
+}
+
+.resize-handle-horizontal {
+  width: 100%;
+  height: 4px;
+  cursor: row-resize;
+}
+
+.resize-handle-vertical {
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+}
+
+/* Selection Info Bar */
+.selection-info {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  display: flex;
+  gap: 12px;
+  padding: 4px 10px;
+  background: rgba(20, 20, 40, 0.85);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--editor-text-secondary);
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+
+.selection-info span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Preview Mode Overlay */
+.preview-mode {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+}
+
+.preview-exit-hint {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 6px 14px;
+  background: rgba(20, 20, 40, 0.7);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--editor-text-secondary);
+  backdrop-filter: blur(4px);
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Keyboard Shortcut Badge */
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: var(--editor-bg-input);
+  border: 1px solid var(--editor-border);
+  border-radius: 3px;
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--editor-text-muted);
+  line-height: 1;
+}
+
+/* Status Colors */
+.status-running { color: var(--editor-success); }
+.status-paused { color: var(--editor-warn); }
+.status-idle { color: var(--editor-text-muted); }
+
+/* Panel Toggle Animation */
+.panel-slide-enter-active,
+.panel-slide-leave-active {
+  transition: all 0.2s ease;
+}
+
+.panel-slide-enter-from,
+.panel-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
