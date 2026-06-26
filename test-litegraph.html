@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiteGraph.js ES6 Refactor Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #222;
+            font-family: sans-serif;
+        }
+        #editor-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        .info-panel {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 4px;
+            pointer-events: none;
+            z-index: 10;
+        }
+        h1 { margin: 0 0 5px 0; font-size: 1.2rem; }
+        p { margin: 0; font-size: 0.9rem; color: #aaa; }
+    </style>
+</head>
+<body>
+
+    <div id="editor-container">
+        <canvas id="mycanvas"></canvas>
+        <div class="info-panel">
+            <h1>LiteGraph ES6 Refactor Test</h1>
+            <p>Status: <span id="status">Initializing...</span></p>
+            <p>Try: Right-click to add nodes, Drag to connect.</p>
+        </div>
+    </div>
+
+    <!-- Import as Module -->
+    <script type="module" src="./test-main.js"></script>
+</body>
+</html>
