@@ -891,10 +891,11 @@ return {
               }
             }
           }
-          // Remove children no longer desired (but keep overlay + default meshes)
+          // Remove children no longer desired (but keep overlay + default + multiSelect)
           for (const child of [...userGroup.children]) {
             if (child === wire || child === datasheetOverlayRef.current || child === selectionOverlaysRef.current) continue;
             if (child.userData?.__isDefault) continue; // keep default objects
+            if (child.userData?.__isMultiSelect) continue; // keep multi-select group
             if (!desiredChildren.has(child)) {
               userGroup.remove(child);
             }
@@ -926,7 +927,9 @@ return {
       }
 
       // ---- selection wireframe + gizmo (supports multi-select) ----
+      // Skip rebuilding selection if gizmo is being dragged (would interrupt drag)
       const selIds = store.selectedObjectIds;
+      if (!gizmoDraggingRef.current) {
       // Clear previous wireframe overlays
       while (selectionOverlaysRef.current.children.length > 0) {
         const child = selectionOverlaysRef.current.children[0];
@@ -937,11 +940,10 @@ return {
 
       // Clean up previous multi-select group
       if (multiSelectGroupRef.current) {
-        // Detach children back to userGroup (don't remove them from scene)
         while (multiSelectGroupRef.current.children.length > 0) {
           const child = multiSelectGroupRef.current.children[0];
           multiSelectGroupRef.current.remove(child);
-          userGroup.add(child); // return to userGroup
+          userGroup.add(child); // return to userGroup, preserves world transform
         }
         userGroup.remove(multiSelectGroupRef.current);
         multiSelectGroupRef.current = null;
@@ -982,16 +984,14 @@ return {
         }
 
         if (selectedMeshes.length === 1) {
-          // Single select: attach gizmo directly to the mesh
           const target = selectedMeshes[0];
-          if (target.isObject3D && tc.object !== target && !gizmoDraggingRef.current) {
+          if (target.isObject3D && tc.object !== target) {
             tc.attach(target);
           }
-        } else if (selectedMeshes.length > 1 && !gizmoDraggingRef.current) {
-          // Multi-select: create a temp Group at the center of all selected meshes
+        } else if (selectedMeshes.length > 1) {
+          // Multi-select: create temp Group at centroid
           const group = new THREE.Group();
           group.userData.__isMultiSelect = true;
-          // Compute center of all selected meshes
           const center = new THREE.Vector3();
           let count = 0;
           for (const mesh of selectedMeshes) {
@@ -1002,18 +1002,18 @@ return {
           }
           center.divideScalar(count);
           group.position.copy(center);
-          // Move meshes from userGroup into the group (preserving world transform)
           for (const mesh of selectedMeshes) {
             userGroup.remove(mesh);
-            group.attach(mesh); // attach preserves world transform
+            group.attach(mesh);
           }
           userGroup.add(group);
           multiSelectGroupRef.current = group;
           tc.attach(group);
         }
       } else {
-        if (tc.object && !gizmoDraggingRef.current) tc.detach();
+        if (tc.object) tc.detach();
       }
+      } // end if (!gizmoDraggingRef.current)
 
       // ---- playback ----
       if (store.isPlaying) {
