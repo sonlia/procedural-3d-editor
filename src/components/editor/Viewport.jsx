@@ -55,6 +55,7 @@ export function Viewport() {
   const tcHelperRef = useRef(null);
   const wireframeRef = useRef(null); // wireframe overlay for selected object (legacy, unused)
   const selectionOverlaysRef = useRef(null); // group holding wireframe overlays for multi-select
+  const multiSelectGroupRef = useRef(null); // temp group for multi-select gizmo
   const datasheetOverlayRef = useRef(null); // highlight overlay for datasheet selection
   const boxSelectRef = useRef(null); // box-select rectangle overlay
   const clockRef = useRef(null);
@@ -264,18 +265,6 @@ export function Viewport() {
       const intersects = ray.intersectObject(userGroup, true);
       if (intersects.length > 0) {
         const hit = intersects[0].object;
-        // Debug: print clicked object info
-        console.log("[raycastSelect] hit:", {
-          uuid: hit.uuid,
-          type: hit.type,
-          name: hit.name,
-          nodeId: hit.userData?.nodeId,
-          isMesh: hit.isMesh,
-          hasGeometry: !!hit.geometry,
-          parentType: hit.parent?.type,
-          parentNodeId: hit.parent?.userData?.nodeId,
-          pos: hit.position.toArray(),
-        });
         // Walk up to find ancestor tagged with nodeId (set by nodes like ImportModel/Geometry)
         let tagged = hit;
         while (tagged && tagged.userData?.nodeId == null && tagged.parent) {
@@ -456,6 +445,7 @@ export function Viewport() {
       userGroup.traverse((o) => {
         if (!o.isObject3D || o === userGroup) return;
         if (o === wire || o === datasheetOverlayRef.current || o === selectionOverlaysRef.current) return;
+        if (o.userData?.__isMultiSelect) return; // skip temp multi-select group
         // Skip default objects? No — include them too.
 
         // Use bounding sphere for more accurate selection
@@ -937,9 +927,7 @@ return {
 
       // ---- selection wireframe + gizmo (supports multi-select) ----
       const selIds = store.selectedObjectIds;
-      // Clear previous wireframe overlays (remove all children from a temp group)
-      // We use a simpler approach: clear the single wire + manage a dynamic set
-      // Clear old overlays
+      // Clear previous wireframe overlays
       while (selectionOverlaysRef.current.children.length > 0) {
         const child = selectionOverlaysRef.current.children[0];
         selectionOverlaysRef.current.remove(child);
@@ -947,8 +935,21 @@ return {
         if (child.material) child.material.dispose();
       }
 
+      // Clean up previous multi-select group
+      if (multiSelectGroupRef.current) {
+        // Detach children back to userGroup (don't remove them from scene)
+        while (multiSelectGroupRef.current.children.length > 0) {
+          const child = multiSelectGroupRef.current.children[0];
+          multiSelectGroupRef.current.remove(child);
+          userGroup.add(child); // return to userGroup
+        }
+        userGroup.remove(multiSelectGroupRef.current);
+        multiSelectGroupRef.current = null;
+      }
+
       if (selIds.length > 0) {
-        let lastFound = null;
+        // Collect all selected meshes
+        const selectedMeshes = [];
         for (const selId of selIds) {
           let found = null;
           userGroup.traverse((o) => {
@@ -956,11 +957,10 @@ return {
               found = o;
             }
           });
-          if (!found) continue;
-          lastFound = found;
+          if (found) selectedMeshes.push(found);
 
-          // Create a wireframe overlay for this object
-          if (found.isMesh && found.geometry) {
+          // Wireframe overlay
+          if (found && found.isMesh && found.geometry) {
             try {
               const wfGeo = new THREE.WireframeGeometry(found.geometry);
               const wfMat = new THREE.LineBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.9 });
@@ -971,7 +971,7 @@ return {
               wf.renderOrder = 998;
               selectionOverlaysRef.current.add(wf);
             } catch {}
-          } else if (found.isObject3D) {
+          } else if (found && found.isObject3D) {
             const box = new THREE.Box3().setFromObject(found);
             if (!box.isEmpty()) {
               const helper = new THREE.Box3Helper(box, 0x00ffff);
@@ -981,10 +981,35 @@ return {
           }
         }
 
-        // Attach gizmo to the last selected object (the "active" one)
-        if (lastFound && lastFound.isObject3D && tc.object !== lastFound && !gizmoDraggingRef.current) {
-          const attachTarget = lastFound.isMesh ? lastFound : lastFound;
-          tc.attach(attachTarget);
+        if (selectedMeshes.length === 1) {
+          // Single select: attach gizmo directly to the mesh
+          const target = selectedMeshes[0];
+          if (target.isObject3D && tc.object !== target && !gizmoDraggingRef.current) {
+            tc.attach(target);
+          }
+        } else if (selectedMeshes.length > 1 && !gizmoDraggingRef.current) {
+          // Multi-select: create a temp Group at the center of all selected meshes
+          const group = new THREE.Group();
+          group.userData.__isMultiSelect = true;
+          // Compute center of all selected meshes
+          const center = new THREE.Vector3();
+          let count = 0;
+          for (const mesh of selectedMeshes) {
+            const pos = new THREE.Vector3();
+            mesh.getWorldPosition(pos);
+            center.add(pos);
+            count++;
+          }
+          center.divideScalar(count);
+          group.position.copy(center);
+          // Move meshes from userGroup into the group (preserving world transform)
+          for (const mesh of selectedMeshes) {
+            userGroup.remove(mesh);
+            group.attach(mesh); // attach preserves world transform
+          }
+          userGroup.add(group);
+          multiSelectGroupRef.current = group;
+          tc.attach(group);
         }
       } else {
         if (tc.object && !gizmoDraggingRef.current) tc.detach();
