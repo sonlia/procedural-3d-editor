@@ -797,9 +797,11 @@ export function Viewport() {
         }
       }
 
-      // ---- re-evaluate ----
-      const versionChanged = store.version !== lastVersion;
-      const frameChanged = store.currentFrame !== lastFrame;
+      // ---- re-evaluate (DISABLED — using direct objects only, bypass LiteGraph) ----
+      // Graph evaluation is skipped to avoid position resets from bgJsCode.
+      // Default objects are created directly and managed by the viewport.
+      // Graph evaluation will be re-enabled when LiteGraph integration is stable.
+      /*
       const shouldReeval =
         !gizmoDraggingRef.current &&
         graph &&
@@ -934,6 +936,7 @@ return {
         }
         lastVersion = store.version;
       }
+      */ // end disabled graph evaluation
 
       // ---- selection wireframe + gizmo (supports multi-select) ----
       // Only rebuild when selection actually changes, not every frame.
@@ -954,12 +957,27 @@ return {
 
       // Clean up previous multi-select group (preserve world transforms)
       if (multiSelectGroupRef.current) {
-        while (multiSelectGroupRef.current.children.length > 0) {
-          const child = multiSelectGroupRef.current.children[0];
-          multiSelectGroupRef.current.remove(child);
-          userGroup.attach(child); // attach preserves world transform
+        const oldGroup = multiSelectGroupRef.current;
+        oldGroup.updateMatrixWorld(true);
+        while (oldGroup.children.length > 0) {
+          const child = oldGroup.children[0];
+          // Don't remove first — attach() handles reparenting.
+          // But we need to remove from oldGroup first, then attach to userGroup
+          // while preserving world transform. The trick: save world position,
+          // remove, then set position relative to userGroup.
+          const worldPos = new THREE.Vector3();
+          const worldQuat = new THREE.Quaternion();
+          const worldScale = new THREE.Vector3();
+          child.matrixWorld.decompose(worldPos, worldQuat, worldScale);
+          oldGroup.remove(child);
+          userGroup.add(child);
+          // Restore world transform as local (userGroup is at origin)
+          child.position.copy(worldPos);
+          child.quaternion.copy(worldQuat);
+          child.scale.copy(worldScale);
+          child.updateMatrixWorld(true);
         }
-        userGroup.remove(multiSelectGroupRef.current);
+        userGroup.remove(oldGroup);
         multiSelectGroupRef.current = null;
       }
 
@@ -1017,8 +1035,18 @@ return {
           center.divideScalar(count);
           group.position.copy(center);
           for (const mesh of selectedMeshes) {
+            // Save world transform, then reparent to group
+            const wp = new THREE.Vector3();
+            const wq = new THREE.Quaternion();
+            const ws = new THREE.Vector3();
+            mesh.matrixWorld.decompose(wp, wq, ws);
             userGroup.remove(mesh);
-            group.attach(mesh);
+            group.add(mesh);
+            // Set local transform relative to group
+            mesh.position.copy(wp).sub(center);
+            mesh.quaternion.copy(wq);
+            mesh.scale.copy(ws);
+            mesh.updateMatrixWorld(true);
           }
           userGroup.add(group);
           multiSelectGroupRef.current = group;
