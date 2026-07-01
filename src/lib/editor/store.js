@@ -30,6 +30,10 @@ export const useEditor = create((set, get) => ({
   // Active camera: 'default' (host camera) or a node ID
   activeCameraId: "default",
   setActiveCameraId: (id) => set({ activeCameraId: id }),
+  // Datasheet highlight: { type: 'point'|'edge'|'face'|'vertex', id: number }
+  // When set, viewport renders an overlay highlighting that element.
+  datasheetHighlight: null,
+  setDatasheetHighlight: (h) => set({ datasheetHighlight: h }),
 
   // ---- node selection ----
   selectedNodeIds: [],

@@ -22,6 +22,7 @@ const eslintConfig = [...nextCoreWebVitals, ...nextTypescript, {
     "react-hooks/static-components": "off",
     "react-hooks/rules-of-hooks": "off",
     "react-hooks/immutability": "off",
+    "react-hooks/set-state-in-effect": "off",
     "react/no-unescaped-entities": "off",
     "react/display-name": "off",
     "react/prop-types": "off",

@@ -54,6 +54,7 @@ export function Viewport() {
   const tcRef = useRef(null);
   const tcHelperRef = useRef(null);
   const wireframeRef = useRef(null); // wireframe overlay for selected object
+  const datasheetOverlayRef = useRef(null); // highlight overlay for datasheet selection
   const boxSelectRef = useRef(null); // box-select rectangle overlay
   const clockRef = useRef(null);
   const boxSelectStateRef = useRef({ active: false, startX: 0, startY: 0, shift: false });
@@ -174,6 +175,12 @@ export function Viewport() {
     wire.userData.origMat = wireMat; // save for restoring after Box3Helper
     wireframeRef.current = wire;
     scene.add(wire);
+
+    // ---- datasheet highlight overlay (for point/edge/face highlighting) ----
+    const datasheetOverlay = new THREE.Group();
+    datasheetOverlay.visible = true;
+    datasheetOverlayRef.current = datasheetOverlay;
+    scene.add(datasheetOverlay);
 
     // ---- box-select overlay (2D rectangle in NDC space) ----
     // Uses a separate orthographic camera so it draws on top in screen space
@@ -386,7 +393,7 @@ export function Viewport() {
       userGroup.traverse((o) => {
         if (!o.isObject3D || o === userGroup) return;
         // Skip overlay meshes
-        if (o === wire || o === boxSelectRef.current) return;
+        if (o === wire || o === boxSelectRef.current || o === datasheetOverlayRef.current) return;
         // Get world position
         const pos = new THREE.Vector3();
         o.getWorldPosition(pos);
@@ -527,6 +534,119 @@ export function Viewport() {
     let lastFrame = -1;
     let lastVersion = -1;
 
+    // Update datasheet highlight overlay
+    const updateDatasheetOverlay = () => {
+      const overlay = datasheetOverlayRef.current;
+      if (!overlay) return;
+      // Clear previous
+      for (const child of [...overlay.children]) {
+        overlay.remove(child);
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) child.material.dispose();
+      }
+      const hl = useEditor.getState().datasheetHighlight;
+      if (!hl || !hl.ids || hl.ids.length === 0) return;
+
+      // Find the selected mesh
+      const selId = useEditor.getState().selectedObjectId;
+      if (!selId) return;
+      let mesh = null;
+      userGroup.traverse((o) => {
+        if (!mesh && o.isMesh && (String(o.userData?.nodeId) === String(selId) || o.uuid === selId)) mesh = o;
+      });
+      if (!mesh || !mesh.geometry) return;
+      mesh.updateMatrixWorld(true);
+      const geo = mesh.geometry;
+      const pos = geo.attributes.position;
+      const index = geo.index;
+
+      const highlightColor = 0xff8800;
+      const mat = new THREE.MeshBasicMaterial({ color: highlightColor, depthTest: false, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+
+      if (hl.type === "points") {
+        const sphereGeo = new THREE.SphereGeometry(0.06, 10, 6);
+        const sphereMat = new THREE.MeshBasicMaterial({ color: highlightColor, depthTest: false, transparent: true });
+        for (const id of hl.ids) {
+          if (id >= pos.count) continue;
+          const v = new THREE.Vector3().fromBufferAttribute(pos, id).applyMatrix4(mesh.matrixWorld);
+          const s = new THREE.Mesh(sphereGeo, sphereMat);
+          s.position.copy(v);
+          s.renderOrder = 999;
+          overlay.add(s);
+        }
+      } else if (hl.type === "edges") {
+        const edgeMat = new THREE.MeshBasicMaterial({ color: highlightColor, depthTest: false, transparent: true });
+        const edgeGeo = new THREE.CylinderGeometry(0.025, 0.025, 1, 8);
+        // Rebuild edge list to match datasheet's edge IDs
+        const allEdges = [];
+        const edgeSet = new Set();
+        const triCount = index ? index.count / 3 : pos.count / 3;
+        for (let i = 0; i < triCount; i++) {
+          const a = index ? index.getX(i * 3) : i * 3;
+          const b = index ? index.getX(i * 3 + 1) : i * 3 + 1;
+          const c = index ? index.getX(i * 3 + 2) : i * 3 + 2;
+          for (const [p1, p2] of [[a, b], [b, c], [c, a]]) {
+            const key = p1 < p2 ? `${p1}-${p2}` : `${p2}-${p1}`;
+            if (!edgeSet.has(key)) {
+              edgeSet.add(key);
+              allEdges.push({ p1: Math.min(p1, p2), p2: Math.max(p1, p2) });
+            }
+          }
+        }
+        for (const id of hl.ids) {
+          const e = allEdges[id];
+          if (!e) continue;
+          const va = new THREE.Vector3().fromBufferAttribute(pos, e.p1).applyMatrix4(mesh.matrixWorld);
+          const vb = new THREE.Vector3().fromBufferAttribute(pos, e.p2).applyMatrix4(mesh.matrixWorld);
+          const dir = new THREE.Vector3().subVectors(vb, va);
+          const len = dir.length();
+          const cyl = new THREE.Mesh(edgeGeo, edgeMat);
+          cyl.position.copy(va).add(vb).multiplyScalar(0.5);
+          cyl.scale.set(1, len, 1);
+          cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+          cyl.renderOrder = 999;
+          overlay.add(cyl);
+        }
+      } else if (hl.type === "faces") {
+        for (const id of hl.ids) {
+          if (!index) continue;
+          const a = index.getX(id * 3);
+          const b = index.getX(id * 3 + 1);
+          const c = index.getX(id * 3 + 2);
+          const va = new THREE.Vector3().fromBufferAttribute(pos, a).applyMatrix4(mesh.matrixWorld);
+          const vb = new THREE.Vector3().fromBufferAttribute(pos, b).applyMatrix4(mesh.matrixWorld);
+          const vc = new THREE.Vector3().fromBufferAttribute(pos, c).applyMatrix4(mesh.matrixWorld);
+          const faceGeo = new THREE.BufferGeometry().setFromPoints([va, vb, vc]);
+          faceGeo.setIndex([0, 1, 2]);
+          const fm = new THREE.Mesh(faceGeo, mat);
+          fm.renderOrder = 999;
+          overlay.add(fm);
+        }
+      } else if (hl.type === "vertices") {
+        // Vertices tab: highlight the specific vertex on a face
+        const sphereGeo = new THREE.SphereGeometry(0.05, 8, 5);
+        const sphereMat = new THREE.MeshBasicMaterial({ color: highlightColor, depthTest: false, transparent: true });
+        // Rebuild vertex list to match datasheet's vertex IDs
+        const allVerts = [];
+        const triCount = index ? index.count / 3 : pos.count / 3;
+        for (let i = 0; i < triCount; i++) {
+          const a = index ? index.getX(i * 3) : i * 3;
+          const b = index ? index.getX(i * 3 + 1) : i * 3 + 1;
+          const c = index ? index.getX(i * 3 + 2) : i * 3 + 2;
+          allVerts.push(a, b, c);
+        }
+        for (const id of hl.ids) {
+          const ptId = allVerts[id];
+          if (ptId == null || ptId >= pos.count) continue;
+          const v = new THREE.Vector3().fromBufferAttribute(pos, ptId).applyMatrix4(mesh.matrixWorld);
+          const s = new THREE.Mesh(sphereGeo, sphereMat);
+          s.position.copy(v);
+          s.renderOrder = 999;
+          overlay.add(s);
+        }
+      }
+    };
+
     const animate = () => {
       rafRef.current = requestAnimationFrame(animate);
       const clock = clockRef.current;
@@ -650,7 +770,7 @@ return {
           }
           // Remove children no longer desired (but keep overlay meshes)
           for (const child of [...userGroup.children]) {
-            if (child === wire) continue;
+            if (child === wire || child === datasheetOverlayRef.current) continue;
             if (!desiredChildren.has(child)) {
               userGroup.remove(child);
             }
@@ -789,6 +909,9 @@ return {
           }
         });
       }
+
+      // ---- datasheet highlight overlay ----
+      updateDatasheetOverlay();
 
       renderer.render(scene, camera);
 
