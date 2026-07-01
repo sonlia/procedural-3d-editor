@@ -207,14 +207,6 @@ export function Viewport() {
     tc.setSize(0.8);
     tc.addEventListener("dragging-changed", (e) => {
       gizmoDraggingRef.current = e.value;
-      if (!e.value && multiSelectGroupRef.current) {
-        // Gizmo released — print positions for debug
-        const g = multiSelectGroupRef.current;
-        console.log("[gizmo release] group pos:", g.position.toArray(), "children:", g.children.length);
-        g.children.forEach((c, i) => {
-          console.log(`  child ${i} localPos:`, c.position.toArray());
-        });
-      }
     });
 
     // ---- selection wireframe overlay ----
