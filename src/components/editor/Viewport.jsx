@@ -56,6 +56,7 @@ export function Viewport() {
   const wireframeRef = useRef(null); // wireframe overlay for selected object (legacy, unused)
   const selectionOverlaysRef = useRef(null); // group holding wireframe overlays for multi-select
   const multiSelectGroupRef = useRef(null); // temp group for multi-select gizmo
+  const lastSelIdsRef = useRef(null); // track selection changes to avoid unnecessary rebuild
   const datasheetOverlayRef = useRef(null); // highlight overlay for datasheet selection
   const boxSelectRef = useRef(null); // box-select rectangle overlay
   const clockRef = useRef(null);
@@ -206,6 +207,14 @@ export function Viewport() {
     tc.setSize(0.8);
     tc.addEventListener("dragging-changed", (e) => {
       gizmoDraggingRef.current = e.value;
+      if (!e.value && multiSelectGroupRef.current) {
+        // Gizmo released — print positions for debug
+        const g = multiSelectGroupRef.current;
+        console.log("[gizmo release] group pos:", g.position.toArray(), "children:", g.children.length);
+        g.children.forEach((c, i) => {
+          console.log(`  child ${i} localPos:`, c.position.toArray());
+        });
+      }
     });
 
     // ---- selection wireframe overlay ----
@@ -927,9 +936,14 @@ return {
       }
 
       // ---- selection wireframe + gizmo (supports multi-select) ----
-      // Skip rebuilding selection if gizmo is being dragged (would interrupt drag)
+      // Only rebuild when selection actually changes, not every frame.
+      // This prevents gizmo drag results from being overwritten.
       const selIds = store.selectedObjectIds;
-      if (!gizmoDraggingRef.current) {
+      const selKey = selIds.join(",");
+      const selChanged = lastSelIdsRef.current !== selKey;
+      lastSelIdsRef.current = selKey;
+
+      if (selChanged && !gizmoDraggingRef.current) {
       // Clear previous wireframe overlays
       while (selectionOverlaysRef.current.children.length > 0) {
         const child = selectionOverlaysRef.current.children[0];
@@ -938,12 +952,12 @@ return {
         if (child.material) child.material.dispose();
       }
 
-      // Clean up previous multi-select group
+      // Clean up previous multi-select group (preserve world transforms)
       if (multiSelectGroupRef.current) {
         while (multiSelectGroupRef.current.children.length > 0) {
           const child = multiSelectGroupRef.current.children[0];
           multiSelectGroupRef.current.remove(child);
-          userGroup.add(child); // return to userGroup, preserves world transform
+          userGroup.attach(child); // attach preserves world transform
         }
         userGroup.remove(multiSelectGroupRef.current);
         multiSelectGroupRef.current = null;
@@ -1013,7 +1027,7 @@ return {
       } else {
         if (tc.object) tc.detach();
       }
-      } // end if (!gizmoDraggingRef.current)
+      } // end if (selChanged && !gizmoDraggingRef.current)
 
       // ---- playback ----
       if (store.isPlaying) {
