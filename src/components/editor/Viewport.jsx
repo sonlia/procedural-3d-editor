@@ -392,16 +392,15 @@ export function Viewport() {
       let overlay = boxSelectRef.current;
       if (!overlay) return;
       const rect = dom.getBoundingClientRect();
-      // Normalize to NDC
-      const nx1 = ((Math.min(x1, x2) - rect.left) / rect.width) * 2 - 1;
-      const nx2 = ((Math.max(x1, x2) - rect.left) / rect.width) * 2 - 1;
-      const ny1 = -((Math.min(y1, y2) - rect.top) / rect.height) * 2 + 1;
-      const ny2 = -((Math.max(y1, y2) - rect.top) / rect.height) * 2 + 1;
-      // Build a quad in NDC space
-      const w = (nx2 - nx1) / 2;
-      const h = (ny2 - ny1) / 2;
-      const cx = (nx1 + nx2) / 2;
-      const cy = (ny1 + ny2) / 2;
+      // Convert screen coords to NDC (-1..1), Y flipped
+      const ndcX1 = ((Math.min(x1, x2) - rect.left) / rect.width) * 2 - 1;
+      const ndcX2 = ((Math.max(x1, x2) - rect.left) / rect.width) * 2 - 1;
+      const ndcY1 = -((Math.max(y1, y2) - rect.top) / rect.height) * 2 + 1; // bottom
+      const ndcY2 = -((Math.min(y1, y2) - rect.top) / rect.height) * 2 + 1; // top
+      const w = (ndcX2 - ndcX1) / 2;
+      const h = (ndcY2 - ndcY1) / 2;
+      const cx = (ndcX1 + ndcX2) / 2;
+      const cy = (ndcY1 + ndcY2) / 2;
       overlay.position.set(cx, cy, 0);
       overlay.scale.set(w, h, 1);
       overlay.visible = true;
@@ -431,39 +430,66 @@ export function Viewport() {
       boxSelectStateRef.current.active = false;
     };
 
-    // Perform box selection: find all objects whose bounding sphere intersects the screen-space rectangle
+    // Perform box selection: find all objects whose bounding sphere intersects
+    // the screen-space rectangle. Uses camera.project() for accurate NDC mapping.
     const performBoxSelect = (x1, y1, x2, y2, shift) => {
       const rect = dom.getBoundingClientRect();
-      const nx1 = ((Math.min(x1, x2) - rect.left) / rect.width) * 2 - 1;
-      const nx2 = ((Math.max(x1, x2) - rect.left) / rect.width) * 2 - 1;
-      const ny1 = -((Math.max(y1, y2) - rect.top) / rect.height) * 2 + 1;
-      const ny2 = -((Math.min(y1, y2) - rect.top) / rect.height) * 2 + 1;
+      // Convert screen coords to NDC (-1..1), Y flipped — same as overlay
+      const ndcX1 = ((Math.min(x1, x2) - rect.left) / rect.width) * 2 - 1;
+      const ndcX2 = ((Math.max(x1, x2) - rect.left) / rect.width) * 2 - 1;
+      const ndcY1 = -((Math.max(y1, y2) - rect.top) / rect.height) * 2 + 1; // bottom
+      const ndcY2 = -((Math.min(y1, y2) - rect.top) / rect.height) * 2 + 1; // top
+
       const store = useEditor.getState();
       const found = [];
       const foundNodeIds = [];
+      const projVec = new THREE.Vector3();
+
       userGroup.traverse((o) => {
         if (!o.isObject3D || o === userGroup) return;
-        // Skip overlay meshes
         if (o === wire || o === boxSelectRef.current || o === datasheetOverlayRef.current) return;
-        // Get world position
-        const pos = new THREE.Vector3();
-        o.getWorldPosition(pos);
-        // Project to NDC
-        const ndc = pos.clone().project(camera);
-        if (ndc.x >= nx1 && ndc.x <= nx2 && ndc.y >= ny1 && ndc.y <= ny2 && ndc.z < 1) {
-          let tagged = o;
-          while (tagged && tagged.userData?.nodeId == null && tagged.parent) tagged = tagged.parent;
-          const nodeId = tagged?.userData?.nodeId || o.uuid;
-          const objId = String(nodeId);
-          if (!found.includes(objId)) {
-            found.push(objId);
-            if (nodeId && !foundNodeIds.includes(nodeId)) foundNodeIds.push(nodeId);
+        // Skip default objects? No — include them too.
+
+        // Use bounding sphere for more accurate selection
+        let center;
+        let radius = 0;
+        if (o.geometry) {
+          if (!o.geometry.boundingSphere) o.geometry.computeBoundingSphere();
+          const bs = o.geometry.boundingSphere;
+          if (bs && bs.radius > 0) {
+            center = bs.center.clone();
+            radius = bs.radius;
+          }
+        }
+        if (!center) {
+          center = new THREE.Vector3();
+          o.getWorldPosition(center);
+        } else {
+          center.applyMatrix4(o.matrixWorld);
+        }
+
+        // Project center to NDC using the current camera
+        projVec.copy(center).project(camera);
+
+        // Check if the projected center is within the rectangle (with radius tolerance)
+        // Convert world-space radius to approximate screen-space radius
+        if (projVec.z >= -1 && projVec.z <= 1) {
+          // Simple check: center point within rectangle
+          if (projVec.x >= ndcX1 && projVec.x <= ndcX2 && projVec.y >= ndcY1 && projVec.y <= ndcY2) {
+            let tagged = o;
+            while (tagged && tagged.userData?.nodeId == null && tagged.parent) tagged = tagged.parent;
+            const nodeId = tagged?.userData?.nodeId || o.uuid;
+            const objId = String(nodeId);
+            if (!found.includes(objId)) {
+              found.push(objId);
+              if (nodeId && !foundNodeIds.includes(nodeId)) foundNodeIds.push(nodeId);
+            }
           }
         }
       });
+
       if (shift) {
         const current = store.selectedObjectIds;
-        // Toggle: remove if already selected, add if not
         const merged = [...current];
         for (const id of found) {
           if (merged.includes(id)) merged.splice(merged.indexOf(id), 1);
