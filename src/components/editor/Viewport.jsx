@@ -36,6 +36,7 @@ import codeStrategy from "@/lib/editor/codeStrategies/index.js";
 export function Viewport() {
   const containerRef = useRef(null);
   const [stats, setStats] = useState({ fps: 0, triangles: 0, drawCalls: 0 });
+  const [boxSelectRect, setBoxSelectRect] = useState({ visible: false });
 
   const displayMode = useEditor((s) => s.displayMode);
   const gizmoMode = useEditor((s) => s.gizmoMode);
@@ -216,25 +217,9 @@ export function Viewport() {
     datasheetOverlayRef.current = datasheetOverlay;
     scene.add(datasheetOverlay);
 
-    // ---- box-select overlay (2D rectangle in NDC space) ----
-    // Uses a separate orthographic camera so it draws on top in screen space
-    const boxOverlayScene = new THREE.Scene();
-    const boxOverlayCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const boxMat = new THREE.MeshBasicMaterial({
-      color: 0x22d3ee,
-      transparent: true,
-      opacity: 0.15,
-      side: THREE.DoubleSide,
-      depthTest: false,
-      depthWrite: false,
-    });
-    const bsGeo = new THREE.PlaneGeometry(1, 1);
-    const bsMesh = new THREE.Mesh(bsGeo, boxMat);
-    bsMesh.visible = false;
-    boxOverlayScene.add(bsMesh);
-    boxSelectRef.current = bsMesh;
-    boxSelectRef.current._scene = boxOverlayScene;
-    boxSelectRef.current._camera = boxOverlayCam;
+    // ---- box-select overlay (CSS div, not Three.js — avoids NDC mismatch) ----
+    // boxSelectRef stores { x, y, w, h, visible } for the CSS overlay
+    boxSelectRef.current = { x: 0, y: 0, w: 0, h: 0, visible: false };
 
     // ---- custom navigation ----
     const dom = renderer.domElement;
@@ -335,6 +320,7 @@ export function Viewport() {
     const cancelBoxSelect = () => {
       boxSelectStateRef.current.active = false;
       if (boxSelectRef.current) boxSelectRef.current.visible = false;
+      setBoxSelectRect({ visible: false });
       dom.style.cursor = "default";
     };
     const onPointerCancel = () => cancelBoxSelect();
@@ -387,23 +373,18 @@ export function Viewport() {
       }
     };
 
-    // Update the 2D box-select rectangle overlay (drawn on a separate orthographic overlay)
+    // Update the box-select overlay using CSS coordinates (relative to canvas)
     const updateBoxSelectOverlay = (x1, y1, x2, y2) => {
-      let overlay = boxSelectRef.current;
-      if (!overlay) return;
       const rect = dom.getBoundingClientRect();
-      // Convert screen coords to NDC (-1..1), Y flipped
-      const ndcX1 = ((Math.min(x1, x2) - rect.left) / rect.width) * 2 - 1;
-      const ndcX2 = ((Math.max(x1, x2) - rect.left) / rect.width) * 2 - 1;
-      const ndcY1 = -((Math.max(y1, y2) - rect.top) / rect.height) * 2 + 1; // bottom
-      const ndcY2 = -((Math.min(y1, y2) - rect.top) / rect.height) * 2 + 1; // top
-      const w = (ndcX2 - ndcX1) / 2;
-      const h = (ndcY2 - ndcY1) / 2;
-      const cx = (ndcX1 + ndcX2) / 2;
-      const cy = (ndcY1 + ndcY2) / 2;
-      overlay.position.set(cx, cy, 0);
-      overlay.scale.set(w, h, 1);
-      overlay.visible = true;
+      const bs = boxSelectRef.current;
+      if (!bs) return;
+      bs.x = Math.min(x1, x2) - rect.left;
+      bs.y = Math.min(y1, y2) - rect.top;
+      bs.w = Math.abs(x2 - x1);
+      bs.h = Math.abs(y2 - y1);
+      bs.visible = true;
+      // Force re-render of the CSS overlay
+      setBoxSelectRect({ x: bs.x, y: bs.y, w: bs.w, h: bs.h, visible: true });
     };
 
     const onPointerUp = (e) => {
@@ -427,6 +408,7 @@ export function Viewport() {
       }
       // Unconditionally hide overlay + reset active (defensive: covers all code paths)
       if (boxSelectRef.current) boxSelectRef.current.visible = false;
+      setBoxSelectRect({ visible: false });
       boxSelectStateRef.current.active = false;
     };
 
@@ -447,7 +429,7 @@ export function Viewport() {
 
       userGroup.traverse((o) => {
         if (!o.isObject3D || o === userGroup) return;
-        if (o === wire || o === boxSelectRef.current || o === datasheetOverlayRef.current) return;
+        if (o === wire || o === datasheetOverlayRef.current) return;
         // Skip default objects? No — include them too.
 
         // Use bounding sphere for more accurate selection
@@ -1079,13 +1061,6 @@ return {
       updateDatasheetOverlay();
 
       renderer.render(scene, camera);
-
-      // ---- box-select overlay render (on top, separate scene) ----
-      if (boxSelectRef.current?._scene && boxSelectRef.current?._camera && boxSelectRef.current.visible) {
-        renderer.autoClear = false;
-        renderer.render(boxSelectRef.current._scene, boxSelectRef.current._camera);
-        renderer.autoClear = true;
-      }
     };
     animate();
 
@@ -1174,6 +1149,19 @@ return {
       <div className="absolute bottom-2 left-2 z-10 bg-black/60 backdrop-blur-sm rounded px-2 py-1 text-[10px] font-mono text-zinc-400 pointer-events-none border border-zinc-700/50">
         LMB: select · Alt+LMB: orbit · Alt+RMB: pan · MMB: pan · Wheel: dolly · F: frame · A: frame all · W/E/R: gizmo · Space: play
       </div>
+
+      {/* Box-select overlay (CSS div — exact pixel match with mouse drag) */}
+      {boxSelectRect.visible && (
+        <div
+          className="absolute pointer-events-none border border-cyan-400 bg-cyan-400/15 z-20"
+          style={{
+            left: `${boxSelectRect.x}px`,
+            top: `${boxSelectRect.y}px`,
+            width: `${boxSelectRect.w}px`,
+            height: `${boxSelectRect.h}px`,
+          }}
+        />
+      )}
     </div>
   );
 }
