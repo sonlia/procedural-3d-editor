@@ -18,12 +18,7 @@ export class SceneSOPNode extends Subgraph {
   }
 
   _initInnerGraph() {
-    // Add a SceneOutput terminal node inside the subgraph
-    const out = LiteGraph.createNode("Output/output/scene");
-    out.pos = [400, 200];
-    this.subgraph.add(out);
-    // Mark it as the subgraph output
-    this.subgraph.output_node_type = "graph/output";
+    // Empty subgraph — user adds geometry/camera/light nodes inside
   }
 
   onExecute() {

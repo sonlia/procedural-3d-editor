@@ -133,51 +133,41 @@ export function NodeGraph() {
   );
 }
 
-// Default scene: 3 unconnected SOP nodes (Lighting + Material + Scene).
-// The Scene SOP contains a Cube + Camera inside its subgraph,
-// so the viewport shows a cube when SceneSOP is display-flagged.
+// Default scene: 3 empty SOP nodes + 2 standalone geometry nodes (Box + Sphere).
+// SOP subgraphs are empty — user adds nodes inside by double-clicking.
+// Viewport auto-adds a default camera + light when no light nodes exist.
 function buildDefaultScene(graph) {
   for (const n of [...(graph.nodes ?? graph._nodes ?? [])]) graph.remove(n);
   graph.links = {};
   graph.last_node_id = 0;
   graph.last_link_id = 0;
 
-  // Lighting SOP — contains a default directional light
+  // Lighting SOP — empty (double-click to add lights inside)
   const lighting = LiteGraph.createNode("SOP/sop/lighting");
   lighting.pos = [60, 80];
   graph.add(lighting);
 
-  // Material SOP — empty (user adds material nodes inside)
+  // Material SOP — empty
   const material = LiteGraph.createNode("SOP/sop/material");
   material.pos = [60, 260];
   graph.add(material);
 
-  // Scene SOP — contains a Cube + Camera + SceneOutput
+  // Scene SOP — empty
   const scene = LiteGraph.createNode("SOP/sop/scene");
   scene.pos = [60, 440];
   graph.add(scene);
 
-  // Add a Cube + Camera inside the Scene SOP subgraph
-  const sub = scene.subgraph;
-  if (sub) {
-    const cube = LiteGraph.createNode("SOP/primitive/geometry");
-    cube.pos = [60, 60];
-    cube.properties = { type: "Box", width: 1.5, height: 1.5, depth: 1.5, segments: 1 };
-    sub.add(cube);
+  // Standalone Box geometry
+  const box = LiteGraph.createNode("SOP/primitive/geometry");
+  box.pos = [320, 80];
+  box.properties = { type: "Box", width: 1.5, height: 1.5, depth: 1.5, segments: 1 };
+  graph.add(box);
 
-    const cam = LiteGraph.createNode("Scene/scene/camera");
-    cam.pos = [60, 280];
-    sub.add(cam);
+  // Standalone Sphere geometry
+  const sphere = LiteGraph.createNode("SOP/primitive/geometry");
+  sphere.pos = [320, 260];
+  sphere.properties = { type: "Sphere", width: 1.5, height: 1.5, depth: 1.5, segments: 32 };
+  graph.add(sphere);
 
-    // Find the SceneOutput node that was added in _initInnerGraph
-    const out = (sub._nodes || []).find((n) => n.type === "Output/output/scene");
-    if (out) {
-      cube.connect(0, out, 0);
-      cam.connect(0, out, 1);
-    }
-  }
-
-  // Mark the Scene SOP as display-flagged
-  useEditor.getState().toggleDisplayFlag(scene.id);
   useEditor.getState().bumpVersion();
 }

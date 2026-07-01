@@ -56,6 +56,7 @@ export function Viewport() {
   const datasheetOverlayRef = useRef(null); // highlight overlay for datasheet selection
   const boxSelectRef = useRef(null); // box-select rectangle overlay
   const clockRef = useRef(null);
+  const defaultLightRef = useRef(null); // auto-managed default lights
   const boxSelectStateRef = useRef({ active: false, startX: 0, startY: 0, shift: false });
   const loadersRef = useRef({});
   const navRef = useRef({
@@ -117,6 +118,18 @@ export function Viewport() {
     grid.material.transparent = true;
     scene.add(grid);
     scene.add(new THREE.AxesHelper(2));
+
+    // ---- default lights (auto-managed: removed when user adds light nodes) ----
+    const defaultDirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    defaultDirLight.position.set(5, 8, 4);
+    defaultDirLight.userData.__isDefault = true;
+    scene.add(defaultDirLight);
+    const defaultAmbLight = new THREE.AmbientLight(0x404040, 0.6);
+    defaultAmbLight.userData.__isDefault = true;
+    scene.add(defaultAmbLight);
+    defaultLightRef.current = { dir: defaultDirLight, amb: defaultAmbLight };
+    window._viewportDefaultLight = defaultLightRef.current;
+    window._viewportScene = scene;
 
     // ---- host camera (fallback when graph has no camera) ----
     const camera = new THREE.PerspectiveCamera(
@@ -951,6 +964,45 @@ return {
             delete o.userData._origMat;
           }
         });
+      }
+
+      // ---- default light auto-management ----
+      // If graph has any concrete light node (directional_light, point_light, etc.),
+      // remove default lights. SOP/sop/lighting itself doesn't count — only the
+      // light nodes INSIDE it do.
+      if (graph) {
+        let hasLightNode = false;
+        const isLightNode = (type) => {
+          if (!type) return false;
+          // Match "Scene/scene/directional_light", "Scene/scene/point_light", etc.
+          // but NOT "SOP/sop/lighting" (which is just a container)
+          return type.includes("scene/directional_light") ||
+                 type.includes("scene/point_light") ||
+                 type.includes("scene/spot_light") ||
+                 type.includes("scene/area_light") ||
+                 type.includes("scene/environment");
+        };
+        const checkNodes = (nodes) => {
+          for (const n of nodes || []) {
+            if (isLightNode(n.type)) { hasLightNode = true; break; }
+            if (n.subgraph) {
+              checkNodes(n.subgraph._nodes || n.subgraph.nodes || []);
+              if (hasLightNode) break;
+            }
+          }
+        };
+        checkNodes(graph._nodes || graph.nodes || []);
+
+        const dl = defaultLightRef.current;
+        if (dl) {
+          if (hasLightNode) {
+            if (dl.dir.parent) dl.dir.parent.remove(dl.dir);
+            if (dl.amb.parent) dl.amb.parent.remove(dl.amb);
+          } else {
+            if (!dl.dir.parent) scene.add(dl.dir);
+            if (!dl.amb.parent) scene.add(dl.amb);
+          }
+        }
       }
 
       // ---- datasheet highlight overlay ----

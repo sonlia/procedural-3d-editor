@@ -15,10 +15,7 @@ export class LightingSOPNode extends Subgraph {
   }
 
   _initInnerGraph() {
-    // Add a default directional light inside
-    const light = LiteGraph.createNode("Scene/scene/directional_light");
-    light.pos = [100, 100];
-    this.subgraph.add(light);
+    // Empty subgraph — user adds light nodes inside
   }
 
   onExecute() {
