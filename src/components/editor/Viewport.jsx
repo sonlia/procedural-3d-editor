@@ -59,6 +59,7 @@ export function Viewport() {
   const boxSelectRef = useRef(null); // box-select rectangle overlay
   const clockRef = useRef(null);
   const defaultLightRef = useRef(null); // auto-managed default lights
+  const axesGizmoRef = useRef(null); // corner axes gizmo preview
   const boxSelectStateRef = useRef({ active: false, startX: 0, startY: 0, shift: false });
   const loadersRef = useRef({});
   const navRef = useRef({
@@ -119,9 +120,15 @@ export function Viewport() {
     grid.material.opacity = 0.5;
     grid.material.transparent = true;
     scene.add(grid);
-    scene.add(new THREE.AxesHelper(2));
+    // Hide center axes — replaced by a small corner gizmo
+    // scene.add(new THREE.AxesHelper(2));
 
-    // ---- default lights (auto-managed: removed when user adds light nodes) ----
+    // ---- corner axes gizmo (small preview in top-left) ----
+    const axesScene = new THREE.Scene();
+    const axesCam = new THREE.OrthographicCamera(-1.5, 1.5, 1.5, -1.5, 0.1, 10);
+    axesCam.position.set(0, 0, 5);
+    axesScene.add(new THREE.AxesHelper(1));
+    axesGizmoRef.current = { scene: axesScene, camera: axesCam };
     const defaultDirLight = new THREE.DirectionalLight(0xffffff, 1.0);
     defaultDirLight.position.set(5, 8, 4);
     defaultDirLight.userData.__isDefault = true;
@@ -257,6 +264,18 @@ export function Viewport() {
       const intersects = ray.intersectObject(userGroup, true);
       if (intersects.length > 0) {
         const hit = intersects[0].object;
+        // Debug: print clicked object info
+        console.log("[raycastSelect] hit:", {
+          uuid: hit.uuid,
+          type: hit.type,
+          name: hit.name,
+          nodeId: hit.userData?.nodeId,
+          isMesh: hit.isMesh,
+          hasGeometry: !!hit.geometry,
+          parentType: hit.parent?.type,
+          parentNodeId: hit.parent?.userData?.nodeId,
+          pos: hit.position.toArray(),
+        });
         // Walk up to find ancestor tagged with nodeId (set by nodes like ImportModel/Geometry)
         let tagged = hit;
         while (tagged && tagged.userData?.nodeId == null && tagged.parent) {
@@ -982,20 +1001,6 @@ return {
       }
       lastFrame = store.currentFrame;
 
-      // ---- stats ----
-      frames++;
-      const now = performance.now();
-      if (now - lastFpsTime >= 500) {
-        const fps = Math.round((frames * 1000) / (now - lastFpsTime));
-        setStats({
-          fps,
-          triangles: renderer.info.render.triangles,
-          drawCalls: renderer.info.render.calls,
-        });
-        frames = 0;
-        lastFpsTime = now;
-      }
-
       // ---- isolate mode ----
       if (store.isolateMode && store.selectedObjectIds.length > 0) {
         userGroup.traverse((o) => {
@@ -1075,6 +1080,43 @@ return {
       updateDatasheetOverlay();
 
       renderer.render(scene, camera);
+
+      // ---- stats (read right after main render, before axes overlay) ----
+      frames++;
+      const now = performance.now();
+      if (now - lastFpsTime >= 500) {
+        const fps = Math.round((frames * 1000) / (now - lastFpsTime));
+        setStats({
+          fps,
+          triangles: renderer.info.render.triangles,
+          drawCalls: renderer.info.render.calls,
+        });
+        frames = 0;
+        lastFpsTime = now;
+      }
+
+      // ---- corner axes gizmo (render in bottom-left 80x80px area) ----
+      if (axesGizmoRef.current) {
+        const ag = axesGizmoRef.current;
+        ag.camera.position.copy(camera.position).sub(nav.target).normalize().multiplyScalar(5);
+        ag.camera.lookAt(0, 0, 0);
+        ag.camera.up.copy(camera.up);
+        const w = renderer.domElement.width;
+        const h = renderer.domElement.height;
+        const dpr = window.devicePixelRatio || 1;
+        const size = 80 * dpr;
+        // Don't clear the main scene's framebuffer — render on top
+        renderer.autoClear = false;
+        renderer.setScissorTest(true);
+        renderer.setScissor(4 * dpr, 4 * dpr, size, size);
+        renderer.setViewport(4 * dpr, 4 * dpr, size, size);
+        ag.camera.aspect = 1;
+        ag.camera.updateProjectionMatrix();
+        renderer.render(ag.scene, ag.camera);
+        renderer.setScissorTest(false);
+        renderer.setViewport(0, 0, w, h);
+        renderer.autoClear = true;
+      }
     };
     animate();
 
