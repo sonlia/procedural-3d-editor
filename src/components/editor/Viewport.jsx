@@ -131,6 +131,29 @@ export function Viewport() {
     window._viewportDefaultLight = defaultLightRef.current;
     window._viewportScene = scene;
 
+    // ---- default objects (created directly, not via graph) ----
+    // These are always visible so the viewport shows something even if
+    // LiteGraph graph evaluation fails.
+    const defaultMat = new THREE.MeshStandardMaterial({ color: 0x4ade80, roughness: 0.4, metalness: 0.1 });
+    const defBoxGeo = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+    const defBoxMesh = new THREE.Mesh(defBoxGeo, defaultMat);
+    defBoxMesh.position.set(-1.5, 0, 0);
+    defBoxMesh.castShadow = true;
+    defBoxMesh.receiveShadow = true;
+    defBoxMesh.userData.__isDefault = true;
+    defBoxMesh.userData.nodeId = "__default_box";
+    userGroup.add(defBoxMesh);
+
+    const sphereMat = new THREE.MeshStandardMaterial({ color: 0x60a5fa, roughness: 0.3, metalness: 0.2 });
+    const defSphereGeo = new THREE.SphereGeometry(0.9, 32, 16);
+    const defSphereMesh = new THREE.Mesh(defSphereGeo, sphereMat);
+    defSphereMesh.position.set(1.5, 0, 0);
+    defSphereMesh.castShadow = true;
+    defSphereMesh.receiveShadow = true;
+    defSphereMesh.userData.__isDefault = true;
+    defSphereMesh.userData.nodeId = "__default_sphere";
+    userGroup.add(defSphereMesh);
+
     // ---- host camera (fallback when graph has no camera) ----
     const camera = new THREE.PerspectiveCamera(
       50,
@@ -205,11 +228,11 @@ export function Viewport() {
       depthTest: false,
       depthWrite: false,
     });
-    const boxGeo = new THREE.PlaneGeometry(1, 1);
-    const boxMesh = new THREE.Mesh(boxGeo, boxMat);
-    boxMesh.visible = false;
-    boxOverlayScene.add(boxMesh);
-    boxSelectRef.current = boxMesh;
+    const bsGeo = new THREE.PlaneGeometry(1, 1);
+    const bsMesh = new THREE.Mesh(bsGeo, boxMat);
+    bsMesh.visible = false;
+    boxOverlayScene.add(bsMesh);
+    boxSelectRef.current = bsMesh;
     boxSelectRef.current._scene = boxOverlayScene;
     boxSelectRef.current._camera = boxOverlayCam;
 
@@ -824,9 +847,10 @@ return {
               }
             }
           }
-          // Remove children no longer desired (but keep overlay meshes)
+          // Remove children no longer desired (but keep overlay + default meshes)
           for (const child of [...userGroup.children]) {
             if (child === wire || child === datasheetOverlayRef.current) continue;
+            if (child.userData?.__isDefault) continue; // keep default objects
             if (!desiredChildren.has(child)) {
               userGroup.remove(child);
             }
