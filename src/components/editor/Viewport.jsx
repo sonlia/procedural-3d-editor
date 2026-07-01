@@ -293,7 +293,21 @@ export function Viewport() {
       // 右键（无 Alt）= 无操作（不旋转不平移）
     };
 
+    // ---- box-select cleanup (defensive: handles pointerup loss) ----
+    const cancelBoxSelect = () => {
+      boxSelectStateRef.current.active = false;
+      if (boxSelectRef.current) boxSelectRef.current.visible = false;
+      dom.style.cursor = "default";
+    };
+    const onPointerCancel = () => cancelBoxSelect();
+    const onLostPointerCapture = () => cancelBoxSelect();
+
     const onPointerMove = (e) => {
+      // Defensive: if mouse button released but pointerup missed, cancel box-select
+      if (boxSelectStateRef.current.active && e.buttons === 0) {
+        cancelBoxSelect();
+        return;
+      }
       if (nav.isPanning) {
         const dx = e.clientX - nav.lastX;
         const dy = e.clientY - nav.lastY;
@@ -361,23 +375,22 @@ export function Viewport() {
       nav.isPanning = false;
       nav.isOrbiting = false;
       dom.style.cursor = "default";
-      // Handle left-button click (button 0) or any pointerup if box-select was active
       const bs = boxSelectStateRef.current;
       if (bs.active) {
         bs.active = false;
         if (bs.moved) {
-          // Box select: raycast all objects in the rectangle
           performBoxSelect(bs.startX, bs.startY, e.clientX, e.clientY, bs.shift);
-          if (boxSelectRef.current) boxSelectRef.current.visible = false;
         } else if (
           !wasPanning &&
           !wasOrbiting &&
           !gizmoDraggingRef.current
         ) {
-          // Click select
           raycastSelect(e);
         }
       }
+      // Unconditionally hide overlay + reset active (defensive: covers all code paths)
+      if (boxSelectRef.current) boxSelectRef.current.visible = false;
+      boxSelectStateRef.current.active = false;
     };
 
     // Perform box selection: find all objects whose bounding sphere intersects the screen-space rectangle
@@ -443,6 +456,8 @@ export function Viewport() {
     dom.addEventListener("pointerdown", onPointerDown);
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
+    dom.addEventListener("pointercancel", onPointerCancel);
+    dom.addEventListener("lostpointercapture", onLostPointerCapture);
     dom.addEventListener("wheel", onWheel, { passive: false });
     dom.addEventListener("contextmenu", onContextMenu);
 
@@ -930,6 +945,8 @@ return {
       dom.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
+      dom.removeEventListener("pointercancel", onPointerCancel);
+      dom.removeEventListener("lostpointercapture", onLostPointerCapture);
       dom.removeEventListener("wheel", onWheel);
       dom.removeEventListener("contextmenu", onContextMenu);
       window.removeEventListener("keydown", onKey);
