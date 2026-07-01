@@ -659,6 +659,31 @@ export function Viewport() {
           s.renderOrder = 999;
           overlay.add(s);
         }
+      } else if (hl.type === "groups") {
+        // Groups tab: highlight all faces in the selected group(s)
+        // geometry.groups[i] = { start, count, materialIndex }
+        // start/count are in index-buffer terms; count/3 = number of triangles
+        const geomGroups = geo.groups || [];
+        for (const id of hl.ids) {
+          const grp = geomGroups[id];
+          if (!grp) continue;
+          const triStart = grp.start / 3;
+          const triCount = grp.count / 3;
+          for (let t = triStart; t < triStart + triCount; t++) {
+            if (!index) continue;
+            const a = index.getX(t * 3);
+            const b = index.getX(t * 3 + 1);
+            const c = index.getX(t * 3 + 2);
+            const va = new THREE.Vector3().fromBufferAttribute(pos, a).applyMatrix4(mesh.matrixWorld);
+            const vb = new THREE.Vector3().fromBufferAttribute(pos, b).applyMatrix4(mesh.matrixWorld);
+            const vc = new THREE.Vector3().fromBufferAttribute(pos, c).applyMatrix4(mesh.matrixWorld);
+            const faceGeo = new THREE.BufferGeometry().setFromPoints([va, vb, vc]);
+            faceGeo.setIndex([0, 1, 2]);
+            const fm = new THREE.Mesh(faceGeo, mat);
+            fm.renderOrder = 999;
+            overlay.add(fm);
+          }
+        }
       }
     };
 

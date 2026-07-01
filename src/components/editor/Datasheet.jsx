@@ -116,7 +116,9 @@ export function Datasheet() {
         {tab === "faces" && (
           <FaceTable faces={data.faces} selectedRows={selectedRows} onRowClick={handleRowClick} />
         )}
-        {tab === "groups" && <GroupTable groups={data.groups} />}
+        {tab === "groups" && (
+          <GroupTable groups={data.groups} selectedRows={selectedRows} onRowClick={handleRowClick} />
+        )}
       </div>
     </div>
   );
@@ -328,7 +330,7 @@ function FaceTable({ faces, selectedRows, onRowClick }) {
   );
 }
 
-function GroupTable({ groups }) {
+function GroupTable({ groups, selectedRows, onRowClick }) {
   if (!groups || groups.length === 0) {
     return <div className="p-3 text-[11px] text-zinc-500 text-center">No groups defined on this geometry.</div>;
   }
@@ -341,13 +343,13 @@ function GroupTable({ groups }) {
       </thead>
       <tbody>
         {groups.map((g) => (
-          <tr key={g.id} className="border-b border-zinc-900 hover:bg-zinc-900/50">
+          <Row key={g.id} selected={selectedRows.has(g.id)} onClick={(e) => onRowClick(g.id, e.shiftKey)}>
             <Td className="text-cyan-400">{g.id}</Td>
             <Td className="text-zinc-300">{g.name}</Td>
             <Td className="text-right text-zinc-300">{g.start}</Td>
             <Td className="text-right text-zinc-300">{g.count}</Td>
             <Td className="text-right text-zinc-300">{g.materialIndex}</Td>
-          </tr>
+          </Row>
         ))}
       </tbody>
     </table>
