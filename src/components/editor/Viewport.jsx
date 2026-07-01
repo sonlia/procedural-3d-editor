@@ -53,7 +53,8 @@ export function Viewport() {
   const userGroupRef = useRef(null); // graph-produced scene's user content goes here
   const tcRef = useRef(null);
   const tcHelperRef = useRef(null);
-  const wireframeRef = useRef(null); // wireframe overlay for selected object
+  const wireframeRef = useRef(null); // wireframe overlay for selected object (legacy, unused)
+  const selectionOverlaysRef = useRef(null); // group holding wireframe overlays for multi-select
   const datasheetOverlayRef = useRef(null); // highlight overlay for datasheet selection
   const boxSelectRef = useRef(null); // box-select rectangle overlay
   const clockRef = useRef(null);
@@ -210,6 +211,12 @@ export function Viewport() {
     wire.userData.origMat = wireMat; // save for restoring after Box3Helper
     wireframeRef.current = wire;
     scene.add(wire);
+
+    // ---- selection wireframe overlays (for multi-select) ----
+    const selectionOverlays = new THREE.Group();
+    selectionOverlays.visible = true;
+    selectionOverlaysRef.current = selectionOverlays;
+    scene.add(selectionOverlays);
 
     // ---- datasheet highlight overlay (for point/edge/face highlighting) ----
     const datasheetOverlay = new THREE.Group();
@@ -429,7 +436,7 @@ export function Viewport() {
 
       userGroup.traverse((o) => {
         if (!o.isObject3D || o === userGroup) return;
-        if (o === wire || o === datasheetOverlayRef.current) return;
+        if (o === wire || o === datasheetOverlayRef.current || o === selectionOverlaysRef.current) return;
         // Skip default objects? No — include them too.
 
         // Use bounding sphere for more accurate selection
@@ -877,7 +884,7 @@ return {
           }
           // Remove children no longer desired (but keep overlay + default meshes)
           for (const child of [...userGroup.children]) {
-            if (child === wire || child === datasheetOverlayRef.current) continue;
+            if (child === wire || child === datasheetOverlayRef.current || child === selectionOverlaysRef.current) continue;
             if (child.userData?.__isDefault) continue; // keep default objects
             if (!desiredChildren.has(child)) {
               userGroup.remove(child);
@@ -909,51 +916,58 @@ return {
         lastVersion = store.version;
       }
 
-      // ---- selection wireframe + gizmo ----
-      const selId = store.selectedObjectId;
-      if (selId != null) {
-        let found = null;
-        userGroup.traverse((o) => {
-          if (!found && (o.uuid === selId || String(o.userData?.nodeId) === selId)) {
-            found = o;
-          }
-        });
-        if (found && found.isMesh && found.geometry) {
-          try {
-            const wfGeo = new THREE.WireframeGeometry(found.geometry);
-            wire.geometry.dispose();
-            wire.geometry = wfGeo;
-            wire.material = wire.userData.origMat;
-            wire.visible = true;
-            wire.position.copy(found.position);
-            wire.rotation.copy(found.rotation);
-            wire.scale.copy(found.scale);
-            if (wire.parent !== found.parent) {
-              (found.parent ?? scene).add(wire);
+      // ---- selection wireframe + gizmo (supports multi-select) ----
+      const selIds = store.selectedObjectIds;
+      // Clear previous wireframe overlays (remove all children from a temp group)
+      // We use a simpler approach: clear the single wire + manage a dynamic set
+      // Clear old overlays
+      while (selectionOverlaysRef.current.children.length > 0) {
+        const child = selectionOverlaysRef.current.children[0];
+        selectionOverlaysRef.current.remove(child);
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) child.material.dispose();
+      }
+
+      if (selIds.length > 0) {
+        let lastFound = null;
+        for (const selId of selIds) {
+          let found = null;
+          userGroup.traverse((o) => {
+            if (!found && (o.uuid === selId || String(o.userData?.nodeId) === selId)) {
+              found = o;
             }
-          } catch {
-            wire.visible = false;
+          });
+          if (!found) continue;
+          lastFound = found;
+
+          // Create a wireframe overlay for this object
+          if (found.isMesh && found.geometry) {
+            try {
+              const wfGeo = new THREE.WireframeGeometry(found.geometry);
+              const wfMat = new THREE.LineBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.9 });
+              const wf = new THREE.LineSegments(wfGeo, wfMat);
+              wf.position.copy(found.position);
+              wf.rotation.copy(found.rotation);
+              wf.scale.copy(found.scale);
+              wf.renderOrder = 998;
+              selectionOverlaysRef.current.add(wf);
+            } catch {}
+          } else if (found.isObject3D) {
+            const box = new THREE.Box3().setFromObject(found);
+            if (!box.isEmpty()) {
+              const helper = new THREE.Box3Helper(box, 0x00ffff);
+              helper.renderOrder = 998;
+              selectionOverlaysRef.current.add(helper);
+            }
           }
-        } else if (found && found.isObject3D) {
-          const box = new THREE.Box3().setFromObject(found);
-          if (!box.isEmpty()) {
-            const helper = new THREE.Box3Helper(box, 0x00ffff);
-            wire.geometry.dispose();
-            wire.geometry = helper.geometry;
-            wire.material = helper.material;
-            wire.visible = true;
-            wire.position.set(0, 0, 0);
-            wire.rotation.set(0, 0, 0);
-            wire.scale.set(1, 1, 1);
-          }
-        } else {
-          wire.visible = false;
         }
-        if (found && found.isObject3D && tc.object !== found && !gizmoDraggingRef.current) {
-          tc.attach(found);
+
+        // Attach gizmo to the last selected object (the "active" one)
+        if (lastFound && lastFound.isObject3D && tc.object !== lastFound && !gizmoDraggingRef.current) {
+          const attachTarget = lastFound.isMesh ? lastFound : lastFound;
+          tc.attach(attachTarget);
         }
       } else {
-        wire.visible = false;
         if (tc.object && !gizmoDraggingRef.current) tc.detach();
       }
 
