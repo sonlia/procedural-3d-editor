@@ -803,6 +803,26 @@ export function Viewport() {
             } catch (e) {
               console.error("[bgJsCode] execution error:", e);
             }
+            // Validate geometries: dispose any with NaN positions
+            if (ctx.__geometries) {
+              for (const [key, geo] of Object.entries(ctx.__geometries)) {
+                if (geo && geo.attributes && geo.attributes.position) {
+                  const arr = geo.attributes.position.array;
+                  let hasNaN = false;
+                  for (let i = 0; i < Math.min(arr.length, 30); i++) {
+                    if (Number.isNaN(arr[i])) { hasNaN = true; break; }
+                  }
+                  if (hasNaN) {
+                    console.warn(`[bgJsCode] geometry ${key} has NaN positions, disposing`);
+                    try { geo.dispose(); } catch {}
+                    delete ctx.__geometries[key];
+                    if (ctx.__meshes && ctx.__meshes[key]) {
+                      ctx.__meshes[key].geometry = new THREE.BufferGeometry(); // empty fallback
+                    }
+                  }
+                }
+              }
+            }
           }
           // 6. Compile + execute jsCode (defines __out_<safeId> for topology)
           const safeVar = (id) => `__out_${String(id).replace(/[^a-zA-Z0-9_]/g, "_")}`;

@@ -26,8 +26,8 @@ export class DirectionalLightNode extends NodeMeta {
     const outVar = `__out_${safeVarSuffix(id)}`;
     const idStr = JSON.stringify(String(id));
     const color = strProp(this, "color", "#ffffff");
-    const intensity = numProp(this, "intensity", 1.0);
-    const pos = vec3Prop(this, "position", [5, 8, 4]);
+    const intensity = Number(numProp(this, "intensity", 1.0)) || 1.0;
+    const pos = vec3Prop(this, "position", [5, 8, 4]).map((v) => Number(v) || 0);
     this.jsCode = `
 // DirectionalLight #${id}
 const ${outVar} = new THREE.DirectionalLight(

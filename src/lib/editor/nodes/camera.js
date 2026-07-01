@@ -26,11 +26,11 @@ export class CameraNode extends NodeMeta {
     const id = this.id;
     const outVar = `__out_${safeVarSuffix(id)}`;
     const idStr = JSON.stringify(String(id));
-    const fov = numProp(this, "fov", 50);
-    const near = numProp(this, "near", 0.1);
-    const far = numProp(this, "far", 2000);
-    const pos = vec3Prop(this, "position", [7, 5, 9]);
-    const la = vec3Prop(this, "lookAt", [0, 0, 0]);
+    const fov = Number(numProp(this, "fov", 50)) || 50;
+    const near = Math.max(0.001, Number(numProp(this, "near", 0.1)) || 0.1);
+    const far = Math.max(1, Number(numProp(this, "far", 2000)) || 2000);
+    const pos = vec3Prop(this, "position", [7, 5, 9]).map((v) => Number(v) || 0);
+    const la = vec3Prop(this, "lookAt", [0, 0, 0]).map((v) => Number(v) || 0);
     this.jsCode = `
 // Camera #${id}
 const ${outVar} = (() => {

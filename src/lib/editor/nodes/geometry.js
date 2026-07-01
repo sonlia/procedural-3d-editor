@@ -51,10 +51,11 @@ export class GeometryNode extends NodeMeta {
     const id = this.id;
     const idStr = JSON.stringify(String(id));
     const type = strProp(this, "type", "Box");
-    const w = numProp(this, "width", 1);
-    const h = numProp(this, "height", 1);
-    const d = numProp(this, "depth", 1);
-    const seg = Math.max(1, Math.floor(numProp(this, "segments", 32)));
+    // Force-convert to number and clamp to avoid NaN in geometry
+    const w = Math.max(0.01, Number(numProp(this, "width", 1)) || 1);
+    const h = Math.max(0.01, Number(numProp(this, "height", 1)) || 1);
+    const d = Math.max(0.01, Number(numProp(this, "depth", 1)) || 1);
+    const seg = Math.max(1, Math.floor(Number(numProp(this, "segments", 32)) || 32));
 
     // Build the geometry creation expression based on type
     let geoCreate;
