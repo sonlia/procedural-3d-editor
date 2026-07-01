@@ -13,7 +13,6 @@ export const MODEL_FORMATS = [
   { value: "VRML", label: "VRML / X3DV", extensions: ".vrml,.wrl", loaderKey: "vrml", extract: "obj" },
   { value: "PCD", label: "PCD (Point Cloud)", extensions: ".pcd", loaderKey: "pcd", extract: "obj" },
   { value: "PDB", label: "PDB (Protein)", extensions: ".pdb", loaderKey: "pdb", extract: "obj" },
-  { value: "VTK", label: "VTK", extensions: ".vtk", loaderKey: "vtk", extract: "obj" },
   { value: "XYZ", label: "XYZ (Point Cloud)", extensions: ".xyz", loaderKey: "xyz", extract: "obj" },
   { value: "KMZ", label: "KMZ (Google Earth)", extensions: ".kmz", loaderKey: "kmz", extract: "obj.scene" },
   { value: "TDS", label: "3DS (Autodesk)", extensions: ".3ds", loaderKey: "tds", extract: "obj" },

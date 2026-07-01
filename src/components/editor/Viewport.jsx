@@ -14,7 +14,6 @@ import { ThreeMFLoader } from "three/examples/jsm/loaders/3MFLoader.js";
 import { VRMLLoader } from "three/examples/jsm/loaders/VRMLLoader.js";
 import { PCDLoader } from "three/examples/jsm/loaders/PCDLoader.js";
 import { PDBLoader } from "three/examples/jsm/loaders/PDBLoader.js";
-import { VTKLoader } from "three/examples/jsm/loaders/VTKLoader.js";
 import { XYZLoader } from "three/examples/jsm/loaders/XYZLoader.js";
 import { KMZLoader } from "three/examples/jsm/loaders/KMZLoader.js";
 import { TDSLoader } from "three/examples/jsm/loaders/TDSLoader.js";
@@ -130,7 +129,7 @@ export function Viewport() {
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
-    const clock = new THREE.Clock();
+    const clock = new THREE.Timer();
     clockRef.current = clock;
 
     // Initialize all loaders (keys must match MODEL_FORMATS[].loaderKey)
@@ -145,7 +144,6 @@ export function Viewport() {
       vrml: new VRMLLoader(),
       pcd: new PCDLoader(),
       pdb: new PDBLoader(),
-      vtk: new VTKLoader(),
       xyz: new XYZLoader(),
       kmz: new KMZLoader(),
       tds: new TDSLoader(),
@@ -694,7 +692,8 @@ export function Viewport() {
     const animate = () => {
       rafRef.current = requestAnimationFrame(animate);
       const clock = clockRef.current;
-      const time = clock.getElapsedTime();
+      clock.update();
+      const time = clock.getElapsed();
       const store = useEditor.getState();
       const graph = store.graph;
 
