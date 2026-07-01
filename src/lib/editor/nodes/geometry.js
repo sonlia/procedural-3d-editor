@@ -81,27 +81,29 @@ export class GeometryNode extends NodeMeta {
     }
 
     // bgJsCode: runtime code that creates geometry + mesh and stores in ctx.__meshes[id]
+    // Use unique variable names (with id suffix) to avoid collisions when
+    // multiple GeometryNodes are concatenated in the same bgJsCode block.
+    const meshVar = `__mesh_${safeVarSuffix(id)}`;
+    const matVar = `__mat_${safeVarSuffix(id)}`;
     this.bgJsCode = `
 // GeometryNode #${id} (${type})
 if (!ctx.__meshes) ctx.__meshes = {};
 if (!ctx.__geometries) ctx.__geometries = {};
-// Dispose old geometry if it exists
 if (ctx.__geometries[${idStr}]) {
   try { ctx.__geometries[${idStr}].dispose(); } catch (e) {}
 }
 ctx.__geometries[${idStr}] = ${geoCreate};
-// Create or reuse mesh
-let __mesh = ctx.__meshes[${idStr}];
-if (!__mesh) {
-  const __mat = new THREE.MeshStandardMaterial({ color: 0x4ade80, roughness: 0.4, metalness: 0.1 });
-  __mesh = new THREE.Mesh(ctx.__geometries[${idStr}], __mat);
-  __mesh.castShadow = true;
-  __mesh.receiveShadow = true;
-  ctx.__meshes[${idStr}] = __mesh;
+let ${meshVar} = ctx.__meshes[${idStr}];
+if (!${meshVar}) {
+  const ${matVar} = new THREE.MeshStandardMaterial({ color: 0x4ade80, roughness: 0.4, metalness: 0.1 });
+  ${meshVar} = new THREE.Mesh(ctx.__geometries[${idStr}], ${matVar});
+  ${meshVar}.castShadow = true;
+  ${meshVar}.receiveShadow = true;
+  ctx.__meshes[${idStr}] = ${meshVar};
 } else {
-  __mesh.geometry = ctx.__geometries[${idStr}];
+  ${meshVar}.geometry = ctx.__geometries[${idStr}];
 }
-__mesh.userData.nodeId = ${idStr};
+${meshVar}.userData.nodeId = ${idStr};
 `;
 
     // jsCode: expose the mesh as __out_<safeVar> (reads from ctx.__meshes which bgJsCode populated)

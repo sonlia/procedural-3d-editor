@@ -133,8 +133,8 @@ export function NodeGraph() {
   );
 }
 
-// Default scene: 3 empty SOP nodes + 2 standalone geometry nodes (Box + Sphere).
-// SOP subgraphs are empty — user adds nodes inside by double-clicking.
+// Default scene: 3 empty SOP nodes only.
+// User adds geometry/light/camera nodes by double-clicking SOPs or from Nodes tab.
 // Viewport auto-adds a default camera + light when no light nodes exist.
 function buildDefaultScene(graph) {
   for (const n of [...(graph.nodes ?? graph._nodes ?? [])]) graph.remove(n);
@@ -156,18 +156,6 @@ function buildDefaultScene(graph) {
   const scene = LiteGraph.createNode("SOP/sop/scene");
   scene.pos = [60, 440];
   graph.add(scene);
-
-  // Standalone Box geometry
-  const box = LiteGraph.createNode("SOP/primitive/geometry");
-  box.pos = [320, 80];
-  box.properties = { type: "Box", width: 1.5, height: 1.5, depth: 1.5, segments: 1 };
-  graph.add(box);
-
-  // Standalone Sphere geometry
-  const sphere = LiteGraph.createNode("SOP/primitive/geometry");
-  sphere.pos = [320, 260];
-  sphere.properties = { type: "Sphere", width: 1.5, height: 1.5, depth: 1.5, segments: 32 };
-  graph.add(sphere);
 
   useEditor.getState().bumpVersion();
 }

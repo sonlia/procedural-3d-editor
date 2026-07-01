@@ -29,7 +29,6 @@ export function NodesTab() {
     const type = `${cls.treePath}/${cls.id}`;
     let node = null;
     try {
-      // Use LiteGraph.createNode (global from editor.js)
       node = LiteGraph.createNode(type);
     } catch (e) {
       console.error("createNode failed:", e);
@@ -39,7 +38,6 @@ export function NodesTab() {
       console.error("createNode returned null for", type);
       return;
     }
-    // Place at a random position near center
     node.pos = [200 + Math.random() * 100, 200 + Math.random() * 100];
     try {
       graph.add(node);
@@ -47,9 +45,13 @@ export function NodesTab() {
       console.error("graph.add failed:", e);
       return;
     }
-    // Select the new node
     if (canvas) {
       try { canvas.selectNodes([node]); } catch (e) {}
+    }
+    // Auto-set display flag for nodes that output objects (geometry/import)
+    // so they're immediately visible in the viewport
+    if (node.outputs && node.outputs.some((o) => o.type === "object")) {
+      useEditor.getState().toggleDisplayFlag(node.id);
     }
     useEditor.getState().pushHistory(`Add ${cls.title}`);
     useEditor.getState().bumpVersion();
