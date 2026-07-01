@@ -231,6 +231,7 @@ export function Viewport() {
       const intersects = ray.intersectObject(userGroup, true);
       if (intersects.length > 0) {
         const hit = intersects[0].object;
+        // Walk up to find ancestor tagged with nodeId (set by nodes like ImportModel/Geometry)
         let tagged = hit;
         while (tagged && tagged.userData?.nodeId == null && tagged.parent) {
           tagged = tagged.parent;
@@ -248,8 +249,11 @@ export function Viewport() {
           store.setSelectedObjectId(objId);
           store.setSelectedNodeIds([nodeId]);
         }
-        // Attach gizmo to the tagged root
-        if (tagged.isObject3D && tc.object !== tagged) tc.attach(tagged);
+        // Attach gizmo: prefer the hit Mesh itself (has geometry, draggable),
+        // only fall back to tagged parent if hit is not a Mesh.
+        // This prevents attaching to an empty Group container.
+        const attachTarget = hit.isMesh ? hit : (tagged?.isObject3D ? tagged : hit);
+        if (attachTarget.isObject3D && tc.object !== attachTarget) tc.attach(attachTarget);
         return;
       }
       if (!isShift) {
