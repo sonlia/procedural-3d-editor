@@ -129,10 +129,7 @@ export function Viewport() {
     axesGizmoRef.current = { scene: axesScene, camera: axesCam };
 
     // ---- Three.js UI overlay (Isolate / Display / Camera) ----
-    // Drawn on a 2D canvas, used as CanvasTexture on a plane,
-    // rendered via OrthographicCamera in the top-right corner.
-    // The 2D canvas has Y=0 at top, but Three.js OrthographicCamera has Y=0 at bottom.
-    // So we flip the texture on the plane (scale.y = -1).
+    // Two canvases: button bar (300x40) + dropdown list (300xN, separate)
     const uiCanvas = document.createElement("canvas");
     uiCanvas.width = 300;
     uiCanvas.height = 40;
@@ -140,24 +137,42 @@ export function Viewport() {
     const uiTex = new THREE.CanvasTexture(uiCanvas);
     uiTex.minFilter = THREE.LinearFilter;
     uiTex.magFilter = THREE.LinearFilter;
-    uiTex.flipY = true; // Default: flip Y so canvas (Y=0 at top) maps to Three.js (Y=0 at bottom)
     const uiMat = new THREE.MeshBasicMaterial({ map: uiTex, transparent: true, depthTest: false, depthWrite: false });
     const uiGeo = new THREE.PlaneGeometry(300, 40);
     const uiMesh = new THREE.Mesh(uiGeo, uiMat);
-    uiMesh.position.set(150, 20, 0);
     uiMesh.renderOrder = 2000;
     const uiScene = new THREE.Scene();
     uiScene.add(uiMesh);
-    // Camera: Y=0 at top (matches canvas), Y=40 at bottom
-    const uiCam = new THREE.OrthographicCamera(0, 300, 0, 40, -1, 1);
+    const uiCam = new THREE.OrthographicCamera(0, 300, 40, 0, -1, 1);
     uiCam.position.z = 1;
-    // UI element layout (x, y, w, h in canvas pixels, y=0 is top)
     const uiElements = [
       { name: "isolate", x: 226, y: 8, w: 68, h: 24 },
       { name: "display", x: 148, y: 8, w: 68, h: 24 },
       { name: "camera", x: 6, y: 8, w: 132, h: 24 },
     ];
-    uiOverlayRef.current = { canvas: uiCanvas, ctx: uiCtx, texture: uiTex, scene: uiScene, camera: uiCam, elements: uiElements };
+
+    // Dropdown canvas (separate, only visible when dropdown is open)
+    const ddCanvas = document.createElement("canvas");
+    ddCanvas.width = 300;
+    ddCanvas.height = 200;
+    const ddCtx = ddCanvas.getContext("2d");
+    const ddTex = new THREE.CanvasTexture(ddCanvas);
+    ddTex.minFilter = THREE.LinearFilter;
+    ddTex.magFilter = THREE.LinearFilter;
+    const ddMat = new THREE.MeshBasicMaterial({ map: ddTex, transparent: true, depthTest: false, depthWrite: false });
+    const ddGeo = new THREE.PlaneGeometry(300, 200);
+    const ddMesh = new THREE.Mesh(ddGeo, ddMat);
+    ddMesh.visible = false;
+    ddMesh.renderOrder = 2001;
+    const ddScene = new THREE.Scene();
+    ddScene.add(ddMesh);
+    const ddCam = new THREE.OrthographicCamera(0, 300, 200, 0, -1, 1);
+    ddCam.position.z = 1;
+
+    uiOverlayRef.current = {
+      canvas: uiCanvas, ctx: uiCtx, texture: uiTex, scene: uiScene, camera: uiCam, elements: uiElements,
+      ddCanvas, ddCtx, ddTex, ddScene, ddCam, ddMesh,
+    };
     window._viewportUI = uiOverlayRef.current;
     const defaultDirLight = new THREE.DirectionalLight(0xffffff, 1.0);
     defaultDirLight.position.set(5, 8, 4);
@@ -826,25 +841,11 @@ export function Viewport() {
     const drawUI = () => {
       const ov = uiOverlayRef.current;
       if (!ov) return;
-      const ctx = ov.ctx;
       const st = useEditor.getState();
-      // Expand canvas height if dropdown is open
-      let maxH = 40;
-      if (dropdownOpen.name === "display") maxH = 40 + displayModes.length * 22 + 4;
-      else if (dropdownOpen.name === "camera") maxH = 40 + getCameraList().length * 22 + 4;
-      if (ov.canvas.height !== maxH) {
-        ov.canvas.height = maxH;
-        ov.texture.needsUpdate = true;
-      }
-      // Resize plane geometry to match canvas (position is set in render loop)
-      const plane = ov.scene.children[0];
-      if (plane && plane.geometry.parameters.height !== maxH) {
-        plane.geometry.dispose();
-        plane.geometry = new THREE.PlaneGeometry(300, maxH);
-      }
-      ctx.clearRect(0, 0, 300, maxH);
 
-      // Draw buttons (always on row 0)
+      // --- Draw button bar (always 300x40) ---
+      const ctx = ov.ctx;
+      ctx.clearRect(0, 0, 300, 40);
       for (const el of ov.elements) {
         const isOpen = dropdownOpen.name === el.name;
         const isActive = (el.name === "isolate" && st.isolateMode) || isOpen;
@@ -866,10 +867,8 @@ export function Viewport() {
           const cur = cams.find((c) => String(c.id) === String(st.activeCameraId));
           label = cur ? cur.label : "Default Cam";
         }
-        // Draw label + dropdown arrow
         ctx.fillText(label, el.x + el.w / 2 - 6, el.y + el.h / 2);
         if (el.name !== "isolate") {
-          // Small down arrow
           ctx.beginPath();
           const ax = el.x + el.w - 12;
           const ay = el.y + el.h / 2;
@@ -881,84 +880,79 @@ export function Viewport() {
           ctx.fill();
         }
       }
-
-      // Draw dropdown list if open
-      if (dropdownOpen.name === "display") {
-        const el = ov.elements.find((e) => e.name === "display");
-        ctx.fillStyle = "rgba(20,20,25,0.95)";
-        ctx.strokeStyle = "#3f3f46";
-        roundRect(ctx, el.x, 34, el.w, displayModes.length * 22 + 4, 4);
-        ctx.fill();
-        ctx.stroke();
-        displayModes.forEach((mode, i) => {
-          const iy = 38 + i * 22;
-          const isCur = st.displayMode === mode;
-          if (isCur) {
-            ctx.fillStyle = "rgba(34,211,238,0.2)";
-            ctx.fillRect(el.x + 2, iy - 2, el.w - 4, 20);
-          }
-          ctx.fillStyle = isCur ? "#22d3ee" : "#d4d4d8";
-          ctx.font = "10px Tahoma, sans-serif";
-          ctx.textAlign = "left";
-          ctx.textBaseline = "middle";
-          ctx.fillText(displayLabels[mode], el.x + 8, iy + 8);
-        });
-      } else if (dropdownOpen.name === "camera") {
-        const el = ov.elements.find((e) => e.name === "camera");
-        const cams = getCameraList();
-        ctx.fillStyle = "rgba(20,20,25,0.95)";
-        ctx.strokeStyle = "#3f3f46";
-        roundRect(ctx, el.x, 34, el.w, cams.length * 22 + 4, 4);
-        ctx.fill();
-        ctx.stroke();
-        cams.forEach((cam, i) => {
-          const iy = 38 + i * 22;
-          const isCur = String(st.activeCameraId) === String(cam.id);
-          if (isCur) {
-            ctx.fillStyle = "rgba(34,211,238,0.2)";
-            ctx.fillRect(el.x + 2, iy - 2, el.w - 4, 20);
-          }
-          ctx.fillStyle = isCur ? "#22d3ee" : "#d4d4d8";
-          ctx.font = "10px Tahoma, sans-serif";
-          ctx.textAlign = "left";
-          ctx.textBaseline = "middle";
-          ctx.fillText(cam.label, el.x + 8, iy + 8);
-        });
-      }
       ov.texture.needsUpdate = true;
+
+      // --- Draw dropdown list (separate canvas) ---
+      const ddCtx2 = ov.ddCtx;
+      ddCtx2.clearRect(0, 0, 300, 200);
+      if (dropdownOpen.name) {
+        const el = ov.elements.find((e) => e.name === dropdownOpen.name);
+        let items = [];
+        let currentValue = null;
+        if (dropdownOpen.name === "display") {
+          items = displayModes.map((m) => ({ id: m, label: displayLabels[m] }));
+          currentValue = st.displayMode;
+        } else if (dropdownOpen.name === "camera") {
+          items = getCameraList();
+          currentValue = st.activeCameraId;
+        }
+        const ddH = items.length * 22 + 8;
+        // Background
+        ddCtx2.fillStyle = "rgba(20,20,25,0.95)";
+        ddCtx2.strokeStyle = "#3f3f46";
+        ddCtx2.lineWidth = 1;
+        roundRect(ddCtx2, el.x, 0, el.w, ddH, 4);
+        ddCtx2.fill();
+        ddCtx2.stroke();
+        items.forEach((item, i) => {
+          const iy = 4 + i * 22;
+          const isCur = String(item.id) === String(currentValue);
+          if (isCur) {
+            ddCtx2.fillStyle = "rgba(34,211,238,0.2)";
+            ddCtx2.fillRect(el.x + 2, iy, el.w - 4, 20);
+          }
+          ddCtx2.fillStyle = isCur ? "#22d3ee" : "#d4d4d8";
+          ddCtx2.font = "10px Tahoma, sans-serif";
+          ddCtx2.textAlign = "left";
+          ddCtx2.textBaseline = "middle";
+          ddCtx2.fillText(item.label, el.x + 8, iy + 10);
+        });
+        ov.ddMesh.visible = true;
+      } else {
+        ov.ddMesh.visible = false;
+      }
+      ov.ddTex.needsUpdate = true;
     };
 
     const hitTestUI = (clientX, clientY) => {
       const ov = uiOverlayRef.current;
       if (!ov) return null;
       const rect = dom.getBoundingClientRect();
-      // UI plane is at top-right: x = [rect.width-300, rect.width], y = [0, canvasH]
-      // (in screen coordinates, y=0 at top)
-      const uiLeft = rect.width - 300;
-      const uiTop = 0;
-      const canvasH = ov.canvas.height;
-      const px = clientX - rect.left - uiLeft;
-      const py = clientY - rect.top - uiTop;
-      if (px < 0 || px > 300 || py < 0 || py > canvasH) return null;
-      // Check buttons (row 0, y=8-32)
-      for (const el of ov.elements) {
-        if (px >= el.x && px <= el.x + el.w && py >= el.y && py <= el.y + el.h) {
-          return { type: "button", name: el.name };
+      // Button bar: top-right, 300x40
+      const barLeft = rect.width - 300;
+      const barTop = 0;
+      const px = clientX - rect.left - barLeft;
+      const py = clientY - rect.top - barTop;
+      // Check buttons (y=8-32)
+      if (px >= 0 && px <= 300 && py >= 0 && py <= 40) {
+        for (const el of ov.elements) {
+          if (px >= el.x && px <= el.x + el.w && py >= el.y && py <= el.y + el.h) {
+            return { type: "button", name: el.name };
+          }
         }
       }
-      // Check dropdown items (y starts at 34)
-      if (dropdownOpen.name === "display") {
-        const el = ov.elements.find((e) => e.name === "display");
-        if (px >= el.x && px <= el.x + el.w && py >= 34 && py <= 34 + displayModes.length * 22 + 4) {
+      // Check dropdown items (below button bar, y starts at 34 relative to bar)
+      if (dropdownOpen.name) {
+        const el = ov.elements.find((e) => e.name === dropdownOpen.name);
+        let items = [];
+        if (dropdownOpen.name === "display") items = displayModes;
+        else if (dropdownOpen.name === "camera") items = getCameraList();
+        const ddH = items.length * 22 + 8;
+        if (px >= el.x && px <= el.x + el.w && py >= 34 && py <= 34 + ddH) {
           const idx = Math.floor((py - 38) / 22);
-          if (idx >= 0 && idx < displayModes.length) return { type: "item", name: "display", value: displayModes[idx] };
-        }
-      } else if (dropdownOpen.name === "camera") {
-        const el = ov.elements.find((e) => e.name === "camera");
-        const cams = getCameraList();
-        if (px >= el.x && px <= el.x + el.w && py >= 34 && py <= 34 + cams.length * 22 + 4) {
-          const idx = Math.floor((py - 38) / 22);
-          if (idx >= 0 && idx < cams.length) return { type: "item", name: "camera", value: cams[idx].id };
+          if (idx >= 0 && idx < items.length) {
+            return { type: "item", name: dropdownOpen.name, value: items[idx].id || items[idx] };
+          }
         }
       }
       return null;
@@ -1427,28 +1421,50 @@ return {
         renderer.autoClear = true;
       }
 
-      // Three.js UI overlay (top-right: Isolate/Display/Camera)
+      // Three.js UI overlay (top-right: button bar + dropdown)
       drawUI();
       if (uiOverlayRef.current) {
         const ov = uiOverlayRef.current;
         const rect = dom.getBoundingClientRect();
-        const canvasH = ov.canvas.height;
-        // Camera covers full canvas (Y up: top=height, bottom=0)
+        // Camera covers full canvas
         ov.camera.left = 0;
         ov.camera.right = rect.width;
         ov.camera.top = rect.height;
         ov.camera.bottom = 0;
         ov.camera.updateProjectionMatrix();
-        // Plane at top-right: center x = width - 150, center y = height - canvasH/2 - 2
-        const plane = ov.scene.children[0];
-        if (plane) {
-          plane.position.set(rect.width - 150, rect.height - canvasH / 2 - 2, 0);
+        // Button bar plane: top-right, 300x40
+        const barPlane = ov.scene.children[0];
+        if (barPlane) {
+          barPlane.position.set(rect.width - 150, rect.height - 20 - 2, 0);
         }
         renderer.autoClear = false;
         renderer.setScissorTest(true);
         renderer.setScissor(0, 0, w, h);
         renderer.setViewport(0, 0, w, h);
         renderer.render(ov.scene, ov.camera);
+
+        // Dropdown plane (if visible): below button bar
+        if (ov.ddMesh.visible) {
+          const el = ov.elements.find((e) => e.name === dropdownOpen.name);
+          let items = [];
+          if (dropdownOpen.name === "display") items = displayModes;
+          else if (dropdownOpen.name === "camera") items = getCameraList();
+          const ddH = items.length * 22 + 8;
+          // Dropdown camera covers full canvas too
+          ov.ddCam.left = 0;
+          ov.ddCam.right = rect.width;
+          ov.ddCam.top = rect.height;
+          ov.ddCam.bottom = 0;
+          ov.ddCam.updateProjectionMatrix();
+          // Position: below the button, aligned with button's X
+          ov.ddMesh.position.set(
+            rect.width - 300 + el.x + el.w / 2,
+            rect.height - 40 - 2 - ddH / 2,
+            0
+          );
+          renderer.render(ov.ddScene, ov.ddCam);
+        }
+
         renderer.setScissorTest(false);
         renderer.autoClear = true;
       }
