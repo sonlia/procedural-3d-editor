@@ -140,22 +140,17 @@ export function Viewport() {
     const uiTex = new THREE.CanvasTexture(uiCanvas);
     uiTex.minFilter = THREE.LinearFilter;
     uiTex.magFilter = THREE.LinearFilter;
+    uiTex.flipY = false; // Canvas Y=0 is top, don't flip — draw directly
     const uiMat = new THREE.MeshBasicMaterial({ map: uiTex, transparent: true, depthTest: false });
     const uiGeo = new THREE.PlaneGeometry(300, 40);
     const uiMesh = new THREE.Mesh(uiGeo, uiMat);
-    uiMesh.position.set(150, 20, 0); // center of 300x40 area
+    uiMesh.position.set(150, 20, 0);
     uiMesh.renderOrder = 2000;
     const uiScene = new THREE.Scene();
     uiScene.add(uiMesh);
-    // Camera: left=0, right=300, top=40, bottom=0 (Y up, so top=40 is top of canvas)
-    // But canvas Y=0 is at top — need to flip. Use top=0, bottom=40 and flip texture.
-    const uiCam = new THREE.OrthographicCamera(0, 300, 40, 0, -1, 1);
+    // Camera: Y=0 at top (matches canvas), Y=40 at bottom
+    const uiCam = new THREE.OrthographicCamera(0, 300, 0, 40, -1, 1);
     uiCam.position.z = 1;
-    // Flip texture V so canvas (0,0=top) maps correctly
-    uiTex.wrapS = THREE.ClampToEdgeWrapping;
-    uiTex.wrapT = THREE.ClampToEdgeWrapping;
-    uiTex.repeat.y = -1;
-    uiTex.offset.y = 1;
     // UI element layout (x, y, w, h in canvas pixels, y=0 is top)
     const uiElements = [
       { name: "isolate", x: 226, y: 8, w: 68, h: 24 },
@@ -842,6 +837,13 @@ export function Viewport() {
         ov.camera.updateProjectionMatrix();
         ov.texture.needsUpdate = true;
       }
+      // Also resize the plane to match canvas
+      const plane = ov.scene.children[0];
+      if (plane && (plane.geometry.parameters.width !== 300 || plane.geometry.parameters.height !== maxH)) {
+        plane.geometry.dispose();
+        plane.geometry = new THREE.PlaneGeometry(300, maxH);
+        plane.position.set(150, maxH / 2, 0);
+      }
       ctx.clearRect(0, 0, 300, maxH);
 
       // Draw buttons (always on row 0)
@@ -1428,10 +1430,13 @@ return {
       if (uiOverlayRef.current) {
         const ov = uiOverlayRef.current;
         const rect = dom.getBoundingClientRect();
+        const canvasH = ov.canvas.height; // dynamic height (40 or more with dropdown)
         const uiW = 300 * dpr;
-        const uiH = 40 * dpr;
+        const uiH = canvasH * dpr;
+        // Top-right: X from right edge, Y at top (WebGL Y=0 is bottom,
+        // so top of screen = height - canvasH)
         const uiX = Math.max(0, (rect.width - 302)) * dpr;
-        const uiY = (rect.height - 42) * dpr;
+        const uiY = (rect.height - canvasH - 2) * dpr;
         renderer.autoClear = false;
         renderer.setScissorTest(true);
         renderer.setScissor(uiX, uiY, uiW, uiH);
