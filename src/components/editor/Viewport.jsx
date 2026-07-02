@@ -141,7 +141,7 @@ export function Viewport() {
     uiTex.minFilter = THREE.LinearFilter;
     uiTex.magFilter = THREE.LinearFilter;
     uiTex.flipY = true; // Default: flip Y so canvas (Y=0 at top) maps to Three.js (Y=0 at bottom)
-    const uiMat = new THREE.MeshBasicMaterial({ map: uiTex, transparent: true, depthTest: false });
+    const uiMat = new THREE.MeshBasicMaterial({ map: uiTex, transparent: true, depthTest: false, depthWrite: false });
     const uiGeo = new THREE.PlaneGeometry(300, 40);
     const uiMesh = new THREE.Mesh(uiGeo, uiMat);
     uiMesh.position.set(150, 20, 0);
@@ -834,16 +834,13 @@ export function Viewport() {
       else if (dropdownOpen.name === "camera") maxH = 40 + getCameraList().length * 22 + 4;
       if (ov.canvas.height !== maxH) {
         ov.canvas.height = maxH;
-        ov.camera.bottom = maxH;
-        ov.camera.updateProjectionMatrix();
         ov.texture.needsUpdate = true;
       }
-      // Also resize the plane to match canvas
+      // Resize plane geometry to match canvas (position is set in render loop)
       const plane = ov.scene.children[0];
-      if (plane && (plane.geometry.parameters.width !== 300 || plane.geometry.parameters.height !== maxH)) {
+      if (plane && plane.geometry.parameters.height !== maxH) {
         plane.geometry.dispose();
         plane.geometry = new THREE.PlaneGeometry(300, maxH);
-        plane.position.set(150, maxH / 2, 0);
       }
       ctx.clearRect(0, 0, 300, maxH);
 
@@ -935,17 +932,21 @@ export function Viewport() {
       const ov = uiOverlayRef.current;
       if (!ov) return null;
       const rect = dom.getBoundingClientRect();
-      const uiLeft = rect.right - 300;
-      const uiTop = rect.top;
-      const px = clientX - uiLeft;
-      const py = clientY - uiTop;
+      // UI plane is at top-right: x = [rect.width-300, rect.width], y = [0, canvasH]
+      // (in screen coordinates, y=0 at top)
+      const uiLeft = rect.width - 300;
+      const uiTop = 0;
+      const canvasH = ov.canvas.height;
+      const px = clientX - rect.left - uiLeft;
+      const py = clientY - rect.top - uiTop;
+      if (px < 0 || px > 300 || py < 0 || py > canvasH) return null;
       // Check buttons (row 0, y=8-32)
       for (const el of ov.elements) {
         if (px >= el.x && px <= el.x + el.w && py >= el.y && py <= el.y + el.h) {
           return { type: "button", name: el.name };
         }
       }
-      // Check dropdown items
+      // Check dropdown items (y starts at 34)
       if (dropdownOpen.name === "display") {
         const el = ov.elements.find((e) => e.name === "display");
         if (px >= el.x && px <= el.x + el.w && py >= 34 && py <= 34 + displayModes.length * 22 + 4) {
@@ -1432,19 +1433,15 @@ return {
         const ov = uiOverlayRef.current;
         const rect = dom.getBoundingClientRect();
         const canvasH = ov.canvas.height;
-        // Plane position: top-right corner
-        // Camera has top=0, bottom=rect.height (Y=0 at bottom, Y=height at top)
-        // But flipY=false means texture Y=0 (top of canvas) maps to... 
-        // Let's use standard Three.js: top=height, bottom=0 (Y up)
-        // And flip texture back to normal
+        // Camera covers full canvas (Y up: top=height, bottom=0)
         ov.camera.left = 0;
         ov.camera.right = rect.width;
         ov.camera.top = rect.height;
         ov.camera.bottom = 0;
         ov.camera.updateProjectionMatrix();
+        // Plane at top-right: center x = width - 150, center y = height - canvasH/2 - 2
         const plane = ov.scene.children[0];
         if (plane) {
-          // Top-right: x = width - 150 (center of 300px), y = height - canvasH/2 (near top)
           plane.position.set(rect.width - 150, rect.height - canvasH / 2 - 2, 0);
         }
         renderer.autoClear = false;
