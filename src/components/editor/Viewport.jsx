@@ -140,7 +140,7 @@ export function Viewport() {
     const uiTex = new THREE.CanvasTexture(uiCanvas);
     uiTex.minFilter = THREE.LinearFilter;
     uiTex.magFilter = THREE.LinearFilter;
-    uiTex.flipY = false; // Canvas Y=0 is top, don't flip — draw directly
+    uiTex.flipY = true; // Default: flip Y so canvas (Y=0 at top) maps to Three.js (Y=0 at bottom)
     const uiMat = new THREE.MeshBasicMaterial({ map: uiTex, transparent: true, depthTest: false });
     const uiGeo = new THREE.PlaneGeometry(300, 40);
     const uiMesh = new THREE.Mesh(uiGeo, uiMat);
@@ -158,6 +158,7 @@ export function Viewport() {
       { name: "camera", x: 6, y: 8, w: 132, h: 24 },
     ];
     uiOverlayRef.current = { canvas: uiCanvas, ctx: uiCtx, texture: uiTex, scene: uiScene, camera: uiCam, elements: uiElements };
+    window._viewportUI = uiOverlayRef.current;
     const defaultDirLight = new THREE.DirectionalLight(0xffffff, 1.0);
     defaultDirLight.position.set(5, 8, 4);
     defaultDirLight.userData.__isDefault = true;
@@ -1430,20 +1431,28 @@ return {
       if (uiOverlayRef.current) {
         const ov = uiOverlayRef.current;
         const rect = dom.getBoundingClientRect();
-        const canvasH = ov.canvas.height; // dynamic height (40 or more with dropdown)
-        const uiW = 300 * dpr;
-        const uiH = canvasH * dpr;
-        // Top-right: X from right edge, Y at top (WebGL Y=0 is bottom,
-        // so top of screen = height - canvasH)
-        const uiX = Math.max(0, (rect.width - 302)) * dpr;
-        const uiY = (rect.height - canvasH - 2) * dpr;
+        const canvasH = ov.canvas.height;
+        // Plane position: top-right corner
+        // Camera has top=0, bottom=rect.height (Y=0 at bottom, Y=height at top)
+        // But flipY=false means texture Y=0 (top of canvas) maps to... 
+        // Let's use standard Three.js: top=height, bottom=0 (Y up)
+        // And flip texture back to normal
+        ov.camera.left = 0;
+        ov.camera.right = rect.width;
+        ov.camera.top = rect.height;
+        ov.camera.bottom = 0;
+        ov.camera.updateProjectionMatrix();
+        const plane = ov.scene.children[0];
+        if (plane) {
+          // Top-right: x = width - 150 (center of 300px), y = height - canvasH/2 (near top)
+          plane.position.set(rect.width - 150, rect.height - canvasH / 2 - 2, 0);
+        }
         renderer.autoClear = false;
         renderer.setScissorTest(true);
-        renderer.setScissor(uiX, uiY, uiW, uiH);
-        renderer.setViewport(uiX, uiY, uiW, uiH);
+        renderer.setScissor(0, 0, w, h);
+        renderer.setViewport(0, 0, w, h);
         renderer.render(ov.scene, ov.camera);
         renderer.setScissorTest(false);
-        renderer.setViewport(0, 0, w, h);
         renderer.autoClear = true;
       }
     };
