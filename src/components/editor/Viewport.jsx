@@ -131,6 +131,8 @@ export function Viewport() {
     // ---- Three.js UI overlay (Isolate / Display / Camera) ----
     // Drawn on a 2D canvas, used as CanvasTexture on a plane,
     // rendered via OrthographicCamera in the top-right corner.
+    // The 2D canvas has Y=0 at top, but Three.js OrthographicCamera has Y=0 at bottom.
+    // So we flip the texture on the plane (scale.y = -1).
     const uiCanvas = document.createElement("canvas");
     uiCanvas.width = 300;
     uiCanvas.height = 40;
@@ -139,13 +141,21 @@ export function Viewport() {
     uiTex.minFilter = THREE.LinearFilter;
     uiTex.magFilter = THREE.LinearFilter;
     const uiMat = new THREE.MeshBasicMaterial({ map: uiTex, transparent: true, depthTest: false });
-    const uiGeo = new THREE.PlaneGeometry(1, 1);
+    const uiGeo = new THREE.PlaneGeometry(300, 40);
     const uiMesh = new THREE.Mesh(uiGeo, uiMat);
+    uiMesh.position.set(150, 20, 0); // center of 300x40 area
     uiMesh.renderOrder = 2000;
     const uiScene = new THREE.Scene();
     uiScene.add(uiMesh);
-    const uiCam = new THREE.OrthographicCamera(0, 300, 0, 40, -1, 1);
+    // Camera: left=0, right=300, top=40, bottom=0 (Y up, so top=40 is top of canvas)
+    // But canvas Y=0 is at top — need to flip. Use top=0, bottom=40 and flip texture.
+    const uiCam = new THREE.OrthographicCamera(0, 300, 40, 0, -1, 1);
     uiCam.position.z = 1;
+    // Flip texture V so canvas (0,0=top) maps correctly
+    uiTex.wrapS = THREE.ClampToEdgeWrapping;
+    uiTex.wrapT = THREE.ClampToEdgeWrapping;
+    uiTex.repeat.y = -1;
+    uiTex.offset.y = 1;
     // UI element layout (x, y, w, h in canvas pixels, y=0 is top)
     const uiElements = [
       { name: "isolate", x: 226, y: 8, w: 68, h: 24 },
@@ -1327,8 +1337,8 @@ return {
         const rect = dom.getBoundingClientRect();
         const uiW = 300 * dpr;
         const uiH = 40 * dpr;
-        const uiX = (rect.width - 300) * dpr;
-        const uiY = (rect.height - 40) * dpr;
+        const uiX = Math.max(0, (rect.width - 302)) * dpr;
+        const uiY = (rect.height - 42) * dpr;
         renderer.autoClear = false;
         renderer.setScissorTest(true);
         renderer.setScissor(uiX, uiY, uiW, uiH);
