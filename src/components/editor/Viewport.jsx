@@ -313,6 +313,13 @@ export function Viewport() {
         nav.isOrbiting = true;
         nav.lastX = e.clientX;
         nav.lastY = e.clientY;
+        nav.shiftOrbit = e.shiftKey; // Shift = snap to nearest axis
+        if (e.shiftKey) {
+          updateSpherical();
+          nav.shiftBaseTheta = nav.spherical.theta;
+          nav.shiftBasePhi = nav.spherical.phi;
+          nav.shiftAccum = { theta: 0, phi: 0 };
+        }
         dom.style.cursor = "move";
         e.preventDefault();
       } else if (e.button === 2 && e.altKey) {
@@ -373,18 +380,42 @@ export function Viewport() {
         nav.target.add(pan);
         nav.userNavigated = true;
       } else if (nav.isOrbiting) {
-        const dx = e.clientX - nav.lastX;
-        const dy = e.clientY - nav.lastY;
+        if (nav.shiftOrbit) {
+          // Shift+rotate: snap to nearest axis preset
+          // 6 standard views: +X, -X, +Y, -Y, +Z, -Z
+          // theta = horizontal angle (0=+Z, PI/2=+X, PI=-Z, 3PI/2=-X)
+          // phi = vertical angle (0=+Y, PI/2=horizon, PI=-Y)
+          updateSpherical();
+          // Accumulate total delta from start
+          if (!nav.shiftAccum) nav.shiftAccum = { theta: 0, phi: 0 };
+          nav.shiftAccum.theta -= dx * 0.005;
+          nav.shiftAccum.phi -= dy * 0.005;
+          // Apply accumulated delta to original spherical
+          const baseTheta = nav.shiftBaseTheta + nav.shiftAccum.theta;
+          const basePhi = Math.max(0.05, Math.min(Math.PI - 0.05, nav.shiftBasePhi + nav.shiftAccum.phi));
+          // Snap to nearest preset
+          const snapped = snapToAxis(baseTheta, basePhi);
+          nav.spherical.theta = snapped.theta;
+          nav.spherical.phi = snapped.phi;
+          const offset = new THREE.Vector3().setFromSpherical(nav.spherical);
+          camera.position.copy(nav.target).add(offset);
+          camera.lookAt(nav.target);
+          nav.userNavigated = true;
+        } else {
+          // Normal orbit
+          const dx = e.clientX - nav.lastX;
+          const dy = e.clientY - nav.lastY;
+          updateSpherical();
+          nav.spherical.theta -= dx * 0.005;
+          nav.spherical.phi -= dy * 0.005;
+          nav.spherical.phi = Math.max(0.05, Math.min(Math.PI - 0.05, nav.spherical.phi));
+          const offset = new THREE.Vector3().setFromSpherical(nav.spherical);
+          camera.position.copy(nav.target).add(offset);
+          camera.lookAt(nav.target);
+          nav.userNavigated = true;
+        }
         nav.lastX = e.clientX;
         nav.lastY = e.clientY;
-        updateSpherical();
-        nav.spherical.theta -= dx * 0.005;
-        nav.spherical.phi -= dy * 0.005;
-        nav.spherical.phi = Math.max(0.05, Math.min(Math.PI - 0.05, nav.spherical.phi));
-        const offset = new THREE.Vector3().setFromSpherical(nav.spherical);
-        camera.position.copy(nav.target).add(offset);
-        camera.lookAt(nav.target);
-        nav.userNavigated = true;
       } else if (boxSelectStateRef.current.active) {
         const bs = boxSelectStateRef.current;
         const dx = Math.abs(e.clientX - bs.startX);
@@ -756,6 +787,38 @@ export function Viewport() {
         }
       }
     };
+
+    // Snap spherical angles to nearest axis preset (6 views)
+    // theta: 0=front(+Z), PI/2=right(+X), PI=back(-Z), 3PI/2=left(-X)
+    // phi: 0=top(+Y), PI/2=horizon, PI=bottom(-Y)
+    function snapToAxis(theta, phi) {
+      // Normalize theta to 0..2PI
+      let t = theta % (2 * Math.PI);
+      if (t < 0) t += 2 * Math.PI;
+      // Candidate presets: (theta, phi) pairs
+      const presets = [
+        { theta: 0, phi: Math.PI / 2 },           // +Z (front)
+        { theta: Math.PI / 2, phi: Math.PI / 2 },  // +X (right)
+        { theta: Math.PI, phi: Math.PI / 2 },       // -Z (back)
+        { theta: 3 * Math.PI / 2, phi: Math.PI / 2 }, // -X (left)
+        { theta: 0, phi: 0.01 },                    // +Y (top)
+        { theta: 0, phi: Math.PI - 0.01 },          // -Y (bottom)
+      ];
+      let best = presets[0];
+      let bestDist = Infinity;
+      for (const p of presets) {
+        // Angular distance (weight theta and phi equally)
+        let dt = Math.abs(t - p.theta);
+        if (dt > Math.PI) dt = 2 * Math.PI - dt;
+        const dp = Math.abs(phi - p.phi);
+        const dist = dt * dt + dp * dp;
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = p;
+        }
+      }
+      return best;
+    }
 
     const animate = () => {
       rafRef.current = requestAnimationFrame(animate);
