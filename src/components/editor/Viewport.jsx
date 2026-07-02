@@ -166,6 +166,7 @@ export function Viewport() {
     defBoxMesh.receiveShadow = true;
     defBoxMesh.userData.__isDefault = true;
     defBoxMesh.userData.nodeId = "__default_box";
+    defBoxMesh.frustumCulled = false;
     userGroup.add(defBoxMesh);
 
     const sphereMat = new THREE.MeshStandardMaterial({ color: 0x60a5fa, roughness: 0.3, metalness: 0.2 });
@@ -176,6 +177,7 @@ export function Viewport() {
     defSphereMesh.receiveShadow = true;
     defSphereMesh.userData.__isDefault = true;
     defSphereMesh.userData.nodeId = "__default_sphere";
+    defSphereMesh.frustumCulled = false;
     userGroup.add(defSphereMesh);
 
     // ---- host camera (fallback when graph has no camera) ----
@@ -301,6 +303,9 @@ export function Viewport() {
 
     const raycastSelect = (e) => {
       const ndc = getMouseNDC(e);
+      camera.updateMatrixWorld();
+      camera.updateProjectionMatrix();
+      userGroup.updateMatrixWorld(true);
       const ray = new THREE.Raycaster();
       ray.setFromCamera(new THREE.Vector2(ndc.x, ndc.y), camera);
       const store = useEditor.getState();
@@ -352,7 +357,6 @@ export function Viewport() {
     };
 
     const onPointerDown = (e) => {
-      if (gizmoDraggingRef.current || tc.axis !== null) return;
       if (e.button === 0 && e.altKey) {
         // Alt + 左键 = 旋转
         nav.isOrbiting = true;
