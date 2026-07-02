@@ -346,6 +346,10 @@ export function Viewport() {
         e.preventDefault();
         return;
       }
+      // Click outside dropdown closes it
+      if (dropdownOpen.name) {
+        dropdownOpen.name = null;
+      }
       if (gizmoDraggingRef.current || tc.axis !== null) return;
       if (e.button === 0 && e.altKey) {
         // Alt + 左键 = 旋转
@@ -798,37 +802,128 @@ export function Viewport() {
 
     // ---- Three.js UI overlay drawing + click handling ----
     const displayModes = ["solid", "wireframe", "points", "xray", "normals"];
-    const displayLabels = { solid: "Solid", wireframe: "Wire", points: "Points", xray: "X-Ray", normals: "Normals" };
+    const displayLabels = { solid: "Solid", wireframe: "Wireframe", points: "Points", xray: "X-Ray", normals: "Normals" };
+    // Dropdown state: which dropdown is open (null = closed)
+    const dropdownOpen = { name: null };
+
+    const getCameraList = () => {
+      const st = useEditor.getState();
+      const list = [{ id: "default", label: "Default Camera" }];
+      const graph = st.graph;
+      if (graph) {
+        const nodes = graph._nodes || graph.nodes || [];
+        for (const n of nodes) {
+          if (n.type && n.type.includes("camera")) list.push({ id: n.id, label: n.title || "Camera" });
+          if (n.subgraph) {
+            const inner = n.subgraph._nodes || n.subgraph.nodes || [];
+            for (const innerN of inner) {
+              if (innerN.type && innerN.type.includes("camera")) {
+                list.push({ id: innerN.id, label: (n.title || "SOP") + "/" + (innerN.title || "Cam") });
+              }
+            }
+          }
+        }
+      }
+      return list;
+    };
 
     const drawUI = () => {
       const ov = uiOverlayRef.current;
       if (!ov) return;
       const ctx = ov.ctx;
       const st = useEditor.getState();
-      ctx.clearRect(0, 0, 300, 40);
+      // Expand canvas height if dropdown is open
+      let maxH = 40;
+      if (dropdownOpen.name === "display") maxH = 40 + displayModes.length * 22 + 4;
+      else if (dropdownOpen.name === "camera") maxH = 40 + getCameraList().length * 22 + 4;
+      if (ov.canvas.height !== maxH) {
+        ov.canvas.height = maxH;
+        ov.camera.bottom = maxH;
+        ov.camera.updateProjectionMatrix();
+        ov.texture.needsUpdate = true;
+      }
+      ctx.clearRect(0, 0, 300, maxH);
 
+      // Draw buttons (always on row 0)
       for (const el of ov.elements) {
-        const active = (el.name === "isolate" && st.isolateMode);
-        // Background
-        ctx.fillStyle = active ? "rgba(34,211,238,0.9)" : "rgba(0,0,0,0.6)";
-        ctx.strokeStyle = active ? "#22d3ee" : "#3f3f46";
+        const isOpen = dropdownOpen.name === el.name;
+        const isActive = (el.name === "isolate" && st.isolateMode) || isOpen;
+        ctx.fillStyle = isActive ? "rgba(34,211,238,0.9)" : "rgba(0,0,0,0.7)";
+        ctx.strokeStyle = isActive ? "#22d3ee" : "#3f3f46";
         ctx.lineWidth = 1;
         roundRect(ctx, el.x, el.y, el.w, el.h, 4);
         ctx.fill();
         ctx.stroke();
-        // Text
-        ctx.fillStyle = active ? "#000" : "#a1a1aa";
+        ctx.fillStyle = isActive ? "#000" : "#d4d4d8";
         ctx.font = "10px Tahoma, sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         let label = "";
-        if (el.name === "isolate") label = "Isolate";
+        if (el.name === "isolate") label = st.isolateMode ? "Isolate ON" : "Isolate";
         else if (el.name === "display") label = displayLabels[st.displayMode] || st.displayMode;
         else if (el.name === "camera") {
-          if (st.activeCameraId === "default" || !st.activeCameraId) label = "Default Cam";
-          else label = "Graph Cam";
+          const cams = getCameraList();
+          const cur = cams.find((c) => String(c.id) === String(st.activeCameraId));
+          label = cur ? cur.label : "Default Cam";
         }
-        ctx.fillText(label, el.x + el.w / 2, el.y + el.h / 2);
+        // Draw label + dropdown arrow
+        ctx.fillText(label, el.x + el.w / 2 - 6, el.y + el.h / 2);
+        if (el.name !== "isolate") {
+          // Small down arrow
+          ctx.beginPath();
+          const ax = el.x + el.w - 12;
+          const ay = el.y + el.h / 2;
+          ctx.moveTo(ax - 3, ay - 2);
+          ctx.lineTo(ax + 3, ay - 2);
+          ctx.lineTo(ax, ay + 2);
+          ctx.closePath();
+          ctx.fillStyle = isActive ? "#000" : "#71717a";
+          ctx.fill();
+        }
+      }
+
+      // Draw dropdown list if open
+      if (dropdownOpen.name === "display") {
+        const el = ov.elements.find((e) => e.name === "display");
+        ctx.fillStyle = "rgba(20,20,25,0.95)";
+        ctx.strokeStyle = "#3f3f46";
+        roundRect(ctx, el.x, 34, el.w, displayModes.length * 22 + 4, 4);
+        ctx.fill();
+        ctx.stroke();
+        displayModes.forEach((mode, i) => {
+          const iy = 38 + i * 22;
+          const isCur = st.displayMode === mode;
+          if (isCur) {
+            ctx.fillStyle = "rgba(34,211,238,0.2)";
+            ctx.fillRect(el.x + 2, iy - 2, el.w - 4, 20);
+          }
+          ctx.fillStyle = isCur ? "#22d3ee" : "#d4d4d8";
+          ctx.font = "10px Tahoma, sans-serif";
+          ctx.textAlign = "left";
+          ctx.textBaseline = "middle";
+          ctx.fillText(displayLabels[mode], el.x + 8, iy + 8);
+        });
+      } else if (dropdownOpen.name === "camera") {
+        const el = ov.elements.find((e) => e.name === "camera");
+        const cams = getCameraList();
+        ctx.fillStyle = "rgba(20,20,25,0.95)";
+        ctx.strokeStyle = "#3f3f46";
+        roundRect(ctx, el.x, 34, el.w, cams.length * 22 + 4, 4);
+        ctx.fill();
+        ctx.stroke();
+        cams.forEach((cam, i) => {
+          const iy = 38 + i * 22;
+          const isCur = String(st.activeCameraId) === String(cam.id);
+          if (isCur) {
+            ctx.fillStyle = "rgba(34,211,238,0.2)";
+            ctx.fillRect(el.x + 2, iy - 2, el.w - 4, 20);
+          }
+          ctx.fillStyle = isCur ? "#22d3ee" : "#d4d4d8";
+          ctx.font = "10px Tahoma, sans-serif";
+          ctx.textAlign = "left";
+          ctx.textBaseline = "middle";
+          ctx.fillText(cam.label, el.x + 8, iy + 8);
+        });
       }
       ov.texture.needsUpdate = true;
     };
@@ -837,53 +932,51 @@ export function Viewport() {
       const ov = uiOverlayRef.current;
       if (!ov) return null;
       const rect = dom.getBoundingClientRect();
-      // UI canvas is 300px wide, anchored to top-right of viewport
       const uiLeft = rect.right - 300;
       const uiTop = rect.top;
       const px = clientX - uiLeft;
       const py = clientY - uiTop;
+      // Check buttons (row 0, y=8-32)
       for (const el of ov.elements) {
         if (px >= el.x && px <= el.x + el.w && py >= el.y && py <= el.y + el.h) {
-          return el.name;
+          return { type: "button", name: el.name };
+        }
+      }
+      // Check dropdown items
+      if (dropdownOpen.name === "display") {
+        const el = ov.elements.find((e) => e.name === "display");
+        if (px >= el.x && px <= el.x + el.w && py >= 34 && py <= 34 + displayModes.length * 22 + 4) {
+          const idx = Math.floor((py - 38) / 22);
+          if (idx >= 0 && idx < displayModes.length) return { type: "item", name: "display", value: displayModes[idx] };
+        }
+      } else if (dropdownOpen.name === "camera") {
+        const el = ov.elements.find((e) => e.name === "camera");
+        const cams = getCameraList();
+        if (px >= el.x && px <= el.x + el.w && py >= 34 && py <= 34 + cams.length * 22 + 4) {
+          const idx = Math.floor((py - 38) / 22);
+          if (idx >= 0 && idx < cams.length) return { type: "item", name: "camera", value: cams[idx].id };
         }
       }
       return null;
     };
 
-    const handleUIClick = (name) => {
+    const handleUIClick = (hit) => {
       const st = useEditor.getState();
-      if (name === "isolate") {
-        st.setIsolateMode(!st.isolateMode);
-      } else if (name === "display") {
-        const idx = displayModes.indexOf(st.displayMode);
-        const next = displayModes[(idx + 1) % displayModes.length];
-        st.setDisplayMode(next);
-      } else if (name === "camera") {
-        // Cycle: default → graph cameras → default
-        const graph = st.graph;
-        const camNodes = [];
-        if (graph) {
-          const nodes = graph._nodes || graph.nodes || [];
-          for (const n of nodes) {
-            if (n.type && n.type.includes("camera")) camNodes.push(n);
-            if (n.subgraph) {
-              const inner = n.subgraph._nodes || n.subgraph.nodes || [];
-              for (const innerN of inner) {
-                if (innerN.type && innerN.type.includes("camera")) camNodes.push(innerN);
-              }
-            }
-          }
+      if (hit.type === "button") {
+        if (hit.name === "isolate") {
+          st.setIsolateMode(!st.isolateMode);
+        } else if (hit.name === "display") {
+          dropdownOpen.name = dropdownOpen.name === "display" ? null : "display";
+        } else if (hit.name === "camera") {
+          dropdownOpen.name = dropdownOpen.name === "camera" ? null : "camera";
         }
-        if (st.activeCameraId === "default" || !st.activeCameraId) {
-          if (camNodes.length > 0) st.setActiveCameraId(camNodes[0].id);
-        } else {
-          const idx = camNodes.findIndex((c) => String(c.id) === String(st.activeCameraId));
-          if (idx >= 0 && idx < camNodes.length - 1) {
-            st.setActiveCameraId(camNodes[idx + 1].id);
-          } else {
-            st.setActiveCameraId("default");
-          }
+      } else if (hit.type === "item") {
+        if (hit.name === "display") {
+          st.setDisplayMode(hit.value);
+        } else if (hit.name === "camera") {
+          st.setActiveCameraId(hit.value);
         }
+        dropdownOpen.name = null;
       }
     };
 
