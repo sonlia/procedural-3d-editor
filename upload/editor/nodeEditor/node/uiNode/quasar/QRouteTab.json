@@ -1,0 +1,125 @@
+{
+  "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567804",
+  "treePath": "ui/quasar",
+  "name": "QRouteTab",
+  "importStr": "import { QRouteTab } from \"quasar\"",
+  "tag": "QRouteTab",
+  "parentMustBe": ["QTabs"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/tabs"
+  },
+  "props": {
+    "to": {
+      "type": ["String", "Object"],
+      "desc": "Equivalent to Vue Router <router-link> 'to' property; Superseded by 'exact' property if path is exact",
+      "required": true,
+      "examples": ["/home/dashboard", "{ name: 'my-route-name' }"],
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'to' 属性"
+    },
+    "exact": {
+      "type": "Boolean",
+      "desc": "Equivalent to Vue Router <router-link> 'exact' property",
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'exact' 属性"
+    },
+    "replace": {
+      "type": "Boolean",
+      "desc": "Equivalent to Vue Router <router-link> 'replace' property",
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'replace' 属性"
+    },
+    "active-class": {
+      "type": "String",
+      "desc": "Equivalent to Vue Router <router-link> 'active-class' property",
+      "default": "q-tab--active",
+      "examples": ["my-active-class"],
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'active-class' 属性"
+    },
+    "exact-active-class": {
+      "type": "String",
+      "desc": "Equivalent to Vue Router <router-link> 'exact-active-class' property",
+      "default": "q-tab--active",
+      "examples": ["my-exact-active-class"],
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'exact-active-class' 属性"
+    },
+    "name": {
+      "type": ["Number", "String"],
+      "desc": "Panel name",
+      "examples": ["accounts-panel"],
+      "category": "general",
+      "desc_cn": "面板名称"
+    },
+    "icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention",
+      "examples": ["map", "ion-add"],
+      "category": "content",
+      "desc_cn": "遵循 Quasar 规范的图标名称"
+    },
+    "label": {
+      "type": ["Number", "String"],
+      "desc": "A number or string to label the tab",
+      "examples": ["Home"],
+      "category": "content",
+      "desc_cn": "标签页的标签文本"
+    },
+    "alert": {
+      "type": ["Boolean", "String"],
+      "desc": "Adds an alert symbol to the tab, notifying the user there are some updates",
+      "examples": ["alert", "alert=\"red\""],
+      "category": "content",
+      "desc_cn": "向标签添加警告符号"
+    },
+    "alert-icon": {
+      "type": "String",
+      "desc": "Icon name to be used as the alert icon",
+      "examples": ["warning"],
+      "category": "content",
+      "desc_cn": "用作警告图标的图标名称"
+    },
+    "no-caps": {
+      "type": "Boolean",
+      "desc": "Turns off capitalizing all letters within the tab",
+      "category": "content",
+      "desc_cn": "关闭标签内所有字母的大写"
+    },
+    "content-class": {
+      "type": "String",
+      "desc": "Class definitions to be attributed to the content wrapper",
+      "examples": ["my-special-class"],
+      "category": "style",
+      "desc_cn": "应用于内容包装器的类名"
+    },
+    "ripple": {
+      "type": ["Boolean", "Object"],
+      "desc": "Configure material ripple",
+      "default": true,
+      "category": "style",
+      "desc_cn": "配置水波纹效果"
+    },
+    "tabindex": {
+      "type": ["Number", "String"],
+      "desc": "Tabindex HTML attribute value",
+      "examples": ["0", "100"],
+      "category": "general",
+      "desc_cn": "Tabindex HTML 属性值"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Suggestion: QBadge, QIcon, custom content",
+      "desc_cn": "建议使用：QBadge、QIcon 或自定义内容"
+    }
+  },
+  "events": {}
+}

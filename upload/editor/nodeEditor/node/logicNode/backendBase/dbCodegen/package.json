@@ -1,0 +1,6 @@
+{
+  "name": "vuestudio-dbcodegen",
+  "private": true,
+  "type": "module",
+  "comment": "ESM 标记仅供 Node.js 直接 import 时按 ESM 解析(脱壳验证 / 项目运行时复用)。Vite 前端编译看语法不看此字段,无影响。"
+}

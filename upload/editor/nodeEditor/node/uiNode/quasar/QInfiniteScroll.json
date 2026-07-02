@@ -1,0 +1,142 @@
+{
+  "id": "8B029FE6-EFA9-F228-3FB2-47E481F0CB1F",
+  "treePath": "ui/quasar",
+  "name": "QInfiniteScroll",
+  "importStr": "import { QInfiniteScroll } from \"quasar\"",
+  "tag": "QInfiniteScroll",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/infinite-scroll"
+  },
+  "props": {
+    "offset": {
+      "type": "Number",
+      "desc": "Offset (pixels) to bottom of Infinite Scroll container from which the component should start loading more content in advance",
+      "default": 500,
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "从无限滚动容器底部开始提前加载更多内容的偏移量（以像素为单位）"
+    },
+    "debounce": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Debounce amount (in milliseconds)",
+      "default": 100,
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "防抖延迟时间（以毫秒为单位）"
+    },
+    "initial-index": {
+      "type": "Number",
+      "desc": "Initialize the pagination index (used for the @load event)",
+      "default": 0,
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "初始化分页索引（用于 @load 事件）"
+    },
+    "scroll-target": {
+      "type": [
+        "Element",
+        "String"
+      ],
+      "desc": "CSS selector or DOM element to be used as a custom scroll container instead of the auto detected one",
+      "examples": [
+        ":scroll-target=\"$refs.scrollTarget\"",
+        "scroll-target=\".scroll-target-class\"",
+        "scroll-target=\"#scroll-target-id\"",
+        "scroll-target=\"body\""
+      ],
+      "category": "behavior",
+      "desc_cn": "用作自定义滚动容器的 CSS 选择器或 DOM 元素，而不是自动检测到的容器。"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式中"
+    },
+    "reverse": {
+      "type": "Boolean",
+      "desc": "Scroll area should behave like a messenger - starting scrolled to bottom and loading when reaching the top",
+      "category": "behavior",
+      "desc_cn": "滚动区域应该像一个消息应用一样 - 初始时滚动到底部，并在达到顶部时加载。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽"
+    },
+    "loading": {
+      "desc": "Slot displaying something while loading content; Example: QSpinner",
+      "desc_cn": "在加载内容时显示某些内容的插槽；示例：QSpinner"
+    }
+  },
+  "events": {
+    "load": {
+      "desc": "Emitted when Infinite Scroll needs to load more data",
+      "params": {
+        "index": {
+          "type": "Number",
+          "desc": "The index parameter can be used to make some sort of pagination on the content you load. It takes numeric values starting with 1 and incrementing with each call",
+          "desc_cn": "索引参数可以用于对加载的内容进行分页。它接受从1开始递增的数字值，并且每次调用都会增加。"
+        },
+        "done": {
+          "type": "Function",
+          "desc": "Function to call when you made all necessary updates. DO NOT forget to call it otherwise your loading message will continue to be displayed",
+          "params": {
+            "stop": {
+              "type": "Boolean",
+              "desc": "Stops QInfiniteScroll if it's Boolean 'true'; Specify it in case there's nothing more to load",
+              "desc_cn": "如果 QInfiniteScroll 的值为布尔类型的 'true'，则停止加载；在没有更多内容需要加载时指定该值。"
+            }
+          },
+          "returns": null,
+          "desc_cn": "当您完成所有必要的更新时调用的函数。请务必���用它，否则您的加载消息将继续显示。"
+        }
+      },
+      "desc_cn": "当无限滚动需要加载更多数据时触发"
+    }
+  },
+  "methods": {
+    "poll": {
+      "desc": "Checks scroll position and loads more content if necessary",
+      "desc_cn": "检查滚动位置并在必要时加载更多内容"
+    },
+    "trigger": {
+      "desc": "Tells Infinite Scroll to load more content, regardless of the scroll position",
+      "desc_cn": "告诉无限滚动加载更多内容，不考虑滚动位置"
+    },
+    "reset": {
+      "desc": "Resets calling index to 0",
+      "desc_cn": "将调用索引重置为0"
+    },
+    "stop": {
+      "desc": "Stops working, regardless of scroll position",
+      "desc_cn": "无论滚动位置如何，都会停止工作"
+    },
+    "resume": {
+      "desc": "Starts working. Checks scroll position upon call and if trigger is hit, it loads more content",
+      "desc_cn": "开始工作。在调用时检查滚动位置，如果触发器被触发，则加载更多内容。"
+    },
+    "setIndex": {
+      "desc": "Overwrite the current pagination index",
+      "params": {
+        "newIndex": {
+          "type": "Number",
+          "desc": "New pagination index",
+          "required": true,
+          "desc_cn": "新的分页索引"
+        }
+      },
+      "desc_cn": "覆盖当前的分页索引"
+    },
+    "updateScrollTarget": {
+      "desc": "Updates the scroll target; Useful when the parent elements change so that the scrolling target also changes",
+      "desc_cn": "更新滚动目标；当父元素发生变化时，可以使用此属性来更新滚动目标。"
+    }
+  }
+}

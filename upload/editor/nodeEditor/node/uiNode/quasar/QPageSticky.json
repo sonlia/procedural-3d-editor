@@ -1,0 +1,54 @@
+{
+  "id": "38C617D6-6F1C-668B-F725-CDF5CC09E810",
+  "treePath": "ui/quasar",
+  "name": "QPageSticky",
+  "importStr": "import { QPageSticky } from \"quasar\"",
+  "tag": "QPageSticky",
+  "parentMustBe": ["QPage", "QPageContainer"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/layout/page-sticky"
+  },
+  "props": {
+    "position": {
+      "type": "String",
+      "desc": "Page side/corner to stick to",
+      "default": "bottom-right",
+      "values": [
+        "top-right",
+        "top-left",
+        "bottom-right",
+        "bottom-left",
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ],
+      "category": "position",
+      "required": false,
+      "desc_cn": "页面侧边/角落固定位置"
+    },
+    "offset": {
+      "type": "Array",
+      "desc": "An array of two numbers to offset the component horizontally and vertically in pixels",
+      "examples": [
+        "[8, 8]",
+        "[5, 10]"
+      ],
+      "category": "position",
+      "desc_cn": "一个包含两个数字的数组，用于以像素为单位水平和垂直偏移组件"
+    },
+    "expand": {
+      "type": "Boolean",
+      "desc": "By default the component shrinks to content's size; By using this prop you make the component fully expand horizontally or vertically, based on 'position' prop",
+      "category": "content",
+      "desc_cn": "默认情况下，组件会根据内容的大小进行收缩；通过使用此属性，您可以使组件在水平或垂直方向上完全展开，取决于 'position' 属性。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽"
+    }
+  }
+}

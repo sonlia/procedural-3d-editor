@@ -1,0 +1,34 @@
+{
+  "id": "quasar-page-container-f1e2d3c4-b5a6-7890-cdef-1234567890ab",
+  "treePath": "ui/quasar",
+  "name": "QPageContainer",
+  "importStr": "import { QPageContainer } from \"quasar\"",
+  "tag": "QPageContainer",
+  "parentMustBe": ["QLayout"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/layout/page",
+    "editorBehavior": {
+      "mode": "placeholder",
+      "reason": "需要 QLayout 上下文"
+    },
+    "editorConfig": {
+      "width": {
+        "type": "String",
+        "default": "100%"
+      },
+      "height": {
+        "type": "String",
+        "default": "200px"
+      }
+    }
+  },
+  "props": {},
+  "slots": {
+    "default": {
+      "desc": "Default slot; Suggestion: QPage, RouterView",
+      "desc_cn": "默认插槽；建议：QPage、RouterView"
+    }
+  },
+  "events": {}
+}

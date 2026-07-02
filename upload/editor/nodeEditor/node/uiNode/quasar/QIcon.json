@@ -1,0 +1,82 @@
+{
+  "id": "FA10AC37-6F19-7E8D-AD33-823E149FEB47",
+  "treePath": "ui/quasar",
+  "name": "QIcon",
+  "importStr": "import { QIcon } from \"quasar\"",
+  "tag": "QIcon",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/icon"
+  },
+  "props": {
+    "size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)",
+      "examples": [
+        "16px",
+        "2rem",
+        "xs",
+        "md"
+      ],
+      "category": "style",
+      "desc_cn": "CSS 单位的尺寸，包括单位名称或标准尺寸名称（xs|sm|md|lg|xl）"
+    },
+    "tag": {
+      "type": "String",
+      "desc": "HTML tag to render, unless no icon is supplied or it's an svg icon",
+      "examples": [
+        "div",
+        "span",
+        "div",
+        "i"
+      ],
+      "category": "content",
+      "default": "i",
+      "required": false,
+      "desc_cn": "用于渲染的 HTML 标签，除非没有提供图标或者它是一个 SVG 图标。"
+    },
+    "name": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "model",
+      "desc_cn": "遵循 Quasar 惯例的图标名称；确保您已安装图标库，除非使用 'img:' 前缀；如果值为 'none'（字符串），则不会渲染任何图标（但屏幕空间仍将用于它）。"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "left": {
+      "type": "Boolean",
+      "desc": "Useful if icon is on the left side of something: applies a standard margin on the right side of Icon",
+      "category": "content",
+      "desc_cn": "如果图标位于某物的左侧，则非常有用：在图标右侧应用标准边距"
+    },
+    "right": {
+      "type": "Boolean",
+      "desc": "Useful if icon is on the right side of something: applies a standard margin on the left side of Icon",
+      "category": "content",
+      "desc_cn": "如果图标位于某物的右侧，则非常有用：在图标的左侧应用标准边距"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Suggestions: QTooltip or QMenu",
+      "desc_cn": "建议：QTooltip 或 QMenu"
+    }
+  }
+}

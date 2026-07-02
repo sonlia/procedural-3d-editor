@@ -1,0 +1,397 @@
+{
+  "id": "F76F5E7C-B62A-0438-24B0-209276DEF40E",
+  "treePath": "ui/quasar",
+  "name": "QMenu",
+  "importStr": "import { QMenu } from \"quasar\"",
+  "tag": "QMenu",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/menu",
+    "editorBehavior": {
+      "mode": "forceRender",
+      "propsOverride": { "model-value": true }
+    },
+    "editorPreview": {
+      "visibility": "surrogate",
+      "reason": "no-visible-dom",
+      "propsOverride": { "model-value": true }
+    }
+  },
+  "props": {
+    "transition-show": {
+      "type": "String",
+      "desc": "One of Quasar's embedded transitions",
+      "examples": [
+        "fade",
+        "slide-down"
+      ],
+      "category": "transition",
+      "default": "fade",
+      "required": false,
+      "desc_cn": "Quasar 的内置过渡之一"
+    },
+    "transition-hide": {
+      "type": "String",
+      "desc": "One of Quasar's embedded transitions",
+      "examples": [
+        "fade",
+        "slide-down"
+      ],
+      "category": "transition",
+      "default": "fade",
+      "required": false,
+      "desc_cn": "Quasar 的内置过渡之一"
+    },
+    "transition-duration": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Transition duration (in milliseconds, without unit)",
+      "default": 300,
+      "category": "transition",
+      "required": false,
+      "desc_cn": "过渡持续时间（以毫秒为单位，不包括单位）"
+    },
+    "target": {
+      "type": [
+        "Boolean",
+        "String",
+        "Element"
+      ],
+      "desc": "Configure a target element to trigger component toggle; 'true' means it enables the parent DOM element, 'false' means it disables attaching events to any DOM elements; By using a String (CSS selector) or a DOM element it attaches the events to the specified DOM element (if it exists)",
+      "default": true,
+      "values": [
+        "(Boolean) true",
+        "(Boolean) false",
+        "(CSS selector)",
+        "(DOM Element)"
+      ],
+      "examples": [
+        ":target=\"false\"",
+        ":target=\"$refs.target\"",
+        "target=\".my-parent\"",
+        "target=\"#target-id\""
+      ],
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "配置一个目标元素来触发组件的切换；'true' 表示启用父级 DOM 元素，'false' 表示禁用将事件附加到任何 DOM 元素；通过使用字符串（CSS 选择器）或 DOM 元素，它会将事件附加到指定的 DOM 元素（如果存在）。"
+    },
+    "no-parent-event": {
+      "type": "Boolean",
+      "desc": "Skips attaching events to the target DOM element (that trigger the element to get shown)",
+      "category": "behavior",
+      "desc_cn": "跳过将事件附加到目标 DOM 元素（触发元素显示）的步骤"
+    },
+    "context-menu": {
+      "type": "Boolean",
+      "desc": "Allows the component to behave like a context menu, which opens with a right mouse click (or long tap on mobile)",
+      "category": "behavior",
+      "desc_cn": "允许组件像上下文菜单一样行为，通过右键点击（或在移动设备上长按）打开。"
+    },
+    "model-value": {
+      "type": "Boolean",
+      "desc": "Model of the component defining shown/hidden state; Either use this property (along with a listener for 'update:model-value' event) OR use v-model directive",
+      "category": "model",
+      "desc_cn": "组件的模型，用于定义显示/隐藏状态；可以使用该属性（以及监听 'update:model-value' 事件）或者使用 v-model 指令。"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "通知组件背景颜色为深色"
+    },
+    "fit": {
+      "type": "Boolean",
+      "desc": "Allows the menu to match at least the full width of its target",
+      "category": "position",
+      "desc_cn": "允许菜单至少与其目标的宽度相匹配"
+    },
+    "cover": {
+      "type": "Boolean",
+      "desc": "Allows the menu to cover its target. When used, the 'self' and 'fit' props are no longer effective",
+      "category": "position",
+      "desc_cn": "允许菜单覆盖其目标。当使用时，'self' 和 'fit' 属性将不再生效"
+    },
+    "anchor": {
+      "type": "String",
+      "desc": "Two values setting the starting position or anchor point of the menu relative to its target",
+      "values": [
+        "top left",
+        "top middle",
+        "top right",
+        "top start",
+        "top end",
+        "center left",
+        "center middle",
+        "center right",
+        "center start",
+        "center end",
+        "bottom left",
+        "bottom middle",
+        "bottom right",
+        "bottom start",
+        "bottom end"
+      ],
+      "category": "position",
+      "desc_cn": "两个值设置菜单相对于其目标的起始位置或锚点"
+    },
+    "self": {
+      "type": "String",
+      "desc": "Two values setting the menu's own position relative to its target",
+      "values": [
+        "top left",
+        "top middle",
+        "top right",
+        "top start",
+        "top end",
+        "center left",
+        "center middle",
+        "center right",
+        "center start",
+        "center end",
+        "bottom left",
+        "bottom middle",
+        "bottom right",
+        "bottom start",
+        "bottom end"
+      ],
+      "category": "position",
+      "desc_cn": "两个值设置菜单相对于其目标的位置"
+    },
+    "offset": {
+      "type": "Array",
+      "desc": "An array of two numbers to offset the menu horizontally and vertically in pixels",
+      "examples": [
+        "[8, 8]",
+        "[5, 10]"
+      ],
+      "category": "position",
+      "desc_cn": "一个包含两个数字的数组，用于以像素为单位水平和垂直偏移菜单。"
+    },
+    "scroll-target": {
+      "type": [
+        "Element",
+        "String"
+      ],
+      "desc": "CSS selector or DOM element to be used as a custom scroll container instead of the auto detected one",
+      "examples": [
+        ":scroll-target=\"$refs.scrollTarget\"",
+        "scroll-target=\".scroll-target-class\"",
+        "scroll-target=\"#scroll-target-id\"",
+        "scroll-target=\"body\""
+      ],
+      "category": "behavior",
+      "desc_cn": "用作自定义滚动容器的 CSS 选择器或 DOM 元素，而不是自动检测到的容器。"
+    },
+    "touch-position": {
+      "type": "Boolean",
+      "desc": "Allows for the target position to be set by the mouse position, when the target of the menu is either clicked or touched",
+      "category": "behavior",
+      "desc_cn": "允许通过鼠标位置设置目标位置，当菜单的目标被点击或触摸时。"
+    },
+    "persistent": {
+      "type": "Boolean",
+      "desc": "Allows the menu to not be dismissed by a click/tap outside of the menu or by hitting the ESC key; Also, an app route change won't dismiss it",
+      "category": "behavior",
+      "desc_cn": "允许菜单在点击/触摸菜单外部或按下 ESC 键时不被关闭。同时路由切换也不会关闭它"
+    },
+    "no-route-dismiss": {
+      "type": "Boolean",
+      "desc": "Changing route app won't dismiss the popup; No need to set it if 'persistent' prop is also set",
+      "category": "behavior",
+      "desc_cn": "改变路由应用程序不会关闭弹出窗口；如果还设置了 'persistent' 属性，则无需设置它。"
+    },
+    "auto-close": {
+      "type": "Boolean",
+      "desc": "Allows any click/tap in the menu to close it; Useful instead of attaching events to each menu item that should close the menu on click/tap",
+      "category": "behavior",
+      "desc_cn": "允许在菜单中的任何点击/轻触操作关闭菜单；与为每个应在点击/轻触时关闭菜单的菜单项附加事件相比，这种方式更加方便。"
+    },
+    "separate-close-popup": {
+      "type": "Boolean",
+      "desc": "Separate from parent menu, marking it as a separate closing point for v-close-popup (without this, chained menus close all together)",
+      "category": "behavior",
+      "desc_cn": "与父菜单分离，将其标记为 v-close-popup 的独立关闭点（如果没有此选项，链接的菜单会一起关闭）。"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Forces content to have squared borders",
+      "category": "style",
+      "desc_cn": "强制内容具有方形边框"
+    },
+    "no-refocus": {
+      "type": "Boolean",
+      "desc": "(Accessibility) When Menu gets hidden, do not refocus on the DOM element that previously had focus",
+      "category": "behavior",
+      "desc_cn": "（无障碍）当菜单隐藏时，不要重新聚焦在之前具有焦点的 DOM 元素上。"
+    },
+    "no-focus": {
+      "type": "Boolean",
+      "desc": "(Accessibility) When Menu gets shown, do not switch focus on it",
+      "category": "behavior",
+      "desc_cn": "（无障碍）当菜单显示时，不要切换焦点到它上面。"
+    },
+    "max-height": {
+      "type": [
+        "String",
+        "null"
+      ],
+      "desc": "The maximum height of the menu; Size in CSS units, including unit name",
+      "examples": [
+        "16px",
+        "2rem"
+      ],
+      "category": "style",
+      "default": null,
+      "required": false,
+      "desc_cn": "菜单的最大高度；以 CSS 单位表示的大小，包括单位名称"
+    },
+    "max-width": {
+      "type": [
+        "String",
+        "null"
+      ],
+      "desc": "The maximum width of the menu; Size in CSS units, including unit name",
+      "examples": [
+        "16px",
+        "2rem"
+      ],
+      "category": "style",
+      "default": null,
+      "required": false,
+      "desc_cn": "菜单的最大宽度；以 CSS 单位表示的大小，包括单位名称"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when showing/hidden state changes; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Boolean",
+          "desc": "New state (showing/hidden)",
+          "desc_cn": "新的状态（显示/隐藏）"
+        }
+      },
+      "desc_cn": "当显示/隐藏状态发生变化时触发；也被 v-model 使用"
+    },
+    "show": {
+      "desc": "Emitted after component has triggered show()",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "组件触发 show() 后会发出此事件"
+    },
+    "before-show": {
+      "desc": "Emitted when component triggers show() but before it finishes doing it",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "组件触发 show() 方法但尚未完成时会触发此事件"
+    },
+    "hide": {
+      "desc": "Emitted after component has triggered hide()",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "组件触发 hide() 后会发出的事件。"
+    },
+    "before-hide": {
+      "desc": "Emitted when component triggers hide() but before it finishes doing it",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 hide() 方法之后但尚未完成隐藏时触发"
+    },
+    "escape-key": {
+      "desc": "Emitted when ESC key is pressed; Does not get emitted if Menu is 'persistent'",
+      "desc_cn": "按下 ESC 键时触发；如果菜单是 'persistent'（持久化）的，则不会触发。"
+    }
+  },
+  "methods": {
+    "show": {
+      "desc": "Triggers component to show",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发组件显示"
+    },
+    "hide": {
+      "desc": "Triggers component to hide",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发组件隐藏"
+    },
+    "toggle": {
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc": "Triggers component to toggle between show/hide",
+      "desc_cn": "触发组件在显示和隐藏之间切换"
+    },
+    "updatePosition": {
+      "desc": "There are some custom scenarios for which Quasar cannot automatically reposition the menu without significant performance drawbacks so the optimal solution is for you to call this method when you need it",
+      "desc_cn": "在某些自定义场景下，Quasar 无法自动重新定位菜单而不会带来显著的性能损耗，因此最佳解决方案是在需要时调用该方法。"
+    },
+    "focus": {
+      "desc": "Focus menu; if you have content with autofocus attribute, it will directly focus it",
+      "desc_cn": "聚焦菜单；如果您的内容具有 autofocus 属性，则会直接将其聚焦"
+    }
+  },
+  "computedProps": {
+    "contentEl": {
+      "type": "Element",
+      "desc": "The DOM Element of the rendered content",
+      "addedIn": "v2.10.1",
+      "desc_cn": "渲染内容的 DOM 元素"
+    }
+  }
+}

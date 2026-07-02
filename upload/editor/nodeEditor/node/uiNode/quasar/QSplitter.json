@@ -1,0 +1,170 @@
+{
+  "id": "B3ECDC5E-2D73-4BBA-0242-D73CB01CF1EE",
+  "treePath": "ui/quasar",
+  "name": "QSplitter",
+  "importStr": "import { QSplitter } from \"quasar\"",
+  "tag": "QSplitter",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/splitter"
+  },
+  "props": {
+    "model-value": {
+      "desc": "Model of the component defining the size of first panel (or second if using reverse) in the unit specified (for '%' it's the split ratio percent - 0.0 < x < 100.0; for 'px' it's the size in px); Either use this property (along with a listener for 'update:modelValue' event) OR use v-model directive",
+      "required": true,
+      "syncable": true,
+      "category": "model",
+      "type": "Number",
+      "examples": [
+        "v-model=\"ratio\""
+      ],
+      "desc_cn": "组件的模型，用于定义第一个面板（如果使用反向则为第二个面板）的大小，单位为指定的值（对于 '%' 是分割比例百分比 - 0.0 < x < 100.0；对于 'px' 是以像素为单位的大小）；可以使用此属性（与 'update:modelValue' 事件监听器一起使用），或者使用 v-model 指令。"
+    },
+    "reverse": {
+      "type": "Boolean",
+      "desc": "Apply the model size to the second panel (by default it applies to the first)",
+      "category": "model",
+      "desc_cn": "将模型大小应用于第二个面板（默认情况下，它适用于第一个）"
+    },
+    "unit": {
+      "type": "String",
+      "desc": "CSS unit for the model",
+      "default": "%",
+      "values": [
+        "%",
+        "px"
+      ],
+      "category": "model",
+      "required": false,
+      "desc_cn": "模型的 CSS 单位"
+    },
+    "emit-immediately": {
+      "type": "Boolean",
+      "desc": "Emit model while user is panning on the separator",
+      "category": "model",
+      "desc_cn": "当用户在分隔符上拖动时，发出模型信号"
+    },
+    "horizontal": {
+      "type": "Boolean",
+      "desc": "Allows the splitter to split its two panels horizontally, instead of vertically",
+      "category": "content",
+      "desc_cn": "允许分割器水平拆分其两个面板，而不是垂直拆分"
+    },
+    "limits": {
+      "type": "Array",
+      "desc": "An array of two values representing the minimum and maximum split size of the two panels; When 'px' unit is set then you can use Infinity as the second value to make it unbound on the other side",
+      "default": "For '%' unit: [10, 90]; For 'px' unit: [50, Infinity]",
+      "examples": [
+        ":limits=\"[30, 70]\"",
+        ":limits=\"[0, Infinity]\""
+      ],
+      "category": "content|model",
+      "required": false,
+      "desc_cn": "一个包含两个值的数组，表示两个面板的最小和最大分割大小；当设置为 'px' 单位时，您可以使用 Infinity 作为第二个值，在另一侧使其无限制。"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式下"
+    },
+    "before-class": {
+      "type": [
+        "String",
+        "Array",
+        "Object"
+      ],
+      "tsType": "VueClassProp",
+      "desc": "Class definitions to be attributed to the 'before' panel",
+      "examples": [
+        "bg-deep-orange",
+        ":before-class=\"{ 'my-special-class': <condition> }\""
+      ],
+      "category": "style",
+      "desc_cn": "要添加到“before”面板的类定义"
+    },
+    "after-class": {
+      "type": [
+        "String",
+        "Array",
+        "Object"
+      ],
+      "tsType": "VueClassProp",
+      "desc": "Class definitions to be attributed to the 'after' panel",
+      "examples": [
+        "bg-deep-orange",
+        ":after-class=\"{ 'my-special-class': <condition> }\""
+      ],
+      "category": "style",
+      "desc_cn": "被应用于 'after' 面板的类定义"
+    },
+    "separator-class": {
+      "type": [
+        "String",
+        "Array",
+        "Object"
+      ],
+      "tsType": "VueClassProp",
+      "desc": "Class definitions to be attributed to the splitter separator",
+      "examples": [
+        "bg-deep-orange",
+        ":separator-class=\"{ 'my-special-class': <condition> }\""
+      ],
+      "category": "style",
+      "desc_cn": "用于分隔器分隔符的类定义"
+    },
+    "separator-style": {
+      "type": [
+        "String",
+        "Array",
+        "Object"
+      ],
+      "tsType": "VueStyleProp",
+      "desc": "Style definitions to be attributed to the splitter separator",
+      "examples": [
+        "background-color: #ff0000",
+        ":separator-style=\"{ backgroundColor: '#ff0000' }\""
+      ],
+      "category": "style",
+      "desc_cn": "分配给拆分器分隔符的样式定义"
+    },
+    "dark": {
+      "type": "Boolean",
+      "desc": "Applies a default lighter color on the separator; To be used when background is darker; Avoid using when you are overriding through separator-class or separator-style props",
+      "category": "style",
+      "desc_cn": "在背景较暗时，为分隔符应用默认的浅色；当您通过 separator-class 或 separator-style 属性进行覆盖时，请避免使用。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component; Suggestion: QTooltip, QMenu",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽；建议使用：QTooltip、QMenu"
+    },
+    "before": {
+      "desc": "Content of the panel on left/top",
+      "desc_cn": "左侧/顶部面板的内容"
+    },
+    "after": {
+      "desc": "Content of the panel on right/bottom",
+      "desc_cn": "右侧/底部面板的内容"
+    },
+    "separator": {
+      "desc": "Content to be placed inside the separator; By default it is centered",
+      "desc_cn": "放置在分隔符内的内容；默认情况下居中显示"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when component's model value changes; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Number",
+          "desc": "New model value (0.0 < x < 100.0) defining the ratio between panels",
+          "desc_cn": "新的模型值（0.0 < x < 100.0），定义面板之间的比例"
+        }
+      },
+      "desc_cn": "当组件的 model 值发生变化时触发；也被 v-model 使用"
+    }
+  }
+}

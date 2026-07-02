@@ -1,0 +1,131 @@
+{
+  "id": "5BDF9C20-2CFF-B9AC-F910-1F9648AC2C29",
+  "treePath": "ui/quasar",
+  "name": "QIntersection",
+  "importStr": "import { QIntersection } from \"quasar\"",
+  "tag": "QIntersection",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/intersection"
+  },
+  "props": {
+    "tag": {
+      "type": "String",
+      "desc": "HTML tag to use",
+      "examples": [
+        "div",
+        "span",
+        "div",
+        "span",
+        "blockquote"
+      ],
+      "category": "content",
+      "default": "div",
+      "required": false,
+      "desc_cn": "要使用的 HTML 标签"
+    },
+    "once": {
+      "type": "Boolean",
+      "desc": "Get triggered only once",
+      "category": "behavior",
+      "desc_cn": "只触发一次"
+    },
+    "ssr-prerender": {
+      "type": "Boolean",
+      "desc": "Pre-render content on server side if using SSR (use it to pre-render above the fold content)",
+      "category": "behavior",
+      "desc_cn": "如果使用 SSR，请在服务器端预渲染内容（使用它来预渲染可见区域的内容）"
+    },
+    "root": {
+      "type": [
+        "Element",
+        "null"
+      ],
+      "default": null,
+      "desc": "[Intersection API root prop] Lets you define an alternative to the viewport as your root (through its DOM element); It is important to keep in mind that root needs to be an ancestor of the observed element",
+      "examples": [
+        "$refs.myTable.$el",
+        "getElementById(\"myTable\")"
+      ],
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "[Intersection API 根属性] 允许您定义一个替代视口作为根元素（通过其 DOM 元素）；需要注意的是，根元素必须是被观察元素的祖先。"
+    },
+    "margin": {
+      "type": "String",
+      "desc": "[Intersection API rootMargin prop] Allows you to specify the margins for the root, effectively allowing you to either grow or shrink the area used for intersections",
+      "examples": [
+        "-20px 0px",
+        "10px 20px 30px 40px"
+      ],
+      "category": "behavior",
+      "desc_cn": "[Intersection API rootMargin prop] 允许您指定根元素的边距，有效地允许您扩大或缩小用于交叉的区域"
+    },
+    "threshold": {
+      "type": [
+        "Array",
+        "Number"
+      ],
+      "desc": "[Intersection API threshold prop] Threshold(s) at which to trigger, specified as a ratio, or list of ratios, of (visible area / total area) of the observed element",
+      "examples": [
+        "[ 0, 0.25, 0.5, 0.75, 1 ]",
+        ":threshold=\"1\""
+      ],
+      "category": "behavior",
+      "desc_cn": "[Intersection API threshold prop] 触发的阈值，以比例或比例列表的形式指定，表示观察元素的可见区域与总区域之间的比例。"
+    },
+    "transition": {
+      "type": "String",
+      "desc": "One of Quasar's embedded transitions",
+      "examples": [
+        "fade",
+        "slide-down"
+      ],
+      "category": "behavior",
+      "desc_cn": "Quasar 的内置过渡之一"
+    },
+    "transition-duration": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Transition duration (in milliseconds, without unit)",
+      "default": 300,
+      "category": "behavior",
+      "addedIn": "v2.3.1",
+      "required": false,
+      "desc_cn": "过渡持续时间（以毫秒为单位，不包括单位）"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Disable visibility observable (content will remain as it was, visible or hidden)",
+      "category": "behavior",
+      "desc_cn": "禁用可见性观察（内容将保持原样，可见或隐藏）"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽"
+    },
+    "hidden": {
+      "desc": "Slot for content to render when component is not on screen; Example: a text that the user can search for with the browser's search function",
+      "addedIn": "v2.12.0",
+      "desc_cn": "当组件不在屏幕上时渲染内容的插槽；示例：用户可以使用浏览器的搜索功能搜索的文本"
+    }
+  },
+  "events": {
+    "visibility": {
+      "desc": "Fires when visibility changes",
+      "params": {
+        "isVisible": {
+          "type": "Boolean",
+          "desc": "Visibility status (true/false)",
+          "desc_cn": "可见性状态（true/false）"
+        }
+      },
+      "desc_cn": "当可见性发生变化时触发"
+    }
+  }
+}

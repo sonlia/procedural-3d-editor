@@ -1,0 +1,141 @@
+{
+  "id": "2ACE0212-02C8-5156-9481-494DBABAE54E",
+  "treePath": "ui/quasar",
+  "name": "QAjaxBar",
+  "importStr": "import { QAjaxBar } from \"quasar\"",
+  "tag": "QAjaxBar",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/ajax-bar"
+  },
+  "props": {
+    "position": {
+      "type": "String",
+      "desc": "Position within window of where QAjaxBar should be displayed",
+      "default": "top",
+      "values": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "窗口中显示 QAjaxBar 的位置"
+    },
+    "size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name",
+      "examples": [
+        "16px",
+        "2rem"
+      ],
+      "category": "style",
+      "default": "2px",
+      "required": false,
+      "desc_cn": "带有 CSS 单位的尺寸大小，包括单位的名称"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "组件的颜色，来自 Quasar 调色板的颜色名称"
+    },
+    "reverse": {
+      "type": "Boolean",
+      "desc": "Reverse direction of progress",
+      "category": "behavior",
+      "desc_cn": "逆转进度方向"
+    },
+    "skip-hijack": {
+      "type": "Boolean",
+      "desc": "Skip Ajax hijacking (not a reactive prop)",
+      "category": "behavior",
+      "desc_cn": "跳过 Ajax 劫持（不是一个响应式属性）"
+    },
+    "hijack-filter": {
+      "type": "Function",
+      "desc": "Filter which URL should trigger start() + stop()",
+      "params": {
+        "url": {
+          "type": "String",
+          "desc": "The URL being triggered",
+          "examples": [
+            "https://some.url/path"
+          ],
+          "desc_cn": "待判断的 URL"
+        }
+      },
+      "returns": {
+        "type": "Boolean",
+        "desc": "Should the URL received as param trigger start() + stop()?",
+        "desc_cn": "当前的 URL 是否可以触发 start() + stop()"
+      },
+      "category": "behavior",
+      "addedIn": "v2.4.5",
+      "desc_cn": "过滤哪些 URL 可以触发 start() + stop()"
+    }
+  },
+  "events": {
+    "start": {
+      "desc": "Emitted when bar is triggered to appear",
+      "desc_cn": "Ajax 栏被触发显示时发出"
+    },
+    "stop": {
+      "desc": "Emitted when bar has finished its job",
+      "desc_cn": "当 Ajax 栏完成它的工作时发出"
+    }
+  },
+  "methods": {
+    "start": {
+      "desc": "Notify bar you are waiting for a new process to finish",
+      "params": {
+        "speed": {
+          "type": "Number",
+          "default": 300,
+          "desc": "Delay (in milliseconds) between progress auto-increments; If delay is 0 then it disables auto-incrementing",
+          "required": false,
+          "desc_cn": "进度自动递增之间的延迟（毫秒）；如果为0，则禁用自动递增"
+        }
+      },
+      "returns": {
+        "type": "Number",
+        "desc": "Number of active simultaneous sessions",
+        "desc_cn": "同时激活的会话数量"
+      },
+      "desc_cn": "手动开启一个 ajax 栏，通知它您正在等待���个新进程完成"
+    },
+    "increment": {
+      "desc": "Manually trigger a bar progress increment",
+      "params": {
+        "amount": {
+          "type": "Number",
+          "desc": "Amount (0 < x <= 100) to increment with",
+          "desc_cn": "增加的数量（0<x<=100）"
+        }
+      },
+      "returns": {
+        "type": "Number",
+        "desc": "Number of active simultaneous sessions",
+        "desc_cn": "同时活动的会话数量"
+      },
+      "desc_cn": "手动触发条形进度递增"
+    },
+    "stop": {
+      "desc": "Notify bar that one process you were waiting has finished",
+      "returns": {
+        "type": "Number",
+        "desc": "Number of active simultaneous sessions",
+        "desc_cn": "同时活动的会话数量"
+      },
+      "desc_cn": "手动关闭 ajax 栏，通知它您等待的进程已完成"
+    }
+  }
+}

@@ -1,0 +1,346 @@
+{
+  "id": "CED61140-BE16-D962-580D-B18EA58650E9",
+  "treePath": "ui/quasar",
+  "name": "QImg",
+  "importStr": "import { QImg } from \"quasar\"",
+  "tag": "QImg",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/img"
+  },
+  "props": {
+    "ratio": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Force the component to maintain an aspect ratio",
+      "examples": [
+        ":ratio=\"4/3\"",
+        ":ratio=\"16/9\"",
+        "ratio=\"1\"",
+        "(Number format) :ratio=\"16/9\"",
+        "(String format) ratio=\"1\""
+      ],
+      "category": "style",
+      "desc_cn": "强制组件保持一个宽高比"
+    },
+    "src": {
+      "type": "String",
+      "desc": "Path to image",
+      "transformAssetUrls": true,
+      "examples": [
+        "(public folder) src=\"img/something.png\"",
+        "(assets folder) src=\"~assets/my-img.gif\"",
+        "(relative path format) :src=\"require('./my_img.jpg')\"",
+        "(URL) src=\"https://picsum.photos/500/300\""
+      ],
+      "category": "model",
+      "desc_cn": "图片路径"
+    },
+    "srcset": {
+      "type": "String",
+      "desc": "Same syntax as <img> srcset attribute",
+      "link": "https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images#Resolution_switching_Different_sizes",
+      "examples": [
+        "elva-fairy-320w.jpg 320w, elva-fairy-480w.jpg 480w"
+      ],
+      "category": "model",
+      "desc_cn": "与 <img> 的 srcset 属性相同的语法"
+    },
+    "sizes": {
+      "type": "String",
+      "desc": "Same syntax as <img> sizes attribute",
+      "link": "https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images#Resolution_switching_Different_sizes",
+      "examples": [
+        "(max-width: 320px) 280px, (max-width: 480px) 440px, 800px"
+      ],
+      "category": "model",
+      "desc_cn": "与 <img> 的 sizes 属性相同的语法"
+    },
+    "placeholder-src": {
+      "type": "String",
+      "desc": "While waiting for your image to load, you can use a placeholder image",
+      "transformAssetUrls": true,
+      "examples": [
+        "(public folder) placeholder-src=\"img/some-placeholder.png\"",
+        "(assets folder) placeholder-src=\"~assets/my-placeholder.gif\"",
+        "(relative path format) :placeholder-src=\"require('./placeholder.jpg')\"",
+        "(URL) placeholder-src=\"https://picsum.photos/500/300\""
+      ],
+      "category": "model",
+      "desc_cn": "在等待图像加载时，您可以使用占位图像。"
+    },
+    "error-src": {
+      "type": "String",
+      "desc": "In case your image fails to load, you can use an error image",
+      "transformAssetUrls": true,
+      "examples": [
+        "(public folder) error-src=\"img/some-placeholder.png\"",
+        "(assets folder) error-src=\"~assets/my-placeholder.gif\"",
+        "(relative path format) :error-src=\"require('./placeholder.jpg')\"",
+        "(URL) error-src=\"https://picsum.photos/500/300\""
+      ],
+      "category": "model",
+      "addedIn": "v2.15",
+      "desc_cn": "图片加载失败时展示的备用图片。"
+    },
+    "initial-ratio": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Use it when not specifying 'ratio' but still wanting an initial aspect ratio",
+      "default": "16/9",
+      "examples": [
+        "(Number format) :initial-ratio=\"16/9\"",
+        "(String format) initial-ratio=\"1\""
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "在不指定 'ratio' 但仍希望有一个初始的宽高比时使用它"
+    },
+    "width": {
+      "type": "String",
+      "desc": "Forces image width; Must also include the unit (px or %)",
+      "examples": [
+        "280px",
+        "70%"
+      ],
+      "category": "style",
+      "desc_cn": "强制图片��度；必须同时包含单位（px 或 %）"
+    },
+    "height": {
+      "type": "String",
+      "desc": "Forces image height; Must also include the unit (px or %)",
+      "examples": [
+        "280px",
+        "70%"
+      ],
+      "category": "style",
+      "desc_cn": "强制图片高度；必须同时包含单位（px 或 %）"
+    },
+    "loading": {
+      "type": "String",
+      "desc": "Lazy or immediate load; Same syntax as <img> loading attribute",
+      "default": "lazy",
+      "values": [
+        "lazy",
+        "eager"
+      ],
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "延迟加载或立即加载；与 <img> 的 loading 属性语法相同"
+    },
+    "loading-show-delay": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Delay showing the spinner when image changes; Gives time for the browser to load the image from cache to prevent flashing the spinner unnecessarily; Value should represent milliseconds",
+      "default": 0,
+      "examples": [
+        "500",
+        "caption-lines=\"1000\""
+      ],
+      "category": "behavior",
+      "addedIn": "v2.14.6",
+      "required": false,
+      "desc_cn": "延迟显示加载动画，直到图片更改；给浏览器一些时间从缓存中加载图片，以防止不必要地闪烁加载动画；数值应表示毫秒"
+    },
+    "crossorigin": {
+      "type": "String",
+      "desc": "Same syntax as <img> crossorigin attribute",
+      "values": [
+        "anonymous",
+        "use-credentials"
+      ],
+      "category": "behavior",
+      "desc_cn": "与 <img> 元素的 crossorigin 属性相同的语法"
+    },
+    "decoding": {
+      "type": "String",
+      "desc": "Same syntax as <img> decoding attribute",
+      "values": [
+        "sync",
+        "async",
+        "auto"
+      ],
+      "category": "behavior",
+      "desc_cn": "与 <img> 解码属性相同的语法"
+    },
+    "referrerpolicy": {
+      "type": "String",
+      "desc": "Same syntax as <img> referrerpolicy attribute",
+      "values": [
+        "no-referrer",
+        "no-referrer-when-downgrade",
+        "origin",
+        "origin-when-cross-origin",
+        "same-origin",
+        "strict-origin",
+        "strict-origin-when-cross-origin",
+        "unsafe-url"
+      ],
+      "category": "behavior",
+      "desc_cn": "与 <img> 的 referrerpolicy 属性相同的语法"
+    },
+    "fetchpriority": {
+      "type": "String",
+      "desc": "Provides a hint of the relative priority to use when fetching the image",
+      "default": "auto",
+      "values": [
+        "high",
+        "low",
+        "auto"
+      ],
+      "category": "behavior",
+      "addedIn": "v2.6.6",
+      "required": false,
+      "desc_cn": "提供了一个相对优先级的提示，用于在获取图像时使用。"
+    },
+    "fit": {
+      "type": "String",
+      "desc": "How the image will fit into the container; Equivalent of the object-fit prop; Can be coordinated with 'position' prop",
+      "default": "cover",
+      "values": [
+        "cover",
+        "fill",
+        "contain",
+        "none",
+        "scale-down"
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "图像如何适应容器；相当于 object-fit 属性；可以与 'position' 属性协调使用"
+    },
+    "position": {
+      "type": "String",
+      "desc": "The alignment of the image into the container; Equivalent of the object-position CSS prop",
+      "default": "50% 50%",
+      "examples": [
+        "0 0",
+        "20px 50px"
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "图像在容器中的对齐方式；相当于 object-position CSS 属性"
+    },
+    "alt": {
+      "type": "String",
+      "desc": "Specifies an alternate text for the image, if the image cannot be displayed",
+      "examples": [
+        "Two cats"
+      ],
+      "category": "miscellaneous",
+      "desc_cn": "如果图片无法显示，则指定图像的替代文本"
+    },
+    "draggable": {
+      "type": "Boolean",
+      "desc": "Adds the native 'draggable' attribute",
+      "category": "miscellaneous",
+      "desc_cn": "添加原生的 'draggable' 属性"
+    },
+    "img-class": {
+      "type": "String",
+      "desc": "CSS classes to be attributed to the native img element",
+      "examples": [
+        "my-special-class"
+      ],
+      "category": "style",
+      "desc_cn": "要分配给原生 img 元素的 CSS 类"
+    },
+    "img-style": {
+      "type": "Object",
+      "tsType": "VueStyleObjectProp",
+      "desc": "Apply CSS to the native img element",
+      "examples": [
+        ":img-style=\"{ transform: 'rotate(45deg)' }\" "
+      ],
+      "category": "style",
+      "desc_cn": "将 CSS 应用于原生 img 元素"
+    },
+    "spinner-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for default Spinner (unless using a 'loading' slot)",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "默认 Spinner 的颜色名称（除非使用 'loading' 插槽）"
+    },
+    "spinner-size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name, for default Spinner (unless using a 'loading' slot)",
+      "examples": [
+        "16px",
+        "2rem"
+      ],
+      "category": "style",
+      "desc_cn": "默认 Spinner 的大小，使用 CSS 单位表示，包括单位名称（除非使用 'loading' 插槽）"
+    },
+    "no-spinner": {
+      "type": "Boolean",
+      "desc": "Do not display the default spinner while waiting for the image to be loaded; It is overriden by the 'loading' slot when one is present",
+      "category": "behavior",
+      "desc_cn": "在等待图像加载时不显示默认的加载动画；如果存在 'loading' 插槽，则会被覆盖。"
+    },
+    "no-native-menu": {
+      "type": "Boolean",
+      "desc": "Disables the native context menu for the image",
+      "category": "behavior",
+      "desc_cn": "禁用图像的原生上下文菜单"
+    },
+    "no-transition": {
+      "type": "Boolean",
+      "desc": "Disable default transition when switching between old and new image",
+      "category": "behavior",
+      "desc_cn": "在切换旧图像和新图像之间禁用默认过渡效果"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot can be used for captions. See examples",
+      "desc_cn": "默认插槽可用于添加标题。请参见示例。"
+    },
+    "loading": {
+      "desc": "While image is loading, this slot is being displayed on top of the component; Suggestions: a spinner or text",
+      "desc_cn": "当图片正在加载时，此插槽将显示在组件的顶部；建议使用旋转图标或文本。"
+    },
+    "error": {
+      "desc": "Optional slot to be used when image could not be loaded; make sure you assign a min-height and min-width to the component through CSS",
+      "desc_cn": "当图片无法加载时可使用的可选插槽；请确保通过 CSS 为组件分配最小高度和最小宽度。"
+    }
+  },
+  "events": {
+    "load": {
+      "desc": "Emitted when image has been loaded by the browser",
+      "params": {
+        "src": {
+          "type": "String",
+          "desc": "URL of image that has been loaded; useful when using 'srcset' and/or 'sizes'",
+          "examples": [
+            "https://some-site.net/some-img.gif"
+          ],
+          "desc_cn": "已加载的图像的 URL；在使用 'srcset' 和/或 'sizes' 时很有用"
+        }
+      },
+      "desc_cn": "当浏览器加载完图片时触发"
+    },
+    "error": {
+      "desc": "Emitted when browser could not load the image",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS Event object (same as the browser's native 'error' event)",
+          "desc_cn": "JS 事件对象（与浏览器原生的 'error' 事件相同）"
+        }
+      },
+      "desc_cn": "当浏览器无法加载图像时发出的事件"
+    }
+  }
+}

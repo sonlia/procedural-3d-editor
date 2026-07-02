@@ -1,0 +1,400 @@
+{
+  "id": "EEAF4539-C322-B58C-F84B-7A1EE46EA4D2",
+  "treePath": "ui/quasar",
+  "name": "QPopupEdit",
+  "importStr": "import { QPopupEdit } from \"quasar\"",
+  "tag": "QPopupEdit",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/popup-edit",
+    "editorBehavior": {
+      "mode": "forceRender",
+      "propsOverride": { "model-value": true }
+    },
+    "editorPreview": {
+      "visibility": "surrogate",
+      "reason": "no-visible-dom",
+      "propsOverride": { "model-value": true }
+    }
+  },
+  "props": {
+    "model-value": {
+      "desc": "Model of the component; Either use this property (along with a listener for 'update:model-value' event) OR use v-model directive",
+      "required": true,
+      "syncable": true,
+      "category": "model",
+      "type": "Any",
+      "examples": [
+        "v-model=\"myValue\""
+      ],
+      "desc_cn": "组件的 model 数据；可以使用该属性（以及监听 'update:model-value' 事件）或者使用 v-model 指令。"
+    },
+    "title": {
+      "type": "String",
+      "desc": "Optional title (unless 'title' slot is used)",
+      "examples": [
+        "Calories"
+      ],
+      "category": "content",
+      "desc_cn": "可选的标题（除非使用了 'title' 插槽）"
+    },
+    "buttons": {
+      "type": "Boolean",
+      "desc": "Show Set and Cancel buttons",
+      "category": "content",
+      "desc_cn": "显示设置和取消按钮"
+    },
+    "label-set": {
+      "type": "String",
+      "desc": "Override Set button label",
+      "examples": [
+        "OK"
+      ],
+      "category": "content",
+      "desc_cn": "覆盖设置按钮标签"
+    },
+    "label-cancel": {
+      "type": "String",
+      "desc": "Override Cancel button label",
+      "examples": [
+        "Cancel"
+      ],
+      "category": "content",
+      "desc_cn": "覆盖取消按钮标签"
+    },
+    "auto-save": {
+      "type": "Boolean",
+      "desc": "Automatically save the model (if changed) when user clicks/taps outside of the popup; It does not apply to ESC key",
+      "category": "behavior",
+      "desc_cn": "当用户在弹出窗口外部点击/触摸时，自动保存模型（如果有更改）；不适用于 ESC 键。"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "default": "primary",
+      "required": false,
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "validate": {
+      "type": "Function",
+      "desc": "Validates model then triggers 'save' and closes Popup; Returns a Boolean ('true' means valid, 'false' means abort); Syntax: validate(value); For best performance, reference it from your scope and do not define it inline",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "Model to validate",
+          "examples": [
+            "My car"
+          ],
+          "desc_cn": "要验证的模型"
+        }
+      },
+      "returns": {
+        "type": "Boolean",
+        "desc": "Is the model valid or not?",
+        "desc_cn": "模型是否有效？"
+      },
+      "examples": [
+        ":validate=\"myValidation\""
+      ],
+      "category": "model",
+      "desc_cn": "验证模型，然后触发 'save' 事件并关闭弹出窗口；返回一个布尔值（'true' 表示有效，'false' 表示中止）；语法：validate(value)；为了获得最佳性能，请从您的作用域引用它，不要内联定义。"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式下"
+    },
+    "fit": {
+      "type": "Boolean",
+      "desc": "Allows the menu to match at least the full width of its target",
+      "category": "position",
+      "desc_cn": "允许菜单至少与其目标的宽度相匹配"
+    },
+    "cover": {
+      "type": "Boolean",
+      "default": true,
+      "desc": "Allows the menu to cover its target. When used, the 'self' and 'fit' props are no longer effective",
+      "category": "position",
+      "required": false,
+      "desc_cn": "允许菜单覆盖其目标。当使用时，'self' 和 'fit' 属性将不再生效"
+    },
+    "anchor": {
+      "type": "String",
+      "desc": "Two values setting the starting position or anchor point of the menu relative to its target",
+      "values": [
+        "top left",
+        "top middle",
+        "top right",
+        "top start",
+        "top end",
+        "center left",
+        "center middle",
+        "center right",
+        "center start",
+        "center end",
+        "bottom left",
+        "bottom middle",
+        "bottom right",
+        "bottom start",
+        "bottom end"
+      ],
+      "category": "position",
+      "desc_cn": "两个值设置菜单相对于其目标的起始位置或锚点"
+    },
+    "self": {
+      "type": "String",
+      "desc": "Two values setting the menu's own position relative to its target",
+      "values": [
+        "top left",
+        "top middle",
+        "top right",
+        "top start",
+        "top end",
+        "center left",
+        "center middle",
+        "center right",
+        "center start",
+        "center end",
+        "bottom left",
+        "bottom middle",
+        "bottom right",
+        "bottom start",
+        "bottom end"
+      ],
+      "category": "position",
+      "desc_cn": "两个值设置菜单相对于其目标的位置"
+    },
+    "offset": {
+      "type": "Array",
+      "desc": "An array of two numbers to offset the menu horizontally and vertically in pixels",
+      "examples": [
+        "[8, 8]",
+        "[5, 10]"
+      ],
+      "category": "style",
+      "desc_cn": "一个包含两个数字的数组，用于以像素为单位水平和垂直偏移菜单。"
+    },
+    "touch-position": {
+      "type": "Boolean",
+      "desc": "Allows for the target position to be set by the mouse position, when the target of the menu is either clicked or touched",
+      "category": "behavior",
+      "desc_cn": "允许通过鼠标位置设置目标位置，当菜单的目标被点击或触摸时。"
+    },
+    "persistent": {
+      "type": "Boolean",
+      "desc": "Avoid menu closing by hitting ESC key or by clicking/tapping outside of the Popup",
+      "category": "behavior",
+      "desc_cn": "避免通过按下 ESC 键或在弹出窗口外部点击/触摸来关闭菜单"
+    },
+    "separate-close-popup": {
+      "type": "Boolean",
+      "desc": "Separate from parent menu, marking it as a separate closing point for v-close-popup (without this, chained menus close all together)",
+      "category": "behavior",
+      "desc_cn": "与父菜单分离，将其标记为 v-close-popup 的独立关闭点（如果没有此选项，链接的菜单会一起关闭）。"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Forces menu to have squared borders",
+      "category": "style",
+      "desc_cn": "强制菜单具有方形边框"
+    },
+    "max-height": {
+      "type": "String",
+      "desc": "The maximum height of the menu; Size in CSS units, including unit name",
+      "examples": [
+        "16px",
+        "2rem"
+      ],
+      "category": "style",
+      "desc_cn": "菜单的最大高度；以 CSS 单位表示的大小，包括单位名称"
+    },
+    "max-width": {
+      "type": "String",
+      "desc": "The maximum width of the menu; Size in CSS units, including unit name",
+      "examples": [
+        "16px",
+        "2rem"
+      ],
+      "category": "style",
+      "desc_cn": "菜单的最大宽度；以 CSS 单位表示的大小，包括单位名称"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Used for injecting the form component; Do NOT destructure it",
+      "scope": {
+        "initialValue": {
+          "type": "Any",
+          "desc": "Initial value",
+          "examples": [
+            0.241,
+            "Text"
+          ],
+          "desc_cn": "初始值"
+        },
+        "value": {
+          "type": "Any",
+          "desc": "Current value",
+          "examples": [
+            0.241,
+            "Text"
+          ],
+          "desc_cn": "当前值"
+        },
+        "validate": {
+          "type": "Function",
+          "desc": "Function that checks if the value is valid",
+          "params": {
+            "value": {
+              "type": "Any",
+              "required": true,
+              "desc": "Value to be checked",
+              "examples": [
+                0,
+                "Changed text"
+              ],
+              "desc_cn": "要检查的值"
+            }
+          },
+          "returns": {
+            "type": "Boolean",
+            "desc": "Checked value is valid or not",
+            "desc_cn": "检查值是否有效"
+          },
+          "desc_cn": "检查值是否有效的函数"
+        },
+        "set": {
+          "type": "Function",
+          "desc": "Function that sets the value and closes the popup",
+          "params": null,
+          "returns": null,
+          "desc_cn": "设置值并关闭弹出窗口的函数"
+        },
+        "cancel": {
+          "type": "Function",
+          "desc": "Function that cancels the editing and reverts the value to the initialValue",
+          "params": null,
+          "returns": null,
+          "desc_cn": "取消编辑并将值恢复为初始值的函数"
+        },
+        "updatePosition": {
+          "type": "Function",
+          "desc": "There are some custom scenarios for which Quasar cannot automatically reposition the component without significant performance drawbacks so the optimal solution is for you to call this method when you need it",
+          "params": null,
+          "returns": null,
+          "desc_cn": "在某些自定义场景下，Quasar 无法自动重新定位组件而不会带来显著的性能损耗，因此最佳解决方案是在需要时调用该方法。"
+        }
+      },
+      "desc_cn": "用于注入表单组件；请勿解构它"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when Popup gets cancelled in order to reset model to its initial value; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的模型值"
+        }
+      },
+      "desc_cn": "当弹出窗口被取消时，会触发此事件以将模型重置为其初始值；也被 v-model 使用"
+    },
+    "before-show": {
+      "desc": "Emitted right before Popup gets shown",
+      "desc_cn": "在 Popup 显示之前发出的事件"
+    },
+    "show": {
+      "desc": "Emitted right after Popup gets shown",
+      "desc_cn": "在 Popup 显示后立即发出的事件"
+    },
+    "before-hide": {
+      "desc": "Emitted right before Popup gets dismissed",
+      "desc_cn": "在弹出窗口关闭之前发出的事件"
+    },
+    "hide": {
+      "desc": "Emitted right after Popup gets dismissed",
+      "desc_cn": "在 Popup 被关闭后立即触发"
+    },
+    "save": {
+      "desc": "Emitted when value has been successfully validated and it should be saved",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "Validated value to be saved",
+          "desc_cn": "要保存的经过验证的值"
+        },
+        "initialValue": {
+          "type": "Any",
+          "desc": "Initial value, before changes",
+          "desc_cn": "更改之前的初始值"
+        }
+      },
+      "desc_cn": "当值成功验证并应该保存时触发"
+    },
+    "cancel": {
+      "desc": "Emitted when user cancelled the change (hit ESC key or clicking outside of Popup or hit 'Cancel' button)",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "Edited value",
+          "desc_cn": "编辑后的值"
+        },
+        "initialValue": {
+          "type": "Any",
+          "desc": "Initial value, before changes",
+          "desc_cn": "更改之前的初始值"
+        }
+      },
+      "desc_cn": "当用户取消更改时触发（按下 ESC 键或在弹出窗口外单击或点击“取消”按钮）"
+    }
+  },
+  "methods": {
+    "set": {
+      "desc": "Trigger a model update; Validates model (and emits 'save' event if it's the case) then closes Popup",
+      "desc_cn": "触发模型更新；验证模型（如果需要则触发 'save' 事件），然后关闭弹出窗口。"
+    },
+    "cancel": {
+      "desc": "Triggers a model reset to its initial value ('cancel' event is emitted) then closes Popup",
+      "desc_cn": "触发模型重置为其初始值（触发'cancel'事件），然后关闭弹出窗口"
+    },
+    "show": {
+      "desc": "Triggers component to show",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发组件显示"
+    },
+    "hide": {
+      "desc": "Triggers component to hide",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发组件隐藏"
+    },
+    "updatePosition": {
+      "desc": "There are some custom scenarios for which Quasar cannot automatically reposition the component without significant performance drawbacks so the optimal solution is for you to call this method when you need it",
+      "desc_cn": "在某些自定义场景下，Quasar 无法自动重新定位组件而不会带来显著的性能损耗，因此最佳解决方案是在需要时调用该方法。"
+    }
+  }
+}

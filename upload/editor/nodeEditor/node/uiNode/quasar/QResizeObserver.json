@@ -1,0 +1,69 @@
+{
+  "id": "90FE4125-C938-2DC6-1D46-E740ADC81BC3",
+  "treePath": "ui/quasar",
+  "name": "QResizeObserver",
+  "importStr": "import { QResizeObserver } from \"quasar\"",
+  "tag": "QResizeObserver",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/resize-observer"
+  },
+  "props": {
+    "debounce": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Debounce amount (in milliseconds)",
+      "default": 100,
+      "examples": [
+        "0",
+        "530"
+      ],
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "防抖延迟时间（以毫秒为单位）"
+    }
+  },
+  "events": {
+    "resize": {
+      "desc": "Parent element has resized (width or height changed)",
+      "params": {
+        "size": {
+          "type": "Object",
+          "desc": "New size",
+          "definition": {
+            "height": {
+              "type": "Number",
+              "required": true,
+              "desc": "Layout height",
+              "desc_cn": "布局高度"
+            },
+            "width": {
+              "type": "Number",
+              "required": true,
+              "desc": "Layout width",
+              "desc_cn": "布局宽度"
+            }
+          },
+          "desc_cn": "新的尺寸"
+        }
+      },
+      "desc_cn": "父元素已调整大小（宽度或高度发生变化）"
+    }
+  },
+  "methods": {
+    "trigger": {
+      "desc": "Emit a 'resize' event",
+      "params": {
+        "immediately": {
+          "type": "Boolean",
+          "desc": "Skip over the debounce amount",
+          "desc_cn": "跳过防抖时间间隔"
+        }
+      },
+      "desc_cn": "触发一个 'resize' 事件"
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "id": "BB195B3B-D908-F2F8-FDD0-B2769FAABD06",
+  "treePath": "ui/quasar",
+  "name": "QBadge",
+  "importStr": "import { QBadge } from \"quasar\"",
+  "tag": "QBadge",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/badge"
+  },
+  "props": {
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "组件的颜色，来自 Quasar 调色板的颜色名称"
+    },
+    "text-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Overrides text color (if needed); Color name from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "覆盖文本颜色（如果需要），来自 Quasar 调色板的颜色名称"
+    },
+    "floating": {
+      "type": "Boolean",
+      "desc": "Tell QBadge if it should float to the top right side of the relative positioned parent element or not",
+      "category": "content",
+      "desc_cn": "控制 QBadge 是否浮动到相对定位的父元素的右上方"
+    },
+    "transparent": {
+      "type": "Boolean",
+      "desc": "Applies a 0.8 opacity; Useful especially for floating QBadge",
+      "category": "style",
+      "desc_cn": "应用 0.8 不透明度，特别适用于浮动 QBadge"
+    },
+    "multi-line": {
+      "type": "Boolean",
+      "desc": "Content can wrap to multiple lines",
+      "category": "content",
+      "desc_cn": "内容可以换行到多行"
+    },
+    "label": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Badge's content as string; overrides default slot if specified",
+      "examples": [
+        "John Doe",
+        22
+      ],
+      "category": "content",
+      "desc_cn": "使用字符串作为 QBadge 的内容。如果指定，则覆盖默认插槽"
+    },
+    "align": {
+      "type": "String",
+      "desc": "Sets vertical-align CSS prop",
+      "values": [
+        "top",
+        "middle",
+        "bottom"
+      ],
+      "category": "content",
+      "desc_cn": "设置 vertical-align CSS 属性"
+    },
+    "outline": {
+      "type": "Boolean",
+      "desc": "Use 'outline' design (colored text and borders only)",
+      "category": "style",
+      "desc_cn": "使用 'outline' 设计（仅彩色文本和边框）"
+    },
+    "rounded": {
+      "type": "Boolean",
+      "desc": "Makes a rounded shaped badge",
+      "category": "style",
+      "desc_cn": "设置为圆形的 QBadge"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "This is where QBadge content goes, if not using 'label' property",
+      "desc_cn": "如果不使用 'label' 属性，这就是 QBadge 内容放置的地方"
+    }
+  }
+}

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="--baseurl--" />
+    <link rel="stylesheet" href="--studio-url--/node_modules/@quasar/extras/material-icons/material-icons.css" />
+    <link rel="stylesheet" href="--studio-url--/node_modules/quasar/dist/quasar.css" />
+    <link rel="stylesheet" href="--studio-url--/src/css/app.css" />
+    <style>
+      html, body {
+        height: 100%; margin: 0; padding: 0;
+        display: flex; flex-direction: column;
+        user-select: none;
+      }
+      #app {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        /* 默认样式直接写在这里，无需 JS 动态创建 */
+        background-color: transparent;
+        flex: 1;
+        min-height: 0;
+      }
+      /* ========== 编辑器专用样式 ========== */
+      .vs-edit-node {
+        /* outline 不占布局空间；负 offset 让红框内缩，相邻组件红框间隙 = 2×|offset|，区分关系且不撑大父级 */
+        --vs-edit-color: rgba(255, 82, 82, 0.86);
+        --vs-edit-fill: rgba(255, 82, 82, 0.06);
+        --vs-edit-outline-style: dashed;
+        margin: 3px !important;
+        outline: 2px var(--vs-edit-outline-style) var(--vs-edit-color) !important;
+        outline-offset: -2px !important;
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.18),
+          inset 0 0 0 2px var(--vs-edit-fill) !important;
+        box-sizing: border-box !important;
+        background-clip: padding-box !important;
+        position: relative;
+        contain: layout;
+      }
+      .vs-edit-node .vs-edit-node {
+        --vs-edit-color: rgba(64, 158, 255, 0.86);
+        --vs-edit-fill: rgba(64, 158, 255, 0.07);
+        --vs-edit-outline-style: dotted;
+      }
+      .vs-edit-node .vs-edit-node .vs-edit-node {
+        --vs-edit-color: rgba(255, 193, 7, 0.9);
+        --vs-edit-fill: rgba(255, 193, 7, 0.08);
+      }
+      .vs-edit-node.vs-full-height,
+      .vs-edit-node.q-layout,
+      .vs-edit-node.q-page-container,
+      .vs-edit-node.q-page {
+        margin: 0 !important;
+        padding: 0 !important;
+        outline-offset: -2px !important;
+      }
+      /* Grid cell 内只有空态/占位/DOM 为空的节点需要临时撑满 cell，真实组件按自身样式显示 */
+      [style*="grid-column"]
+        > .vs-edit-node:is(
+          .vs-empty-node,
+          .vs-empty-grid,
+          .vs-placeholder-node,
+          :empty
+        ),
+      [style*="grid-area"]
+        > .vs-edit-node:is(
+          .vs-empty-node,
+          .vs-empty-grid,
+          .vs-placeholder-node,
+          :empty
+        ) {
+        margin: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+      /* Layout 内部的 dropzone 在 flex 计算中透明，避免破坏 split/leaf 的 flex 链路 */
+      .vs-layout-split > .vs-drop-zone,
+      .vs-layout-leaf > .vs-drop-zone {
+        display: contents !important;
+      }
+      .vs-layout-split,
+      .vs-layout-leaf,
+      .vs-layout-cell {
+        box-sizing: border-box !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+      }
+      .vs-layout-leaf,
+      .vs-layout-cell {
+        overflow: hidden;
+      }
+      /* 全高容器 */
+      .vs-full-height {
+        min-height: 300px !important;
+        height: 100% !important;
+      }
+      /* 空节点样式 */
+      .vs-empty-node {
+        position: relative !important;
+        min-height: 60px !important;
+        min-width: 60px !important;
+        display: block !important;
+        background: rgba(64, 158, 255, 0.08) !important;
+        border-color: #409EFF !important;
+      }
+      .vs-empty-node::before {
+        content: attr(data-tag);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        min-height: 56px;
+        color: rgba(64, 158, 255, 0.6);
+        font-size: 12px;
+        font-weight: 500;
+        pointer-events: none;
+      }
+      /* 空 Grid 容器 - 不覆盖 display:grid */
+      .vs-empty-grid {
+        min-height: 60px !important;
+        min-width: 60px !important;
+        background: rgba(64, 158, 255, 0.04) !important;
+      }
+      /* 占位符节点样式 */
+      .vs-placeholder-node {
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column;
+        flex: 1 !important;
+        min-height: 60px !important;
+        min-width: 60px !important;
+        width: 100% !important;
+        height: 100% !important;
+        box-sizing: border-box;
+        background: rgba(255, 193, 7, 0.1) !important;
+        border: 1px dashed #FFC107 !important;
+      }
+      /* 占位符内部的子元素也需要撑满 */
+      .vs-placeholder-node > * {
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 !important;
+        min-height: 0 !important;
+      }
+      /* Quasar q-page-container 内的占位符需要撑满 */
+      .q-page-container {
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 !important;
+      }
+      .q-page-container > .vs-placeholder-node {
+        flex: 1 !important;
+      }
+      .vs-placeholder-node::before {
+        content: attr(data-tag);
+        position: absolute;
+        top: 4px;
+        left: 8px;
+        font-size: 10px;
+        color: #FFC107;
+        font-weight: 600;
+        z-index: 1;
+      }
+      .vs-placeholder-node::after {
+        content: attr(data-reason);
+        position: absolute;
+        bottom: 4px;
+        left: 8px;
+        font-size: 9px;
+        color: rgba(255, 193, 7, 0.6);
+        font-style: italic;
+        z-index: 1;
+      }
+      /* 选中状态 */
+      .drag-editor-selected {
+        outline: 2px solid #409EFF !important;
+        outline-offset: -2px !important;
+      }
+      /* ========== slotEditor 专用样式 ========== */
+      .vs-slot-container {
+        min-height: 60px !important;
+        min-width: 60px !important;
+        /* 使用 outline 替代 border，避免布局影响 */
+        outline: 1px dashed #409EFF !important;
+        outline-offset: -1px !important;
+        border-radius: 4px;
+        background: rgba(64, 158, 255, 0.05);
+        box-sizing: border-box;
+      }
+      /* 弹窗编辑区域样式 */
+      .vs-popup-editor-section {
+        margin-top: 16px;
+        border: 1px solid #E91E63;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .vs-popup-editor-header {
+        background: rgba(233, 30, 99, 0.1);
+        color: #E91E63;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-bottom: 1px solid rgba(233, 30, 99, 0.2);
+      }
+      .vs-popup-editor-content {
+        padding: 8px;
+        background: rgba(233, 30, 99, 0.02);
+      }
+      /* 弹窗组件内联包装器 */
+      .vs-popup-inline-wrapper {
+        position: relative !important;
+        display: block !important;
+        /* 使用 outline 替代 border，避免 margin 导致溢出 */
+        outline: 2px dashed #E91E63 !important;
+        outline-offset: -2px !important;
+        border-radius: 4px;
+        background: rgba(233, 30, 99, 0.05);
+        min-height: 60px;
+      }
+      .vs-popup-inline-wrapper::before {
+        content: attr(data-popup-label) " (" attr(data-popup-type) ")";
+        position: absolute;
+        top: -10px;
+        left: 8px;
+        background: #1d1d1d;
+        padding: 0 6px;
+        font-size: 10px;
+        color: #E91E63;
+        font-weight: 600;
+        z-index: 10;
+      }
+      .vs-popup-content {
+        position: relative !important;
+        display: block !important;
+      }
+    </style>
+    <script>
+      // 全局错误捕获
+      window.onerror = function(message, source, lineno, colno, error) {
+        console.error('[Preview iframe] Global error:', message, 'at', source, lineno, colno, error);
+        return false;
+      };
+      window.addEventListener('unhandledrejection', function(event) {
+        console.error('[Preview iframe] Unhandled rejection:', event.reason);
+      });
+
+      // 初始化环境 (原 sharebefore 逻辑的简化版)
+      function initEnvironment() {
+        // 🔥 关键：先卸载旧的 Vue 应用，在清理 DOM 之前！
+        // 这样 Vue 能正确清理内部状态和事件监听器
+        if (window.__vueApp__) {
+          try {
+            window.__vueApp__.unmount();
+            console.info('[Preview] 旧 Vue 实例已卸载');
+          } catch (e) {
+            console.warn('[Preview] 卸载旧 Vue 实例失败:', e);
+          }
+          window.__vueApp__ = null;
+        }
+
+        // 🔥 重新创建 app 容器而不是清理 innerHTML
+        // 避免 Vue 卸载过程中访问已移除的 DOM 节点
+        let oldApp = document.getElementById('app');
+        if (oldApp) {
+          oldApp.remove();
+        }
+
+        const app = document.createElement('div');
+        app.id = 'app';
+        document.body.appendChild(app);
+
+        // 简单的自适应高度逻辑 (如果需要原来的 MutationObserver 可以加回来，但通常 flex 布局够用了)
+        app.style.minHeight = "";
+        return app;
+      }
+
+      let scriptEls = [];
+      let _evalProcessing = false;
+      let _evalPending = null;
+
+      window.addEventListener("message", async ({ data, source }) => {
+        // 修正安全检查：只要消息来自父窗口即可 (srcdoc 特性)
+        if (source !== window.parent) return;
+
+        const { type, code } = data;
+
+        if (type === "eval") {
+          if (_evalProcessing) {
+            // 已有 eval 在执行，将最新的排队（覆盖之前排队的）
+            _evalPending = code;
+            return;
+          }
+          await processEval(code);
+        }
+      });
+
+      async function processEval(code) {
+        _evalProcessing = true;
+
+        // 1. 重置环境
+        initEnvironment();
+
+        // 2. 清理旧脚本
+        scriptEls.forEach((el) => el.remove());
+        scriptEls = [];
+
+        // 3. 执行新代码
+        await handleEval(code);
+
+        _evalProcessing = false;
+
+        // 4. 如果有排队的 eval，处理最新的
+        if (_evalPending !== null) {
+          const nextCode = _evalPending;
+          _evalPending = null;
+          await processEval(nextCode);
+        }
+      }
+
+      async function handleEval(tupleScripts) {
+        for (const script of tupleScripts) {
+          const scriptEl = document.createElement("script");
+          scriptEl.setAttribute("type", "module");
+
+          // 使用 Promise 等待脚本执行完毕
+          const done = new Promise((resolve) => { window.__next__ = resolve; });
+          // 注入自动执行的 next
+          scriptEl.innerHTML = script + `\n;window.__next__?.();`;
+
+          // 添加错误处理
+          scriptEl.onerror = (e) => {
+            console.error('[Preview iframe] Script error:', e);
+          };
+
+          document.head.appendChild(scriptEl);
+          scriptEls.push(scriptEl);
+          try { await done; } catch(e) { console.error('[Preview iframe] Execution error:', e); }
+        }
+        delete window.__next__;
+      }
+      
+      window.loadElement = async (path) => {
+        return await import(path);
+      };
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

@@ -1,0 +1,336 @@
+{
+  "id": "9B57883C-3236-B673-F9EC-4388CD8B9B8D",
+  "treePath": "ui/quasar",
+  "name": "QDialog",
+  "importStr": "import { QDialog } from \"quasar\"",
+  "tag": "QDialog",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/dialog",
+    "editorBehavior": {
+      "mode": "forceRender",
+      "propsOverride": { "model-value": true, "seamless": true, "position": "standard" }
+    },
+    "editorPreview": {
+      "visibility": "surrogate",
+      "reason": "no-visible-dom",
+      "propsOverride": { "model-value": true, "seamless": true, "position": "standard" }
+    }
+  },
+  "props": {
+    "transition-show": {
+      "type": "String",
+      "desc": "One of Quasar's embedded transitions",
+      "examples": [
+        "fade",
+        "slide-down"
+      ],
+      "category": "transition",
+      "default": "fade",
+      "required": false,
+      "desc_cn": "Quasar 内置的过渡效果之一"
+    },
+    "transition-hide": {
+      "type": "String",
+      "desc": "One of Quasar's embedded transitions",
+      "examples": [
+        "fade",
+        "slide-down"
+      ],
+      "category": "transition",
+      "default": "fade",
+      "required": false,
+      "desc_cn": "Quasar 内置的过渡效果之一"
+    },
+    "transition-duration": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Transition duration (in milliseconds, without unit)",
+      "default": 300,
+      "category": "transition",
+      "required": false,
+      "desc_cn": "过渡动画的时长（单位毫秒，不带单位）"
+    },
+    "model-value": {
+      "type": "Boolean",
+      "desc": "Model of the component defining shown/hidden state; Either use this property (along with a listener for 'update:model-value' event) OR use v-model directive",
+      "category": "model",
+      "desc_cn": "此组件的 model 数据，控制组件显示/隐藏的状态。可使用此属性（搭配一个 'update:model-value' 监听事件）或者直接使用 v-model 指令。"
+    },
+    "persistent": {
+      "type": "Boolean",
+      "desc": "User cannot dismiss Dialog if clicking outside of it or hitting ESC key; Also, an app route change won't dismiss it",
+      "category": "behavior",
+      "desc_cn": "设置后，用户在对话框外单击或按 ESC 键时不再关闭对话框；此外，应用程序路由更改也不会关闭它"
+    },
+    "no-esc-dismiss": {
+      "type": "Boolean",
+      "desc": "User cannot dismiss Dialog by hitting ESC key; No need to set it if 'persistent' prop is also set",
+      "category": "behavior",
+      "desc_cn": "用户不能按 ESC 键关闭对话框；如果还设置了 'persistent' 属性，则无需设置它"
+    },
+    "no-backdrop-dismiss": {
+      "type": "Boolean",
+      "desc": "User cannot dismiss Dialog by clicking outside of it; No need to set it if 'persistent' prop is also set",
+      "category": "behavior",
+      "desc_cn": "用户不能通过单击对话框外部来关闭对话框；如果还设置了 'persistent' 属性，则无需设置它"
+    },
+    "no-route-dismiss": {
+      "type": "Boolean",
+      "desc": "Changing route app won't dismiss Dialog; No need to set it if 'persistent' prop is also set",
+      "category": "behavior",
+      "desc_cn": "更改路由应用程序不会关闭对话框；如果还设置了 'persistent' 属性，则无需设置它"
+    },
+    "auto-close": {
+      "type": "Boolean",
+      "desc": "Any click/tap inside of the dialog will close it",
+      "category": "behavior",
+      "desc_cn": "对话框内的任何单击/点击都将关闭它"
+    },
+    "seamless": {
+      "type": "Boolean",
+      "desc": "Put Dialog into seamless mode; Does not use a backdrop so user is able to interact with the rest of the page too",
+      "category": "content",
+      "desc_cn": "使对话框进入无缝模式；不使用背景，因此用户也可以与页面的其他部分进行交互"
+    },
+    "backdrop-filter": {
+      "type": "String",
+      "desc": "Apply a backdrop filter; The value needs to be the same as in the CSS specs for backdrop-filter; The examples are not an exhaustive list",
+      "examples": [
+        "blur(4px)",
+        "blur(4px) saturate(150%)",
+        "brightness(60%)",
+        "invert(70%)",
+        "grayscale(100%)",
+        "contrast(40%)",
+        "hue-rotate(120deg)",
+        "sepia(90%)",
+        "saturate(80%)",
+        "none"
+      ],
+      "category": "style",
+      "addedIn": "v2.15",
+      "desc_cn": "应用背景滤镜；值需要与 CSS 规范中的 backdrop-filter 相同；示例并非详尽列表。"
+    },
+    "maximized": {
+      "type": "Boolean",
+      "desc": "Put Dialog into maximized mode",
+      "category": "content",
+      "desc_cn": "将对话框置于最大化模式"
+    },
+    "full-width": {
+      "type": "Boolean",
+      "desc": "Dialog will try to render with same width as the window",
+      "category": "content",
+      "desc_cn": "对话框将尝试以与窗口相同的宽度进行渲染"
+    },
+    "full-height": {
+      "type": "Boolean",
+      "desc": "Dialog will try to render with same height as the window",
+      "category": "content",
+      "desc_cn": "对话框将尝试以与窗口相同的高度渲染"
+    },
+    "position": {
+      "type": "String",
+      "desc": "Stick dialog to one of the sides (top, right, bottom or left)",
+      "default": "standard",
+      "values": [
+        "standard",
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ],
+      "category": "content",
+      "required": false,
+      "desc_cn": "将对话框附着到一侧（顶部、右侧、底部或左侧）"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Forces content to have squared borders",
+      "category": "style",
+      "desc_cn": "强制内容具有方形边框"
+    },
+    "no-refocus": {
+      "type": "Boolean",
+      "desc": "(Accessibility) When Dialog gets hidden, do not refocus on the DOM element that previously had focus",
+      "category": "behavior",
+      "desc_cn": "（可访问性）当对话框被隐藏时，不要重新聚焦以前有聚焦过的 DOM 元素"
+    },
+    "no-focus": {
+      "type": "Boolean",
+      "desc": "(Accessibility) When Dialog gets shown, do not switch focus on it",
+      "category": "behavior",
+      "desc_cn": "（辅助功能）显示对话框时，不要将焦点切换到该对话框上"
+    },
+    "no-shake": {
+      "type": "Boolean",
+      "desc": "Do not shake up the Dialog to catch user's attention",
+      "category": "behavior",
+      "addedIn": "v2.1.1",
+      "desc_cn": "不要晃动对话框来引起用户的注意。"
+    },
+    "allow-focus-outside": {
+      "type": "Boolean",
+      "desc": "Allow elements outside of the Dialog to be focusable; By default, for accessibility reasons, QDialog does not allow outer focus",
+      "category": "behavior",
+      "addedIn": "v2.7.2",
+      "desc_cn": "允许对话框外的元素可聚焦；出于辅助功能的原因，默认情况下 QDialog 不允许外部聚焦。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的默认插槽"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when showing/hidden state changes; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Boolean",
+          "desc": "New state (showing/hidden)",
+          "desc_cn": "新的状态（显示/隐藏）"
+        }
+      },
+      "desc_cn": "当显示/隐藏的状态切换时触发，也会被 v-model 指令使用"
+    },
+    "show": {
+      "desc": "Emitted after component has triggered show()",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 show() 后触发"
+    },
+    "before-show": {
+      "desc": "Emitted when component triggers show() but before it finishes doing it",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 show() 之前触发"
+    },
+    "hide": {
+      "desc": "Emitted after component has triggered hide()",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 hide() 后触发"
+    },
+    "before-hide": {
+      "desc": "Emitted when component triggers hide() but before it finishes doing it",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 hide() 之前触发"
+    },
+    "shake": {
+      "desc": "Emitted when the Dialog shakes in order to catch user's attention, unless the 'no-shake' property is set",
+      "desc_cn": "当对话框晃动以引起用户注意时触发，除非设置了 'no-shake' 属性。"
+    },
+    "escape-key": {
+      "desc": "Emitted when ESC key is pressed; Does not get emitted if Dialog is 'persistent' or it has 'no-esc-key' set",
+      "desc_cn": "按 ESC 键时触发；如果对话框为 'persistent' 或未设置 'no-esc-key'，则不会触发"
+    }
+  },
+  "methods": {
+    "show": {
+      "desc": "Triggers component to show",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发组件显示"
+    },
+    "hide": {
+      "desc": "Triggers component to hide",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发组件隐藏"
+    },
+    "toggle": {
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc": "Triggers component to toggle between show/hide",
+      "desc_cn": "触发组件在显示/隐藏之间切换"
+    },
+    "focus": {
+      "desc": "Focus dialog; if you have content with autofocus attribute, it will directly focus it",
+      "params": {
+        "selector": {
+          "type": "String",
+          "required": false,
+          "desc": "Optional CSS selector to override default focusable element",
+          "examples": [
+            "[tabindex]:not([tabindex=\"-1\"])"
+          ],
+          "addedIn": "v2.6.5",
+          "desc_cn": "可选的 CSS 选择器，替代默认的可聚焦元素"
+        }
+      },
+      "desc_cn": "聚焦对话框；如果内容具有“自动聚焦”（autofocus）属性，它将直接对其进行聚焦"
+    },
+    "shake": {
+      "desc": "Shakes dialog",
+      "params": {
+        "focusTarget": {
+          "type": "Element",
+          "desc": "Optional DOM Element to be focused after shake",
+          "examples": [
+            "document.getElementById('example')"
+          ],
+          "addedIn": "v2.10.1",
+          "desc_cn": "可选的 DOM 元素，当震动后将会被聚焦"
+        }
+      },
+      "desc_cn": "震动对话框"
+    }
+  },
+  "computedProps": {
+    "contentEl": {
+      "type": "Element",
+      "desc": "The DOM Element of the rendered content",
+      "addedIn": "v2.10.1",
+      "desc_cn": "渲染内容的 DOM 元素"
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "id": "622CD228-629C-1A47-738A-9FD70AD0B1A3",
+  "treePath": "ui/quasar",
+  "name": "QSeparator",
+  "importStr": "import { QSeparator } from \"quasar\"",
+  "tag": "QSeparator",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/separator"
+  },
+  "props": {
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "通知组件背景颜色为深色"
+    },
+    "spaced": {
+      "type": [
+        "Boolean",
+        "String"
+      ],
+      "desc": "If set to true, the corresponding direction margins will be set to 8px; It can also be set to a size in CSS units, including unit name, or one of the xs|sm|md|lg|xl predefined sizes",
+      "default": "md",
+      "examples": [
+        "12px",
+        "sm",
+        "md"
+      ],
+      "category": "content",
+      "required": false,
+      "desc_cn": "如果设置为true，则相应的方向边距将设置为8px；也可以设置为CSS单位中的大小，包括单位名称，或者其中一个预定义尺寸xs|sm|md|lg|xl"
+    },
+    "inset": {
+      "type": [
+        "Boolean",
+        "String"
+      ],
+      "desc": "If set to Boolean true, the left and right margins will be set to 16px. If set to 'item' then it will match a QItem's design. If set to 'item-thumbnail' then it will match the design of a QItem with a thumbnail on the left side",
+      "values": [
+        "(Boolean) true",
+        "(Boolean) false",
+        "item",
+        "item-thumbnail"
+      ],
+      "category": "content",
+      "desc_cn": "如果设置为布尔值 true，则左右边距将被设置为16px。如果设置为 'item'，则会匹配 QItem 的设计。如果设置为 'item-thumbnail'，则会匹配带有缩略图的 QItem 的设计"
+    },
+    "vertical": {
+      "type": "Boolean",
+      "desc": "If set to true, the separator will be vertical.",
+      "category": "content",
+      "desc_cn": "如果设置为true，则分隔符将是垂直的。"
+    },
+    "size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name",
+      "examples": [
+        "16px",
+        "2rem"
+      ],
+      "category": "style",
+      "desc_cn": "CSS 单位的大小，包括单位名称"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    }
+  }
+}

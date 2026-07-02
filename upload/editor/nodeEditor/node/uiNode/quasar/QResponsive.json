@@ -1,0 +1,34 @@
+{
+  "id": "1E023FCB-365D-535F-C7F9-1F9BB355EC1D",
+  "treePath": "ui/quasar",
+  "name": "QResponsive",
+  "importStr": "import { QResponsive } from \"quasar\"",
+  "tag": "QResponsive",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/responsive"
+  },
+  "props": {
+    "ratio": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Aspect ratio for the content; If value is a String, then avoid using a computational statement (like '16/9') and instead specify the String value of the result directly (eg. '1.7777')",
+      "examples": [
+        ":ratio=\"4/3\"",
+        ":ratio=\"16/9\"",
+        "ratio=\"1\""
+      ],
+      "category": "style",
+      "desc_cn": "内容的宽高比；如果值是一个字符串，则避免使用计算语句（如 '16/9'），而是直接指定结果的字符串值（例如 '1.7777'）"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽"
+    }
+  }
+}

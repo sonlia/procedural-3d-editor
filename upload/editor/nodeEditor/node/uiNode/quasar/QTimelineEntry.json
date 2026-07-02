@@ -1,0 +1,94 @@
+{
+  "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567808",
+  "treePath": "ui/quasar",
+  "name": "QTimelineEntry",
+  "importStr": "import { QTimelineEntry } from \"quasar\"",
+  "tag": "QTimelineEntry",
+  "parentMustBe": ["QTimeline"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/timeline"
+  },
+  "props": {
+    "heading": {
+      "type": "Boolean",
+      "desc": "Defines a heading timeline entry",
+      "category": "content",
+      "desc_cn": "定义一个标题时间线条目"
+    },
+    "tag": {
+      "type": "String",
+      "desc": "Tag to use for the timeline heading entry; Useful when the 'heading' prop is set",
+      "default": "h3",
+      "examples": ["h1", "div"],
+      "category": "content",
+      "desc_cn": "用于时间线标题条目的 HTML 标签"
+    },
+    "side": {
+      "type": "String",
+      "desc": "Side to place the timeline entry in loose layout; Only works when QTimeline has layout 'loose'",
+      "default": "right",
+      "values": ["left", "right"],
+      "category": "behavior",
+      "desc_cn": "在松散布局中放置时间线条目的一侧"
+    },
+    "icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention",
+      "examples": ["map", "ion-add"],
+      "category": "content",
+      "desc_cn": "遵循 Quasar 规范的图标名称"
+    },
+    "avatar": {
+      "type": "String",
+      "desc": "URL to the avatar image; Icon takes priority if both are used",
+      "examples": ["(public folder) img/avatar.png"],
+      "category": "content",
+      "desc_cn": "头像图片的 URL；如果同时使用，图标优先"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": ["primary", "teal", "teal-10"],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "title": {
+      "type": "String",
+      "desc": "Title of timeline entry",
+      "examples": ["December Party"],
+      "category": "content",
+      "desc_cn": "时间线条目的标题"
+    },
+    "subtitle": {
+      "type": "String",
+      "desc": "Subtitle of timeline entry",
+      "examples": ["Company Celebration"],
+      "category": "content",
+      "desc_cn": "时间线条目的副标题"
+    },
+    "body": {
+      "type": "String",
+      "desc": "Body content of timeline entry",
+      "examples": ["Lorem ipsum dolor sit amet..."],
+      "category": "content",
+      "desc_cn": "时间线条目的内容"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Timeline entry body content; Overrides the 'body' prop when used",
+      "desc_cn": "时间线条目的主体内容；使用时覆盖 'body' 属性"
+    },
+    "title": {
+      "desc": "Timeline entry title; Overrides the 'title' prop when used",
+      "desc_cn": "时间线条目的标题；使用时覆盖 'title' 属性"
+    },
+    "subtitle": {
+      "desc": "Timeline entry subtitle; Overrides the 'subtitle' prop when used",
+      "desc_cn": "时间线条目的副标题；使用时覆盖 'subtitle' 属性"
+    }
+  },
+  "events": {}
+}

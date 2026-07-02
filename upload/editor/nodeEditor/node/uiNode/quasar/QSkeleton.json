@@ -1,0 +1,144 @@
+{
+  "id": "CC57BBD1-5D6F-E22E-1866-BD0B3B28EE0D",
+  "treePath": "ui/quasar",
+  "name": "QSkeleton",
+  "importStr": "import { QSkeleton } from \"quasar\"",
+  "tag": "QSkeleton",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/skeleton"
+  },
+  "props": {
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "通知组件背景颜色为深色"
+    },
+    "type": {
+      "type": "String",
+      "desc": "Type of skeleton placeholder",
+      "values": [
+        "text",
+        "rect",
+        "circle",
+        "QBtn",
+        "QBadge",
+        "QChip",
+        "QToolbar",
+        "QCheckbox",
+        "QRadio",
+        "QToggle",
+        "QSlider",
+        "QRange",
+        "QInput",
+        "QAvatar"
+      ],
+      "default": "rect",
+      "category": "content",
+      "required": false,
+      "desc_cn": "骨架占位符的类型"
+    },
+    "animation": {
+      "type": "String",
+      "desc": "The animation effect of the skeleton placeholder",
+      "values": [
+        "wave",
+        "pulse",
+        "pulse-x",
+        "pulse-y",
+        "fade",
+        "blink",
+        "none"
+      ],
+      "default": "wave",
+      "category": "style",
+      "required": false,
+      "desc_cn": "骨架占位符的动画效果"
+    },
+    "animation-speed": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Animation speed (in milliseconds, without unit)",
+      "examples": [
+        500,
+        "1200"
+      ],
+      "category": "style",
+      "default": 300,
+      "addedIn": "v2.2",
+      "required": false,
+      "desc_cn": "动画速度（以毫秒为单位，不包括单位）"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Removes border-radius so borders are squared",
+      "category": "style",
+      "desc_cn": "移除边框半径，使边框变为方形"
+    },
+    "bordered": {
+      "type": "Boolean",
+      "desc": "Applies a default border to the component",
+      "category": "style",
+      "desc_cn": "为组件应用默认边框"
+    },
+    "size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name; Overrides 'height' and 'width' props and applies the value to both height and width",
+      "examples": [
+        "16px",
+        "2rem"
+      ],
+      "category": "style",
+      "desc_cn": "CSS 单位的尺寸，包括单位名称；覆盖 'height' 和 'width' 属性，并将该值应用于高度和宽度。"
+    },
+    "width": {
+      "type": "String",
+      "desc": "Width in CSS units, including unit name; Apply custom width; Use this prop or through CSS; Overridden by 'size' prop if used",
+      "examples": [
+        "16px",
+        "2rem"
+      ],
+      "category": "style",
+      "desc_cn": "CSS 单位的宽度，包括单位名称；应用自定义宽度；可以通过此属性或 CSS 进行设置；如果还设置了 'size' 属性，则会被覆盖"
+    },
+    "height": {
+      "type": "String",
+      "desc": "Height in CSS units, including unit name; Apply custom height; Use this prop or through CSS; Overridden by 'size' prop if used",
+      "examples": [
+        "16px",
+        "2rem"
+      ],
+      "category": "style",
+      "desc_cn": "在 CSS 单位中的高度，包括单位名称；应用自定义高度；可以通过此属性或者通过 CSS 来设置；如果还设置了 'size' 属性则会被覆盖。"
+    },
+    "tag": {
+      "type": "String",
+      "desc": "HTML tag to use",
+      "examples": [
+        "div",
+        "span",
+        "div",
+        "span"
+      ],
+      "category": "content",
+      "default": "div",
+      "required": false,
+      "desc_cn": "要使用的 HTML 标签"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽"
+    }
+  }
+}

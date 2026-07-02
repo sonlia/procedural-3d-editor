@@ -1,0 +1,57 @@
+{
+  "id": "55587F2E-67FE-2E71-AA69-62D8E2DA955D",
+  "treePath": "ui/quasar",
+  "name": "QBanner",
+  "importStr": "import { QBanner } from \"quasar\"",
+  "tag": "QBanner",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/banner"
+  },
+  "props": {
+    "inline-actions": {
+      "type": "Boolean",
+      "desc": "Display actions on same row as content",
+      "category": "content",
+      "desc_cn": "在与内容所在的相同行上显示操作按钮"
+    },
+    "dense": {
+      "type": "Boolean",
+      "desc": "Dense mode; occupies less space",
+      "category": "style",
+      "desc_cn": "紧凑模式，占用更少的空间"
+    },
+    "rounded": {
+      "type": "Boolean",
+      "desc": "Applies a small standard border-radius for a squared shape of the component",
+      "category": "style",
+      "desc_cn": "为组件应用较小标准的边框圆角（border-radius）"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "设置组件背景为深色"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "This is where Banner content goes",
+      "desc_cn": "这就是横幅内容的所在位置"
+    },
+    "avatar": {
+      "desc": "Slot for displaying an avatar (suggestions: QIcon, QAvatar)",
+      "desc_cn": "用于显示头像的插槽（建议：QIcon、QAvatar）"
+    },
+    "action": {
+      "desc": "Slot for Banner action (suggestions: QBtn)",
+      "desc_cn": "横幅操作按钮的插槽（建议：QBtn）"
+    }
+  }
+}

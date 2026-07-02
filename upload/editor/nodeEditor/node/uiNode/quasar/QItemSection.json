@@ -1,0 +1,52 @@
+{
+  "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567811",
+  "treePath": "ui/quasar",
+  "name": "QItemSection",
+  "importStr": "import { QItemSection } from \"quasar\"",
+  "tag": "QItemSection",
+  "parentMustBe": ["QItem"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/list-and-list-items",
+    "allowChildren": ["QItemLabel"]
+  },
+  "props": {
+    "avatar": {
+      "type": "Boolean",
+      "desc": "Render an avatar item side (does not include QAvatar component, just styles the wrapper)",
+      "category": "content",
+      "desc_cn": "渲染头像区块样式（不包含 QAvatar 组件，只设置包装器样式）"
+    },
+    "thumbnail": {
+      "type": "Boolean",
+      "desc": "Render a thumbnail item side (does not include QImg component, just styles the wrapper)",
+      "category": "content",
+      "desc_cn": "渲染缩略图区块样式（不包含 QImg 组件，只设置包装器样式）"
+    },
+    "side": {
+      "type": "Boolean",
+      "desc": "Renders as a side item (has specific styling like alignment, padding)",
+      "category": "content",
+      "desc_cn": "渲染为侧边项（具有特定样式如对齐、内边距）"
+    },
+    "top": {
+      "type": "Boolean",
+      "desc": "Align content to top (useful when content has more than one line)",
+      "category": "content",
+      "desc_cn": "将内容对齐到顶部（当内容超过一行时有用）"
+    },
+    "no-wrap": {
+      "type": "Boolean",
+      "desc": "Do not wrap text (useful for single line content like 'secondary' text)",
+      "category": "content",
+      "desc_cn": "不换行文本"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Section content",
+      "desc_cn": "区块内容"
+    }
+  },
+  "events": {}
+}

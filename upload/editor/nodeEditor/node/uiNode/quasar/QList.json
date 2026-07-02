@@ -1,0 +1,65 @@
+{
+  "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567810",
+  "treePath": "ui/quasar",
+  "name": "QList",
+  "type": "component",
+  "tag": "QList",
+  "importStr": "import { QList } from 'quasar'",
+  "uiPanel": "undefined",
+  "parentMustBe": [],
+
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/list-and-list-items",
+    "allowChildren": ["QItem", "QExpansionItem", "QSlideItem"]
+  },
+  "props": {
+    "bordered": {
+      "type": "Boolean",
+      "desc": "Applies a default border to the component",
+      "category": "style",
+      "desc_cn": "为组件应用默认边框"
+    },
+    "dense": {
+      "type": "Boolean",
+      "desc": "Dense mode; occupies less space",
+      "category": "style",
+      "desc_cn": "紧凑模式；占用较少空间"
+    },
+    "separator": {
+      "type": "Boolean",
+      "desc": "Applies a separator between contained items",
+      "category": "content",
+      "desc_cn": "在包含的项目之间应用分隔符"
+    },
+    "dark": {
+      "type": ["Boolean", "null"],
+      "default": "null",
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "通知组件背景颜色为深色"
+    },
+    "padding": {
+      "type": "Boolean",
+      "desc": "Applies a material design-like padding on top and bottom",
+      "category": "content",
+      "desc_cn": "在顶部和底部应用类似于 Material Design 的内边距"
+    },
+    "tag": {
+      "type": "String",
+      "desc": "HTML tag to use",
+      "category": "content",
+      "default": "'div'",
+      "examples": ["'div'", "'ul'", "'ol'"],
+      "addedIn": "v2.10.1",
+      "required": false,
+      "desc_cn": "要使用的 HTML 标签"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "This is where the content goes; Suggestion: QItem, QExpansionItem, ...",
+      "desc_cn": "这是内容的位置；建议使用 QItem、QExpansionItem 等组件..."
+    }
+  }
+}

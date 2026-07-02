@@ -1,0 +1,189 @@
+{
+  "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567810",
+  "treePath": "ui/quasar",
+  "name": "QFabAction",
+  "importStr": "import { QFabAction } from \"quasar\"",
+  "tag": "QFabAction",
+  "parentMustBe": ["QFab"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/floating-action-button"
+  },
+  "props": {
+    "type": {
+      "type": "String",
+      "desc": "Define the button HTML DOM type",
+      "default": "a",
+      "values": ["a", "submit", "button", "reset"],
+      "category": "general",
+      "desc_cn": "定义按钮的 HTML DOM 类型"
+    },
+    "outline": {
+      "type": "Boolean",
+      "desc": "Use 'outline' design for Fab button",
+      "category": "style",
+      "desc_cn": "使用 'outline' 设计"
+    },
+    "push": {
+      "type": "Boolean",
+      "desc": "Use 'push' design for Fab button",
+      "category": "style",
+      "desc_cn": "使用 'push' 设计"
+    },
+    "flat": {
+      "type": "Boolean",
+      "desc": "Use 'flat' design for Fab button",
+      "category": "style",
+      "desc_cn": "使用 'flat' 设计"
+    },
+    "unelevated": {
+      "type": "Boolean",
+      "desc": "Remove shadow",
+      "category": "style",
+      "desc_cn": "移除阴影"
+    },
+    "padding": {
+      "type": "String",
+      "desc": "Apply custom padding (vertical [horizontal])",
+      "examples": ["16px", "10px 5px", "xs", "md lg"],
+      "category": "style",
+      "desc_cn": "应用自定义内边距"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": ["primary", "teal", "teal-10"],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "text-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Overrides text color (if needed); Color name from the Quasar Color Palette",
+      "examples": ["primary", "teal", "teal-10"],
+      "category": "style",
+      "desc_cn": "覆盖文本颜色"
+    },
+    "glossy": {
+      "type": "Boolean",
+      "desc": "Apply the glossy effect over the button",
+      "category": "style",
+      "desc_cn": "应用光泽效果"
+    },
+    "external-label": {
+      "type": "Boolean",
+      "desc": "Display label besides the FAB, as external content",
+      "category": "style|content",
+      "desc_cn": "将标签作为外部内容显示在 FAB 旁边"
+    },
+    "label": {
+      "type": ["String", "Number"],
+      "desc": "The label that will be shown when Fab is extended",
+      "examples": ["Button Label"],
+      "category": "content",
+      "desc_cn": "展开时显示的标签"
+    },
+    "label-position": {
+      "type": "String",
+      "desc": "Position of the label around the icon",
+      "values": ["top", "right", "bottom", "left"],
+      "category": "style|content",
+      "desc_cn": "标签相对于图标的位置"
+    },
+    "hide-label": {
+      "type": ["Boolean", "null"],
+      "default": null,
+      "desc": "Hide the label; Useful for animation purposes",
+      "category": "style|content",
+      "desc_cn": "隐藏标签；用于动画目的"
+    },
+    "label-class": {
+      "type": ["String", "Array", "Object"],
+      "desc": "Class definitions to be attributed to the label container",
+      "examples": ["my-special-class"],
+      "category": "style",
+      "desc_cn": "应用于标签容器的类名"
+    },
+    "label-style": {
+      "type": ["String", "Array", "Object"],
+      "desc": "Style definitions to be attributed to the label container",
+      "examples": ["background-color: #ff0000"],
+      "category": "style",
+      "desc_cn": "应用于标签容器的样式"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Apply a rectangle aspect to the FAB",
+      "category": "style",
+      "desc_cn": "应用矩形外观"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式"
+    },
+    "tabindex": {
+      "type": ["Number", "String"],
+      "desc": "Tabindex HTML attribute value",
+      "examples": ["0", "100"],
+      "category": "general",
+      "desc_cn": "Tabindex HTML 属性值"
+    },
+    "icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention",
+      "examples": ["map", "ion-add"],
+      "category": "content",
+      "desc_cn": "遵循 Quasar 规范的图标名称"
+    },
+    "anchor": {
+      "type": "String",
+      "desc": "How to align the Fab Action relative to Fab expand direction",
+      "values": ["start", "center", "end"],
+      "category": "position",
+      "desc_cn": "相对于 Fab 展开方向的对齐方式"
+    },
+    "to": {
+      "type": ["String", "Object"],
+      "desc": "Equivalent to Vue Router <router-link> 'to' property",
+      "examples": ["/home/dashboard"],
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'to' 属性"
+    },
+    "replace": {
+      "type": "Boolean",
+      "desc": "Equivalent to Vue Router <router-link> 'replace' property",
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'replace' 属性"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Suggestion: QTooltip",
+      "desc_cn": "建议使用：QTooltip"
+    },
+    "icon": {
+      "desc": "Slot for icon; Suggestion: QIcon",
+      "desc_cn": "图标插槽；建议使用 QIcon"
+    },
+    "label": {
+      "desc": "Slot for label",
+      "desc_cn": "标签插槽"
+    }
+  },
+  "events": {
+    "click": {
+      "desc": "Emitted when the component is clicked",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "点击组件时触发"
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "id": "500A4DDF-3EDA-986B-4B4B-841D204676CF",
+  "treePath": "ui/quasar",
+  "name": "QTimeline",
+  "importStr": "import { QTimeline } from \"quasar\"",
+  "tag": "QTimeline",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/timeline"
+  },
+  "props": {
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "side": {
+      "type": "String",
+      "desc": "Side to place the timeline entries in dense and comfortable layout; For loose layout it gets overridden by QTimelineEntry side prop",
+      "default": "right",
+      "values": [
+        "left",
+        "right"
+      ],
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "在紧凑和舒适布局中放置时间线条目的一侧；对于松散布局，它会被 QTimelineEntry 组件的 side 属性覆盖"
+    },
+    "layout": {
+      "type": "String",
+      "desc": "Layout of the timeline. Dense keeps content and labels on one side. Comfortable keeps content on one side and labels on the opposite side. Loose puts content on both sides.",
+      "default": "dense",
+      "values": [
+        "dense",
+        "comfortable",
+        "loose"
+      ],
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "时间轴的布局。Dense 将内容和标签放在一侧。Comfortable 将内容放在一侧，标签放在相反的一侧。Loose 在两侧都放置内容。"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "通知组件背景颜色为深色"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Used for content of component",
+      "desc_cn": "用于组件的内容"
+    }
+  }
+}

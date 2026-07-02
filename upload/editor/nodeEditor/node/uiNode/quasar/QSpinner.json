@@ -1,0 +1,46 @@
+{
+  "id": "60456952-28B1-B22E-0794-0990B80803E1",
+  "treePath": "ui/quasar",
+  "name": "QSpinner",
+  "importStr": "import { QSpinner } from \"quasar\"",
+  "tag": "QSpinner",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/spinners"
+  },
+  "props": {
+    "size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)",
+      "examples": [
+        "16px",
+        "2rem",
+        "xs",
+        "md"
+      ],
+      "category": "style",
+      "desc_cn": "CSS 单位的尺寸，包括单位名称或标准尺寸名称（xs|sm|md|lg|xl）"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "thickness": {
+      "type": "Number",
+      "desc": "Override value to use for stroke-width",
+      "default": 5,
+      "category": "style",
+      "required": false,
+      "desc_cn": "覆盖使用的描边宽度值"
+    }
+  }
+}

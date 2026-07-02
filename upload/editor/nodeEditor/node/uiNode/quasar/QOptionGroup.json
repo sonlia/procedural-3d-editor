@@ -1,0 +1,278 @@
+{
+  "id": "987A8622-5869-DA5D-380B-6888F7CB8DED",
+  "treePath": "ui/quasar",
+  "name": "QOptionGroup",
+  "importStr": "import { QOptionGroup } from \"quasar\"",
+  "tag": "QOptionGroup",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/option-group"
+  },
+  "props": {
+    "size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)",
+      "examples": [
+        "16px",
+        "2rem",
+        "xs",
+        "md"
+      ],
+      "category": "style",
+      "desc_cn": "CSS 单位的尺寸，包括单位名称或标准尺寸名称（xs|sm|md|lg|xl）"
+    },
+    "model-value": {
+      "desc": "Model of the component; Either use this property (along with a listener for 'update:model-value' event) OR use v-model directive",
+      "required": true,
+      "syncable": true,
+      "category": "model",
+      "type": "Any",
+      "examples": [
+        "v-model=\"group\""
+      ],
+      "desc_cn": "组件的 model 数据；可以使用该属性（以及监听 'update:model-value' 事件）或者使用 v-model 指令。"
+    },
+    "options": {
+      "type": "Array",
+      "desc": "Array of objects with value, label, and disable (optional) props. The binary components will be created according to this array; Props from QToggle, QCheckbox or QRadio can also be added as key/value pairs to control the components singularly",
+      "definition": {
+        "label": {
+          "type": "String",
+          "desc": "Label to display along the component",
+          "required": true,
+          "examples": [
+            "Option 1",
+            "Option 2",
+            "Option 3"
+          ],
+          "desc_cn": "组件上显示的标签"
+        },
+        "value": {
+          "type": "Any",
+          "desc": "Value of the option that will be used by the component model",
+          "required": true,
+          "examples": [
+            "op1",
+            "op2",
+            "op3"
+          ],
+          "desc_cn": "组件模型将使用的选项值"
+        },
+        "disable": {
+          "type": "Boolean",
+          "desc": "If true, the option will be disabled",
+          "desc_cn": "如果为 true，则该选项将被禁用"
+        },
+        "...props": {
+          "type": "Any",
+          "desc": "Any other props from QToggle, QCheckbox, or QRadio",
+          "examples": [
+            "val=\"car\"",
+            ":true-value=\"trueValue\"",
+            "checked-icon=\"visibility\""
+          ],
+          "desc_cn": "来自 QToggle、QCheckbox 或 QRadio 的其他任何属性"
+        }
+      },
+      "examples": [
+        ":options=\"[ { label: 'Option 1', value: 'op1' }, { label: 'Option 2', value: 'op2' }, { label: 'Option 3', value: 'op3', disable: true } ]\""
+      ],
+      "category": "model",
+      "desc_cn": "具有值、标签和禁用（可选）属性的对象数组。根据此数组创建二进制组件；也可以将 QToggle、QCheckbox 或 QRadio 的属性作为键/值对添加以单独控制组件。"
+    },
+    "name": {
+      "type": "String",
+      "desc": "Used to specify the name of the controls; Useful if dealing with forms submitted directly to a URL",
+      "examples": [
+        "car_id"
+      ],
+      "category": "behavior",
+      "desc_cn": "用于指定控件的名称；如果处理直接提交到 URL 的表单时很有用"
+    },
+    "type": {
+      "type": "String",
+      "desc": "The type of input component to be used",
+      "values": [
+        "radio",
+        "checkbox",
+        "toggle"
+      ],
+      "default": "radio",
+      "category": "content",
+      "required": false,
+      "desc_cn": "要使用的输入组件类型"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "keep-color": {
+      "type": "Boolean",
+      "desc": "Should the color (if specified any) be kept when input components are unticked?",
+      "category": "behavior",
+      "desc_cn": "当取消选中输入组件时，是否保留颜色（如果指定了任何颜色）？"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "通知组件背景颜色为深色"
+    },
+    "dense": {
+      "type": "Boolean",
+      "desc": "Dense mode; occupies less space",
+      "category": "style",
+      "desc_cn": "紧凑模式；占用较少空间"
+    },
+    "left-label": {
+      "type": "Boolean",
+      "desc": "Label (if any specified) should be displayed on the left side of the input components",
+      "category": "content",
+      "desc_cn": "（如果有指定）标签应显示在输入组件的左侧"
+    },
+    "inline": {
+      "type": "Boolean",
+      "desc": "Show input components as inline-block rather than each having their own row",
+      "category": "content",
+      "desc_cn": "将输入组件显示为内联块，而不是每个组件都有自己的行"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式下"
+    }
+  },
+  "slots": {
+    "label": {
+      "desc": "Generic slot for all labels",
+      "scope": {
+        "...self": {
+          "type": "Object",
+          "desc": "The corresponding option entry from the 'options' prop",
+          "definition": {
+            "label": {
+              "type": "String",
+              "desc": "Label to display along the component",
+              "required": true,
+              "examples": [
+                "Option 1",
+                "Option 2",
+                "Option 3"
+              ],
+              "desc_cn": "组件上显示的标签"
+            },
+            "value": {
+              "type": "Any",
+              "desc": "Value of the option that will be used by the component model",
+              "required": true,
+              "examples": [
+                "op1",
+                "op2",
+                "op3"
+              ],
+              "desc_cn": "组件模型将使用的选项值"
+            },
+            "disable": {
+              "type": "Boolean",
+              "desc": "If true, the option will be disabled",
+              "desc_cn": "如果为 true，则该选项将被禁用"
+            },
+            "...props": {
+              "type": "Any",
+              "desc": "Any other props from QToggle, QCheckbox, or QRadio",
+              "examples": [
+                "val=\"car\"",
+                ":true-value=\"trueValue\"",
+                "checked-icon=\"visibility\""
+              ],
+              "desc_cn": "来自 QToggle、QCheckbox 或 QRadio 的其他任何属性"
+            }
+          },
+          "desc_cn": "'options' 属性中对应的选项条目"
+        }
+      },
+      "addedIn": "v2.2",
+      "desc_cn": "所有标签的通用插槽"
+    },
+    "label-[name]": {
+      "desc": "Slot to define the specific label for the option at '[name]' where name is a 0-based index; Overrides the generic 'label' slot if used",
+      "scope": {
+        "...self": {
+          "type": "Object",
+          "desc": "The corresponding option entry from the 'options' prop",
+          "definition": {
+            "label": {
+              "type": "String",
+              "desc": "Label to display along the component",
+              "required": true,
+              "examples": [
+                "Option 1",
+                "Option 2",
+                "Option 3"
+              ],
+              "desc_cn": "组件上显示的标签"
+            },
+            "value": {
+              "type": "Any",
+              "desc": "Value of the option that will be used by the component model",
+              "required": true,
+              "examples": [
+                "op1",
+                "op2",
+                "op3"
+              ],
+              "desc_cn": "组件模型将使用的选项值"
+            },
+            "disable": {
+              "type": "Boolean",
+              "desc": "If true, the option will be disabled",
+              "desc_cn": "如果为 true，则该选项将被禁用"
+            },
+            "...props": {
+              "type": "Any",
+              "desc": "Any other props from QToggle, QCheckbox, or QRadio",
+              "examples": [
+                "val=\"car\"",
+                ":true-value=\"trueValue\"",
+                "checked-icon=\"visibility\""
+              ],
+              "desc_cn": "来自 QToggle、QCheckbox 或 QRadio 的其他任何属性"
+            }
+          },
+          "desc_cn": "'options' 属性中对应的选项条目"
+        }
+      },
+      "addedIn": "v2.2",
+      "desc_cn": "用于定义在 '[name]' 处的选项的特定标签的插槽，其中 name 是从 0 开始计数的索引；如果使用了该插槽，则会覆盖通用的 'label' 插槽。"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when the component needs to change the model; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的模型值"
+        }
+      },
+      "desc_cn": "当组件需要更改模型时触发；也被 v-model 使用"
+    }
+  }
+}

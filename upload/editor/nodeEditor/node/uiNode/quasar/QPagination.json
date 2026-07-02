@@ -1,0 +1,424 @@
+{
+  "id": "FB3CB10F-DA1F-B5EC-554D-BEEB1B5A6E77",
+  "treePath": "ui/quasar",
+  "name": "QPagination",
+  "importStr": "import { QPagination } from \"quasar\"",
+  "tag": "QPagination",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/pagination"
+  },
+  "props": {
+    "model-value": {
+      "desc": "Current page (must be between min/max)",
+      "required": true,
+      "syncable": true,
+      "category": "model",
+      "type": "Number",
+      "desc_cn": "当前页码（必须在最小值和最大值之间）"
+    },
+    "min": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Minimum page (must be lower than 'max')",
+      "default": 1,
+      "category": "model",
+      "required": false,
+      "desc_cn": "最小页面（必须低于 'max'）"
+    },
+    "max": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Number of last page (must be higher than 'min')",
+      "required": true,
+      "category": "model",
+      "desc_cn": "最后一页的页码（必须大于 'min'）"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color (useful when you are using it along with the 'input' prop)",
+      "category": "style",
+      "required": false,
+      "desc_cn": "通知组件背景颜色为深色（当与 'input' 属性一起使用时很有用）"
+    },
+    "size": {
+      "type": "String",
+      "desc": "Button size in CSS units, including unit name",
+      "examples": [
+        "20px"
+      ],
+      "category": "style",
+      "desc_cn": "按钮的大小，使用 CSS 单位表示，包括单位名称。"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式下"
+    },
+    "input": {
+      "type": "Boolean",
+      "desc": "Use an input instead of buttons",
+      "category": "content",
+      "desc_cn": "使用输入框而不是按钮"
+    },
+    "icon-prev": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "遵循 Quasar 惯例的图标名称；确保您已安装图标库，除非使用 'img:' 前缀；如果值为 'none'（字符串），则不会渲染任何图标（但屏幕空间仍将用于它）。"
+    },
+    "icon-next": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "遵循 Quasar 惯例的图标名称；确保您已安装图标库，除非使用 'img:' 前缀；如果值为 'none'（字符串），则不会渲染任何图标（但屏幕空间仍将用于它）。"
+    },
+    "icon-first": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "遵循 Quasar 惯例的图标名称；确保您已安装图标库，除非使用 'img:' 前缀；如果值为 'none'（字符串），则不会渲染任何图标（但屏幕空间仍将用于它）。"
+    },
+    "icon-last": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "遵循 Quasar 框架约定的图标名称；确保您已安装图标库，除非使用 'img:' 前缀；如果值为 'none'（字符串），则不会渲染任何图标（但屏幕空间仍将被占用）"
+    },
+    "to-fn": {
+      "type": "Function",
+      "desc": "Generate link for page buttons; For best performance, reference it from your scope and do not define it inline",
+      "params": {
+        "page": {
+          "type": "Number",
+          "desc": "Page number to navigate to",
+          "desc_cn": "导航到的页码"
+        }
+      },
+      "returns": {
+        "type": [
+          "Object",
+          "String"
+        ],
+        "desc": "Object or String that can be passed to a <router-link> as 'to' parameter",
+        "desc_cn": "可以传递给 <router-link> 组件的 'to' 参数的对象或字符串"
+      },
+      "examples": [
+        ":to-fn=\"page => ({ query: { page } })\""
+      ],
+      "category": "content",
+      "desc_cn": "生成页面按钮的链接；为了获得最佳性能，请从您的作用域中引用它，不要内联定义。"
+    },
+    "boundary-links": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Show boundary button links",
+      "category": "content",
+      "required": false,
+      "desc_cn": "显示边界按钮链接"
+    },
+    "boundary-numbers": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Always show first and last page buttons (if not using 'input')",
+      "category": "content",
+      "required": false,
+      "desc_cn": "始终显示第一个和最后一个页面按钮（如果不使用 'input'）"
+    },
+    "direction-links": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Show direction buttons",
+      "category": "content",
+      "required": false,
+      "desc_cn": "显示方向按钮"
+    },
+    "ellipses": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Show ellipses (...) when pages are available",
+      "category": "content",
+      "required": false,
+      "desc_cn": "当页面可用时显示省略号 (...)"
+    },
+    "max-pages": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "default": 0,
+      "desc": "Maximum number of page links to display at a time; 0 means Infinite",
+      "category": "content",
+      "required": false,
+      "desc_cn": "每次显示的最大页面链接数；0 表示无限制"
+    },
+    "flat": {
+      "type": "Boolean",
+      "desc": "Use 'flat' design for non-active buttons (it's the default option)",
+      "category": "style",
+      "desc_cn": "为非活动按钮使用 'flat'（扁平）设计（这是默认选项）"
+    },
+    "outline": {
+      "type": "Boolean",
+      "desc": "Use 'outline' design for non-active buttons",
+      "category": "style",
+      "desc_cn": "为非激活按钮使用 'outline'（轮廓）设计"
+    },
+    "unelevated": {
+      "type": "Boolean",
+      "desc": "Remove shadow for non-active buttons",
+      "category": "style",
+      "desc_cn": "移除非活动按钮的阴影"
+    },
+    "push": {
+      "type": "Boolean",
+      "desc": "Use 'push' design for non-active buttons",
+      "category": "style",
+      "desc_cn": "为非激活按钮使用 'push'（堆叠）设计"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name from the Quasar Color Palette for the non-active buttons",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "default": "primary",
+      "required": false,
+      "desc_cn": "非活动按钮的 Quasar 颜色调色板中的颜色名称"
+    },
+    "text-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Text color name from the Quasar Color Palette for the ACTIVE buttons",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的 ACTIVE 按钮的文本颜色名称"
+    },
+    "active-design": {
+      "type": "String",
+      "desc": "The design of the ACTIVE button, similar to the flat/outline/push/unelevated props (but those are used for non-active buttons)",
+      "values": [
+        "flat",
+        "outline",
+        "push",
+        "unelevated"
+      ],
+      "category": "style",
+      "addedIn": "v2.10",
+      "desc_cn": "ACTIVE 按钮的设计，类似于 flat/outline/push/unelevated 属性（但这些属性用于非活动按钮）"
+    },
+    "active-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name from the Quasar Color Palette for the ACTIVE button",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "default": "primary",
+      "required": false,
+      "desc_cn": "来自 Quasar 颜色调色板的 ACTIVE 按钮的颜色名称"
+    },
+    "active-text-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Text color name from the Quasar Color Palette for the ACTIVE button",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的 ACTIVE 按钮的文本颜色名称"
+    },
+    "round": {
+      "type": "Boolean",
+      "desc": "Makes a circle shaped button for all buttons",
+      "category": "style",
+      "desc_cn": "为所有按钮创建一个圆形的按钮"
+    },
+    "rounded": {
+      "type": "Boolean",
+      "desc": "Applies a more prominent border-radius for a squared shape button for all buttons",
+      "category": "style",
+      "desc_cn": "为所有按钮应用更突出的边框半径，以实现方形按钮的效果"
+    },
+    "glossy": {
+      "type": "Boolean",
+      "desc": "Applies a glossy effect for all buttons",
+      "category": "style",
+      "desc_cn": "为所有按钮应用光泽效果"
+    },
+    "gutter": {
+      "type": "String",
+      "desc": "Apply custom gutter; Size in CSS units, including unit name or standard size name (none|xs|sm|md|lg|xl)",
+      "default": "2px",
+      "examples": [
+        "16px",
+        "10px 5px",
+        "2rem",
+        "xs",
+        "md lg",
+        "2px 2px 5px 7px"
+      ],
+      "category": "style",
+      "addedIn": "v2.10",
+      "required": false,
+      "desc_cn": "应用自定义间距；以 CSS 单位表示的大小，包括单位名称或标准大小名称（none|xs|sm|md|lg|xl）"
+    },
+    "padding": {
+      "type": "String",
+      "desc": "Apply custom padding (vertical [horizontal]); Size in CSS units, including unit name or standard size name (none|xs|sm|md|lg|xl); Also removes the min width and height when set",
+      "examples": [
+        "16px",
+        "10px 5px",
+        "2rem",
+        "xs",
+        "md lg",
+        "2px 2px 5px 7px"
+      ],
+      "category": "style",
+      "desc_cn": "应用自定义的内边距（垂直 [水平]）；尺寸使用 CSS 单位，包括单位名称或标准尺寸名称（none|xs|sm|md|lg|xl）；还会在设置时移除最小宽度和高度。"
+    },
+    "input-style": {
+      "type": [
+        "String",
+        "Array",
+        "Object"
+      ],
+      "tsType": "VueStyleProp",
+      "desc": "Style definitions to be attributed to the input (if using one)",
+      "examples": [
+        "background-color: #ff0000",
+        ":input-style=\"{ backgroundColor: '#ff0000' }\""
+      ],
+      "category": "style",
+      "desc_cn": "将样式定义应用于输入框（如果使用）"
+    },
+    "input-class": {
+      "type": [
+        "String",
+        "Array",
+        "Object"
+      ],
+      "tsType": "VueClassProp",
+      "desc": "Class definitions to be attributed to the input (if using one)",
+      "examples": [
+        "my-special-class",
+        ":input-class=\"{ 'my-special-class': <condition> }\""
+      ],
+      "category": "style",
+      "desc_cn": "如果使用输入框，则将其归属于的类定义"
+    },
+    "ripple": {
+      "type": [
+        "Boolean",
+        "Object",
+        "null"
+      ],
+      "desc": "Configure buttons material ripple (disable it by setting it to 'false' or supply a config object); Does not applies to boundary and ellipsis buttons",
+      "default": true,
+      "examples": [
+        false,
+        "{ early: true, center: true, color: 'teal', keyCodes: [] }"
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "配置按钮的材质涟漪效果（通过将其设置为 'false' 或提供一个配置对象来禁用它）；不适用于边界和省略号按钮。"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when the component needs to change the model; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Number",
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的模型值"
+        }
+      },
+      "desc_cn": "当组件需要更改模型时触发；也被 v-model 使用"
+    }
+  },
+  "methods": {
+    "set": {
+      "desc": "Go directly to the specified page",
+      "params": {
+        "pageNumber": {
+          "type": "Number",
+          "desc": "Page number to go to",
+          "desc_cn": "要前往的页码"
+        }
+      },
+      "desc_cn": "直接跳转到指定页面"
+    },
+    "setByOffset": {
+      "desc": "Increment/Decrement current page by offset",
+      "params": {
+        "offset": {
+          "type": "Number",
+          "desc": "Offset page, can be negative or positive",
+          "desc_cn": "偏移页数，可以是负数或正数"
+        }
+      },
+      "desc_cn": "通过偏移量增加/减少当前页面"
+    }
+  }
+}

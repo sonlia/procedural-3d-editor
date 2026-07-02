@@ -1,0 +1,49 @@
+{
+  "id": "vue-router-view-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "treePath": "ui/VueRouter",
+  "name": "RouterView",
+  "importStr": "import { RouterView } from 'vue-router'; import { QPage } from 'quasar'",
+  "tag": "RouterView",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://router.vuejs.org/api/#router-view-props",
+    "wrapperTag": "QPage",
+    "editorBehavior": {
+      "mode": "placeholder",
+      "reason": "路由视图占位"
+    },
+    "editorConfig": {
+      "width": {
+        "type": "String",
+        "default": "100%",
+        "desc_cn": "编辑模式下的预览宽度"
+      },
+      "height": {
+        "type": "String",
+        "default": "200px",
+        "desc_cn": "编辑模式下的预览高度"
+      }
+    }
+  },
+  "props": {
+    "name": {
+      "type": "String",
+      "desc": "When a <router-view> has a name, it will render the component with the corresponding name in the matched route record's components option.",
+      "default": "default",
+      "examples": ["'default'", "'sidebar'", "'header'"],
+      "category": "general",
+      "desc_cn": "命名视图。当 <router-view> 有 name 时，它将渲染匹配路由记录中 components 选项里对应名称的组件"
+    },
+    "route": {
+      "type": "Object",
+      "desc": "A route location that has all of its components resolved.",
+      "examples": ["route"],
+      "category": "general",
+      "desc_cn": "已解析所有组件的路由位置对象"
+    }
+  },
+  "slots": {},
+  "events": {},
+  "methods": {}
+}

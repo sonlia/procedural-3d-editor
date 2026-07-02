@@ -1,0 +1,175 @@
+{
+  "id": "7E4129F8-AF15-2FB2-793E-BFED163C46DC",
+  "treePath": "ui/quasar",
+  "name": "QColor",
+  "importStr": "import { QColor } from \"quasar\"",
+  "tag": "QColor",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/color-picker"
+  },
+  "props": {
+    "name": {
+      "type": "String",
+      "desc": "Used to specify the name of the control; Useful if dealing with forms submitted directly to a URL",
+      "examples": [
+        "car_id"
+      ],
+      "category": "behavior",
+      "desc_cn": "用于指定控件的名称；如果处理直接提交到 URL 的表单，则非常有用"
+    },
+    "model-value": {
+      "desc": "Model of the component; Either use this property (along with a listener for 'update:model-value' event) OR use v-model directive",
+      "required": true,
+      "syncable": true,
+      "category": "model",
+      "type": [
+        "String",
+        "null",
+        "undefined"
+      ],
+      "examples": [
+        "v-model=\"myColor\""
+      ],
+      "desc_cn": "组件的 model 数据，可使用此属性（搭配一个 'update:model-value' 监听事件）或者直接使用 v-model 指令。"
+    },
+    "default-value": {
+      "type": "String",
+      "desc": "The default value to show when the model doesn't have one",
+      "examples": [
+        "default-value=\"#c0c0c0\""
+      ],
+      "category": "model",
+      "desc_cn": "model 没有数据时显示的默认值"
+    },
+    "default-view": {
+      "type": "String",
+      "desc": "The default view of the picker",
+      "default": "spectrum",
+      "values": [
+        "spectrum",
+        "tune",
+        "palette"
+      ],
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "选择器的默认视图"
+    },
+    "format-model": {
+      "type": "String",
+      "desc": "Forces a certain model format upon the model",
+      "default": "auto",
+      "values": [
+        "auto",
+        "hex",
+        "rgb",
+        "hexa",
+        "rgba"
+      ],
+      "category": "model",
+      "required": false,
+      "desc_cn": "在 mdoel 上强制使用特定的颜色格式"
+    },
+    "palette": {
+      "type": "Array",
+      "desc": "Use a custom palette of colors for the palette tab",
+      "default": "(hard-coded palette)",
+      "examples": [
+        ":palette=\"[ '#019A9D', '#D9B801', 'rgb(23,120,0)', '#B2028A' ]\""
+      ],
+      "category": "content",
+      "required": false,
+      "desc_cn": "使用调色板选项卡的自定义调色板"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Removes border-radius so borders are squared",
+      "category": "style",
+      "desc_cn": "删除边框圆角（border-radius），使边框为正方形"
+    },
+    "flat": {
+      "type": "Boolean",
+      "desc": "Applies a 'flat' design (no default shadow)",
+      "category": "style",
+      "desc_cn": "应用 'flat' 设计（无默认阴影）"
+    },
+    "bordered": {
+      "type": "Boolean",
+      "desc": "Applies a default border to the component",
+      "category": "style",
+      "desc_cn": "将默认边框应用于组件"
+    },
+    "no-header": {
+      "type": "Boolean",
+      "desc": "Do not render header",
+      "category": "content",
+      "desc_cn": "不呈现标题"
+    },
+    "no-header-tabs": {
+      "type": "Boolean",
+      "desc": "Do not render header tabs (only the input)",
+      "category": "content",
+      "addedIn": "v2.2",
+      "desc_cn": "不渲染头部选项卡（只有输入框）"
+    },
+    "no-footer": {
+      "type": "Boolean",
+      "desc": "Do not render footer; Useful when you want a specific view ('default-view' prop) and don't want the user to be able to switch it",
+      "category": "content",
+      "desc_cn": "不呈现页脚；当您需要特定视图（'default-view' 属性）并且不希望用户能够切换它时非常有用"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式"
+    },
+    "readonly": {
+      "type": "Boolean",
+      "desc": "Put component in readonly mode",
+      "category": "state",
+      "desc_cn": "将组件置于只读模式"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "设置组件背景为深色"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when the component needs to change the model; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": [
+            "String",
+            "null"
+          ],
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的 model 值"
+        }
+      },
+      "desc_cn": "当组件需要改变模型数据（model）时触发，也会被 v-model 使用"
+    },
+    "change": {
+      "desc": "Emitted on lazy model value change (after user finishes selecting a color)",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的 model 值"
+        }
+      },
+      "desc_cn": "当延迟的模型值更改时触发（用户选择完颜色后）"
+    }
+  }
+}

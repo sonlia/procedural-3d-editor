@@ -1,0 +1,108 @@
+{
+  "id": "0E02D3D4-2134-6F3C-77C3-D1059A52471B",
+  "treePath": "ui/quasar",
+  "name": "QPullToRefresh",
+  "importStr": "import { QPullToRefresh } from \"quasar\"",
+  "tag": "QPullToRefresh",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/pull-to-refresh"
+  },
+  "props": {
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for the icon from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的图标颜色名称"
+    },
+    "bg-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for background of the icon container from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "Quasar 颜色调色板中图标容器背景的颜色名称"
+    },
+    "icon": {
+      "type": "String",
+      "desc": "Icon to display when refreshing the content",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "刷新内容时显示的图标"
+    },
+    "no-mouse": {
+      "type": "Boolean",
+      "desc": "Don't listen for mouse events",
+      "category": "behavior",
+      "desc_cn": "不要监听鼠标事件"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式中"
+    },
+    "scroll-target": {
+      "type": [
+        "Element",
+        "String"
+      ],
+      "desc": "CSS selector or DOM element to be used as a custom scroll container instead of the auto detected one",
+      "examples": [
+        ":scroll-target=\"$refs.scrollTarget\"",
+        "scroll-target=\".scroll-target-class\"",
+        "scroll-target=\"#scroll-target-id\"",
+        "scroll-target=\"body\""
+      ],
+      "category": "behavior",
+      "desc_cn": "用作自定义滚动容器的 CSS 选择器或 DOM 元素，而不是自动检测到的容器。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Content (area controlled by the component) goes here",
+      "desc_cn": "组件控制的内容（区域）放在这里"
+    }
+  },
+  "events": {
+    "refresh": {
+      "desc": "Called whenever a refresh is triggered; at this time, your function should load more data",
+      "params": {
+        "done": {
+          "type": "Function",
+          "desc": "Call the done() function when your data has been refreshed",
+          "params": null,
+          "returns": null,
+          "desc_cn": "当您的数据已刷新时，请调用 done() 函数"
+        }
+      },
+      "desc_cn": "每当触发刷新时调用；此时，您的函数应该加载更多数据。"
+    }
+  },
+  "methods": {
+    "trigger": {
+      "desc": "Triggers a refresh",
+      "desc_cn": "触发刷新"
+    },
+    "updateScrollTarget": {
+      "desc": "Updates the scroll target; Useful when the parent elements change so that the scrolling target also changes",
+      "desc_cn": "更新滚动目标；当父元素发生变化时，可以使用此属性来更新滚动目标。"
+    }
+  }
+}

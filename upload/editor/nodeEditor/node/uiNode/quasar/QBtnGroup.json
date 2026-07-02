@@ -1,0 +1,76 @@
+{
+  "id": "F141DD5A-D51A-B8CB-C908-04D10F7BD920",
+  "treePath": "ui/quasar",
+  "name": "QBtnGroup",
+  "importStr": "import { QBtnGroup } from \"quasar\"",
+  "tag": "QBtnGroup",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/button-group",
+    "allowChildren": ["QBtn", "QBtnDropdown"]
+  },
+  "props": {
+    "spread": {
+      "type": "Boolean",
+      "desc": "Spread horizontally to all available space",
+      "category": "content",
+      "desc_cn": "水平扩展到所有可用空间"
+    },
+    "outline": {
+      "type": "Boolean",
+      "desc": "Use 'outline' design for buttons",
+      "category": "style",
+      "desc_cn": "采用“轮廓线”设计的按钮"
+    },
+    "flat": {
+      "type": "Boolean",
+      "desc": "Use 'flat' design for buttons",
+      "category": "style",
+      "desc_cn": "采用“扁平”设计的按钮"
+    },
+    "unelevated": {
+      "type": "Boolean",
+      "desc": "Remove shadow on buttons",
+      "category": "style",
+      "desc_cn": "去掉按钮上的阴影效果"
+    },
+    "rounded": {
+      "type": "Boolean",
+      "desc": "Applies a more prominent border-radius for squared shape buttons",
+      "category": "style",
+      "desc_cn": "为方形按钮应用更突出的圆角边框（border-radius）"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Removes border-radius so borders are squared",
+      "category": "style",
+      "addedIn": "v2.7.6",
+      "desc_cn": "删除边框圆角（border-radius），所以边框是方形的"
+    },
+    "push": {
+      "type": "Boolean",
+      "desc": "Use 'push' design for buttons",
+      "category": "style",
+      "desc_cn": "采用 'push' 设计的按钮"
+    },
+    "stretch": {
+      "type": "Boolean",
+      "desc": "When used on flexbox parent, buttons will stretch to parent's height",
+      "category": "content",
+      "desc_cn": "在 flexbox 父元素上使用时，按钮将延伸到父元素的高度"
+    },
+    "glossy": {
+      "type": "Boolean",
+      "desc": "Applies a glossy effect",
+      "category": "style",
+      "desc_cn": "应用光泽效果"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Suggestion: QBtn",
+      "desc_cn": "建议：使用 QBtn 组件"
+    }
+  }
+}

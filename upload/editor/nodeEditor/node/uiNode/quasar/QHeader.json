@@ -1,0 +1,96 @@
+{
+  "id": "E6D11474-AB1B-5873-48C1-F4F67EE08173",
+  "treePath": "ui/quasar",
+  "name": "QHeader",
+  "importStr": "import { QHeader } from \"quasar\"",
+  "tag": "QHeader",
+  "parentMustBe": ["QLayout"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/layout/header-and-footer",
+    "editorBehavior": {
+      "mode": "forceRender",
+      "propsOverride": { "model-value": true }
+    },
+    "editorConfig": {
+      "width": {
+        "type": "String",
+        "default": "100%"
+      },
+      "height": {
+        "type": "String",
+        "default": "50px"
+      }
+    }
+  },
+  "props": {
+    "model-value": {
+      "desc": "Model of the component defining if it is shown or hidden to the user; Either use this property (along with a listener for 'update:modelValue' event) OR use v-model directive",
+      "required": false,
+      "syncable": true,
+      "category": "model",
+      "type": "Boolean",
+      "default": true,
+      "examples": [
+        "v-model=\"headerState\""
+      ],
+      "desc_cn": "组件的模型，用于定义是否对用户显示或隐藏；可以使用此属性（以及监听器 'update:modelValue' 事件）或使用 v-model 指令。"
+    },
+    "reveal": {
+      "type": "Boolean",
+      "desc": "Enable 'reveal' mode; Takes into account user scroll to temporarily show/hide header",
+      "category": "behavior",
+      "desc_cn": "启用 'reveal' 模式；根据用户滚动来临时显示/隐藏标题栏"
+    },
+    "reveal-offset": {
+      "type": "Number",
+      "desc": "Amount of scroll (in pixels) that should trigger a 'reveal' state change",
+      "default": 250,
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "触发“reveal”状态变化的滚动量（以像素为单位）"
+    },
+    "bordered": {
+      "type": "Boolean",
+      "desc": "Applies a default border to the component",
+      "category": "style",
+      "desc_cn": "为组件应用默认边框"
+    },
+    "elevated": {
+      "type": "Boolean",
+      "desc": "Adds a default shadow to the header",
+      "category": "style",
+      "desc_cn": "为头部添加默认阴影"
+    },
+    "height-hint": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "When using SSR, you can optionally hint of the height (in pixels) of the QHeader",
+      "default": 50,
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "在使用SSR时，您可以选择性地指定QHeader的高度（以像素为单位）的提示信息。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component; Suggestion: QToolbar",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽；建议使用：QToolbar"
+    }
+  },
+  "events": {
+    "reveal": {
+      "desc": "Emitted when 'reveal' state gets changed",
+      "params": {
+        "value": {
+          "type": "Boolean",
+          "desc": "New 'reveal' state",
+          "desc_cn": "新的 'reveal' 状态"
+        }
+      },
+      "desc_cn": "当 'reveal' 状态发生变化时触发"
+    }
+  }
+}

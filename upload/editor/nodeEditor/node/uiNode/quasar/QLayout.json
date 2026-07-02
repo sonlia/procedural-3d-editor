@@ -1,0 +1,122 @@
+{
+  "id": "33571611-99B4-6CD2-8F7C-D4553E6BBC20",
+  "treePath": "ui/quasar",
+  "name": "QLayout",
+  "importStr": "import { QLayout } from \"quasar\"",
+  "tag": "QLayout",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/layout/layout",
+    "editorBehavior": {
+      "mode": "forceRender",
+      "fullHeight": true
+    }
+  },
+  "props": {
+    "view": {
+      "type": "String",
+      "outType": "layoutViewItem",
+      "desc": "Defines how your layout components (header/footer/drawer) should be placed on screen; See docs examples",
+      "default": "hhh lpr fff",
+      "examples": ["hHh lpR fFf"],
+      "category": "content",
+      "required": false,
+      "desc_cn": "定义了布局组件（头部/底部/抽屉）在屏幕上的放置方式；请参考文档示例。"
+    },
+    "container": {
+      "type": "Boolean",
+      "desc": "Containerize the layout which means it changes the default behavior of expanding to the whole window; Useful (but not limited to) for when using on a QDialog",
+      "category": "content",
+      "desc_cn": "将布局容器化，这意味着它改变了默认的展开到整个窗口的行为；在使用 QDialog 时非常有用（但不仅限于此）。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Suggestion: QHeader, QFooter, QDrawer, QPageContainer",
+      "desc_cn": "建议：QHeader、QFooter、QDrawer、QPageContainer"
+    }
+  },
+  "events": {
+    "resize": {
+      "desc": "Emitted when layout size (height, width) changes",
+      "params": {
+        "size": {
+          "type": "Object",
+          "desc": "New size",
+          "definition": {
+            "height": {
+              "type": "Number",
+              "required": true,
+              "desc": "Layout height",
+              "desc_cn": "布局高度"
+            },
+            "width": {
+              "type": "Number",
+              "required": true,
+              "desc": "Layout width",
+              "desc_cn": "布局高度"
+            }
+          },
+          "desc_cn": "新的尺寸"
+        }
+      },
+      "desc_cn": "布局大小（高度、宽度）发生变化时触发"
+    },
+    "scroll": {
+      "desc": "Emitted when user scrolls within layout",
+      "params": {
+        "details": {
+          "type": "Object",
+          "desc": "Scroll details",
+          "definition": {
+            "position": {
+              "type": "Number",
+              "required": true,
+              "desc": "Scroll offset from top (vertical)",
+              "desc_cn": "从顶部滚动的偏移量（垂直）"
+            },
+            "direction": {
+              "type": "String",
+              "required": true,
+              "desc": "Direction of scroll",
+              "values": ["up", "down"],
+              "desc_cn": "滚动的方向"
+            },
+            "directionChanged": {
+              "type": "Boolean",
+              "required": true,
+              "desc": "Has scroll direction changed since event was last emitted?",
+              "desc_cn": "滚动方向自上次事件发出以来是否发生了变化？"
+            },
+            "delta": {
+              "type": "Number",
+              "required": true,
+              "desc": "Vertical delta distance since event was last emitted",
+              "desc_cn": "事件最后一次触发以来的垂直位移距离"
+            },
+            "inflectionPoint": {
+              "type": "Number",
+              "required": true,
+              "desc": "Scroll offset from top (vertical)",
+              "desc_cn": "从顶部滚动的偏移量（垂直）"
+            }
+          },
+          "desc_cn": "滚动详情"
+        }
+      },
+      "desc_cn": "用户在布局内滚动时触发"
+    },
+    "scroll-height": {
+      "desc": "Emitted when the scroll size of layout changes",
+      "params": {
+        "height": {
+          "type": "Number",
+          "desc": "New scroll height of layout",
+          "desc_cn": "布局的新滚动高度"
+        }
+      },
+      "desc_cn": "布局的滚动大小发生变化时触发"
+    }
+  }
+}

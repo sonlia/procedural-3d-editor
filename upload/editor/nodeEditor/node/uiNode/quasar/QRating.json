@@ -1,0 +1,210 @@
+{
+  "id": "480D55C3-B95A-CDC2-7FCD-5A5FE63EFEA2",
+  "treePath": "ui/quasar",
+  "name": "QRating",
+  "importStr": "import { QRating } from \"quasar\"",
+  "tag": "QRating",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/rating"
+  },
+  "props": {
+    "name": {
+      "type": "String",
+      "desc": "Used to specify the name of the control; Useful if dealing with forms submitted directly to a URL",
+      "examples": [
+        "car_id"
+      ],
+      "category": "behavior",
+      "desc_cn": "用于指定控件的名称；如果处理直接提交到 URL 的表单时很有用"
+    },
+    "size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)",
+      "examples": [
+        "16px",
+        "2rem",
+        "xs",
+        "md"
+      ],
+      "category": "style",
+      "desc_cn": "CSS 单位的尺寸，包括单位名称或标准尺寸名称（xs|sm|md|lg|xl）"
+    },
+    "model-value": {
+      "desc": "Model of the component; Either use this property (along with a listener for 'update:model-value' event) OR use v-model directive",
+      "required": true,
+      "syncable": true,
+      "category": "model",
+      "type": "Number",
+      "examples": [
+        "v-model=\"rating\"",
+        ":model-value=\"rating\"",
+        ":model-value=\"2\""
+      ],
+      "desc_cn": "组件的 model 数据；可以使用该属性（以及监听 'update:model-value' 事件）或者使用 v-model 指令。"
+    },
+    "max": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Number of icons to display",
+      "default": 5,
+      "category": "general",
+      "required": false,
+      "desc_cn": "要显示的图标数量"
+    },
+    "icon": {
+      "type": [
+        "String",
+        "Array"
+      ],
+      "desc": "Icon name following Quasar convention; make sure you have the icon library installed unless you are using 'img:' prefix; If an array is provided each rating value will use the corresponding icon in the array (0 based)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "遵循 Quasar 框架约定的图标名称；除非使用 'img:' 前缀，否则请确保已安装图标库；如果提供了一个数组，则每个评分值将使用数组中对应的图标（从 0 开始）"
+    },
+    "icon-selected": {
+      "type": [
+        "String",
+        "Array"
+      ],
+      "desc": "Icon name following Quasar convention to be used when selected (optional); make sure you have the icon library installed unless you are using 'img:' prefix; If an array is provided each rating value will use the corresponding icon in the array (0 based)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "按照 Quasar 的约定，选中时使用的图标名称（可选）；请确保已安装图标库，除非您使用 'img:' 前缀；如果提供了一个数组，则每个评分值将使用数组中对应的图标（从 0 开始）。"
+    },
+    "icon-half": {
+      "type": [
+        "String",
+        "Array"
+      ],
+      "desc": "Icon name following Quasar convention to be used when selected (optional); make sure you have the icon library installed unless you are using 'img:' prefix; If an array is provided each rating value will use the corresponding icon in the array (0 based)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "按照 Quasar 的约定，选中��使用的图标名称（可选）；请确保已安装图标库，除非您使用 'img:' 前缀；如果提供了一个数组，则每个评分值将使用数组中对应的图标（从 0 开始）。"
+    },
+    "icon-aria-label": {
+      "type": [
+        "String",
+        "Array"
+      ],
+      "desc": "Label to be set on aria-label for Icon; If an array is provided each rating value will use the corresponding aria-label in the array (0 based); If string value is provided the rating value will be appended; If not provided the name of the icon will be used",
+      "examples": [
+        "Rating",
+        "[\"Bad\", \"Normal\", \"Good\"]"
+      ],
+      "category": "accessibility",
+      "addedIn": "v1.20.3",
+      "desc_cn": "在 Icon 上设置的 aria-label 的标签；如果提供了一个数组，每个评分值将使用数组中对应的 aria-label（从0开始）；如果提供了字符串值，则评分值将被追加；如果未提供，则将使用图标的名称。"
+    },
+    "color": {
+      "type": [
+        "String",
+        "Array"
+      ],
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette; v1.5.0+: If an array is provided each rating value will use the corresponding color in the array (0 based)",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10",
+        "primary",
+        "teal-10",
+        "[\"accent\", \"grey-7\"] "
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称；v1.5.0+：如果提供了一个数组，每个评分值将使用数组中对应的颜色（从 0 开始）"
+    },
+    "color-selected": {
+      "type": [
+        "String",
+        "Array"
+      ],
+      "tsType": "NamedColor",
+      "desc": "Color name from the Quasar Palette for selected icons",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "从 Quasar 调色板中选择图标的颜色名称"
+    },
+    "color-half": {
+      "type": [
+        "String",
+        "Array"
+      ],
+      "tsType": "NamedColor",
+      "desc": "Color name from the Quasar Palette for half selected icons",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "Quasar 调色板中用于半选图标的颜色名称"
+    },
+    "no-dimming": {
+      "type": "Boolean",
+      "desc": "Does not lower opacity for unselected icons",
+      "category": "style",
+      "desc_cn": "不会降低未选中图标的不透明度"
+    },
+    "no-reset": {
+      "type": "Boolean",
+      "desc": "When used, disables default behavior of clicking/tapping on icon which represents current model value to reset model to 0",
+      "category": "model",
+      "desc_cn": "当使用时，禁用了点击/轻触表示当前模型值的图标的默认行为，以将模型重置为0。"
+    },
+    "readonly": {
+      "type": "Boolean",
+      "desc": "Put component in readonly mode",
+      "category": "state",
+      "desc_cn": "将组件置于只读模式"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式下"
+    }
+  },
+  "slots": {
+    "tip-[name]": {
+      "desc": "Slot to define the tooltip of icon at '[name]' where name is a 1-based index; Suggestion: QTooltip",
+      "desc_cn": "在 '[name]' 处定义图标的工具提示插槽，其中 name 是从 1 开始的索引；建议使用 QTooltip。"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when the component needs to change the model; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的模型值"
+        }
+      },
+      "desc_cn": "当组件需要更改模型时触发；也被 v-model 使用"
+    }
+  }
+}

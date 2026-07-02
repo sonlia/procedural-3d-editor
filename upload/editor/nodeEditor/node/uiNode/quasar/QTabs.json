@@ -1,0 +1,208 @@
+{
+  "id": "194608F3-654A-5CED-FABD-D5B6D1D30729",
+  "treePath": "ui/quasar",
+  "name": "QTabs",
+  "importStr": "import { QTabs } from \"quasar\"",
+  "tag": "QTabs",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/tabs"
+  },
+  "props": {
+    "model-value": {
+      "desc": "Model of the component defining current panel name; Either use this property (along with a listener for 'update:modelValue' event) OR use v-model directive",
+      "required": false,
+      "syncable": true,
+      "category": "model",
+      "type": [
+        "Number",
+        "String",
+        "null",
+        "undefined"
+      ],
+      "examples": [
+        "v-model=\"selectedTab\""
+      ],
+      "desc_cn": "组件的 model 数据，用于定义当前面板的名称；可以使用该属性（以及监听 'update:modelValue' 事件的侦听器），或者使用 v-model 指令。"
+    },
+    "vertical": {
+      "type": "Boolean",
+      "desc": "Use vertical design (tabs one on top of each other rather than one next to the other horizontally)",
+      "category": "content",
+      "desc_cn": "使用垂直设计（选项卡一个在另一个上方而不是水平排列在一起）"
+    },
+    "outside-arrows": {
+      "type": "Boolean",
+      "desc": "Reserve space for arrows to place them on each side of the tabs (the arrows fade when inactive)",
+      "category": "content",
+      "desc_cn": "为选项卡的两侧预留空间以放置箭头（非活动状态下，箭头会变淡）"
+    },
+    "mobile-arrows": {
+      "type": "Boolean",
+      "desc": "Force display of arrows (if needed) on mobile",
+      "category": "content",
+      "desc_cn": "在移动设备上强制显示箭头（如果需要）"
+    },
+    "align": {
+      "type": "String",
+      "desc": "Horizontal alignment the tabs within the tabs container",
+      "default": "center",
+      "values": [
+        "left",
+        "center",
+        "right",
+        "justify"
+      ],
+      "category": "content",
+      "required": false,
+      "desc_cn": "选项卡容器中选项卡的水平对齐方式"
+    },
+    "breakpoint": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Breakpoint (in pixels) of tabs container width at which the tabs automatically turn to a justify alignment",
+      "default": 600,
+      "category": "content|behavior",
+      "required": false,
+      "desc_cn": "在像素上的断点，当标签页容器宽度达到该值时，标签页会自动转为对齐方式。"
+    },
+    "active-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "The color to be attributed to the text of the active tab",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "活动选项卡文本的颜色"
+    },
+    "active-bg-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "The color to be attributed to the background of the active tab",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "活动选项卡的背景颜色"
+    },
+    "indicator-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "The color to be attributed to the indicator (the underline) of the active tab",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "活动选项卡指示器（下划线）的颜色。"
+    },
+    "content-class": {
+      "type": "String",
+      "desc": "Class definitions to be attributed to the content wrapper",
+      "examples": [
+        "my-special-class"
+      ],
+      "category": "style",
+      "desc_cn": "用于给内容包装器添加的类定义"
+    },
+    "active-class": {
+      "type": "String",
+      "desc": "The class to be set on the active tab",
+      "examples": [
+        "my-active-class"
+      ],
+      "category": "style",
+      "addedIn": "v2.1.4",
+      "desc_cn": "要设置在活动选项卡上的类"
+    },
+    "left-icon": {
+      "type": "String",
+      "desc": "The name of an icon to replace the default arrow used to scroll through the tabs to the left, when the tabs extend past the width of the tabs container",
+      "examples": [
+        "arrow_left"
+      ],
+      "category": "content",
+      "desc_cn": "当选项卡的宽度超过选项卡容器的宽度时，用于替换默认箭头以向左滚动浏览选项卡的图标名称。"
+    },
+    "right-icon": {
+      "type": "String",
+      "desc": "The name of an icon to replace the default arrow used to scroll through the tabs to the right, when the tabs extend past the width of the tabs container",
+      "examples": [
+        "arrow_right"
+      ],
+      "category": "content",
+      "desc_cn": "当选项卡的宽度超过选项卡容器的宽度时，用于替换默认箭头以向右滚动浏览选项卡的图标名称。"
+    },
+    "stretch": {
+      "type": "Boolean",
+      "desc": "When used on flexbox parent, tabs will stretch to parent's height",
+      "category": "content",
+      "desc_cn": "当在 flexbox 父元素上使用时，选项卡将会拉伸到父元素的高度"
+    },
+    "shrink": {
+      "type": "Boolean",
+      "desc": "By default, QTabs is set to grow to the available space; However, you can reverse that with this prop; Useful (and required) when placing the component in a QToolbar",
+      "category": "content",
+      "desc_cn": "默认情况下，QTabs 会自动扩展到可用空间；然而，您可以通过该属性来反转这一行为；在将组件放置在 QToolbar 中时非常有用（也是必需的）。"
+    },
+    "switch-indicator": {
+      "type": "Boolean",
+      "desc": "Switches the indicator position (on left of tab for vertical mode or above the tab for default horizontal mode)",
+      "category": "content",
+      "desc_cn": "切换指示器位置（在垂直模式下为选项卡左侧，或在默认水平模式下为选项卡上方）"
+    },
+    "narrow-indicator": {
+      "type": "Boolean",
+      "desc": "Allows the indicator to be the same width as the tab's content (text or icon), instead of the whole width of the tab",
+      "category": "content",
+      "desc_cn": "允许指示器的宽度与选项卡内容（文本或图标）相同，而不是整个选项卡的宽度。"
+    },
+    "inline-label": {
+      "type": "Boolean",
+      "desc": "Allows the text to be inline with the icon, should one be used",
+      "category": "content",
+      "desc_cn": "允许文本与图标内联显示，如果使用了图标的话"
+    },
+    "no-caps": {
+      "type": "Boolean",
+      "desc": "Turns off capitalizing all letters within the tab (which is the default)",
+      "category": "content",
+      "desc_cn": "关闭选项卡中所有字母的大写（默认情况下）"
+    },
+    "dense": {
+      "type": "Boolean",
+      "desc": "Dense mode; occupies less space",
+      "category": "style",
+      "desc_cn": "紧凑模式；占用较少空间"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when the component needs to change the model; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的模型值"
+        }
+      },
+      "desc_cn": "当组件需要更改模型时触发；也被 v-model 使用"
+    }
+  }
+}

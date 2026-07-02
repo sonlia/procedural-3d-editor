@@ -1,0 +1,44 @@
+{
+  "id": "C63BFD99-3CE6-0784-D8AD-813E29A8726A",
+  "treePath": "ui/quasar",
+  "name": "QSlideTransition",
+  "importStr": "import { QSlideTransition } from \"quasar\"",
+  "tag": "QSlideTransition",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/slide-transition"
+  },
+  "props": {
+    "appear": {
+      "type": "Boolean",
+      "desc": "If set to true, the transition will be applied on the initial render.",
+      "category": "behavior",
+      "desc_cn": "如果设置为true，则过渡效果将在初始渲染时应用。"
+    },
+    "duration": {
+      "type": "Number",
+      "desc": "Duration (in milliseconds) enabling animated scroll.",
+      "default": 300,
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "动画滚动的持续时间（以毫秒为单位）。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "This is where content goes",
+      "desc_cn": "这是内容放置的位置"
+    }
+  },
+  "events": {
+    "show": {
+      "desc": "Emitted when component show animation is finished",
+      "desc_cn": "组件显示动画完成时触发"
+    },
+    "hide": {
+      "desc": "Emitted when component hide animation is finished",
+      "desc_cn": "组件隐藏动画完成时触发"
+    }
+  }
+}

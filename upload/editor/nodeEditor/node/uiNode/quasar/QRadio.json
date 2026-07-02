@@ -1,0 +1,188 @@
+{
+  "id": "2C2E4ED5-4047-B622-2F74-94B74E42AFAA",
+  "treePath": "ui/quasar",
+  "name": "QRadio",
+  "importStr": "import { QRadio } from \"quasar\"",
+  "tag": "QRadio",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/radio"
+  },
+  "props": {
+    "name": {
+      "type": "String",
+      "desc": "Used to specify the name of the control; Useful if dealing with forms submitted directly to a URL",
+      "examples": [
+        "car_id"
+      ],
+      "category": "behavior",
+      "desc_cn": "用于指定控件的名称；如果处理直接提交到 URL 的表单时很有用"
+    },
+    "size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)",
+      "examples": [
+        "16px",
+        "2rem",
+        "xs",
+        "md"
+      ],
+      "category": "style",
+      "desc_cn": "CSS 单位的尺寸，包括单位名称或标准尺寸名称（xs|sm|md|lg|xl）"
+    },
+    "model-value": {
+      "desc": "Model of the component; Either use this property (along with a listener for 'update:model-value' event) OR use v-model directive",
+      "required": true,
+      "syncable": true,
+      "category": "model",
+      "type": [
+        "Number",
+        "String",
+        "null",
+        "undefined"
+      ],
+      "examples": [
+        "v-model=\"option\""
+      ],
+      "desc_cn": "组件的 model 数据；可以使用该属性（以及监听 'update:model-value' 事件）或者使用 v-model 指令。"
+    },
+    "val": {
+      "type": [
+        "Number",
+        "String",
+        "null",
+        "undefined"
+      ],
+      "required": true,
+      "desc": "The actual value of the option with which model value is changed",
+      "examples": [
+        "opt1",
+        50
+      ],
+      "category": "model",
+      "desc_cn": "模型值更改的选项的实际值"
+    },
+    "label": {
+      "type": "String",
+      "desc": "Label to display along the radio control (or use the default slot instead of this prop)",
+      "examples": [
+        "label=\"Option 1\""
+      ],
+      "category": "label",
+      "desc_cn": "在单选控件旁边显示的标签（或者可以使用默认插槽代替此属性）"
+    },
+    "left-label": {
+      "type": "Boolean",
+      "desc": "Label (if any specified) should be displayed on the left side of the checkbox",
+      "category": "label",
+      "desc_cn": "（如果有指定）标签应显示在复选框的左侧"
+    },
+    "checked-icon": {
+      "type": "String",
+      "desc": "The icon to be used when selected (instead of the default design)",
+      "examples": [
+        "visibility"
+      ],
+      "category": "icons",
+      "addedIn": "v2.5",
+      "desc_cn": "选中时要使用的图标（而不是默认设计）"
+    },
+    "unchecked-icon": {
+      "type": "String",
+      "desc": "The icon to be used when un-selected (instead of the default design)",
+      "examples": [
+        "visibility_off"
+      ],
+      "category": "icons",
+      "addedIn": "v2.5",
+      "desc_cn": "未选择时要使用的图标（而不是默认设计）"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "keep-color": {
+      "type": "Boolean",
+      "desc": "Should the color (if specified any) be kept when checkbox is unticked?",
+      "category": "behavior",
+      "desc_cn": "当复选框取消选中时，是否保留颜色（如果指定了任何颜色）？"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "通知组件背景颜色为深色"
+    },
+    "dense": {
+      "type": "Boolean",
+      "desc": "Dense mode; occupies less space",
+      "category": "style",
+      "desc_cn": "紧凑模式；占用较少空间"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式中"
+    },
+    "tabindex": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Tabindex HTML attribute value",
+      "examples": [
+        "0",
+        "100"
+      ],
+      "category": "general",
+      "desc_cn": "Tabindex HTML 属性的值"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot can be used as label, unless 'label' prop is specified; Suggestion: string",
+      "desc_cn": "默认插槽可以用作标签，除非指定了 'label' 属性；建议：字符串"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when the component needs to change the model; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的模型值"
+        },
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "当组件需要更改模型时触发；也被 v-model 使用"
+    }
+  },
+  "methods": {
+    "set": {
+      "desc": "Sets the Radio's v-model to equal the val",
+      "desc_cn": "将 Radio 的 v-model 设置为等于 val"
+    }
+  }
+}

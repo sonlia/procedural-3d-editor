@@ -1,0 +1,8 @@
+import { defineStore } from 'pinia'
+//<---importStr--->
+
+export const use<--StoreNamePascal-->Store = defineStore('<--storeName-->', () => {
+//<---jsCode--->
+
+  return { //<---exportList---> }
+})

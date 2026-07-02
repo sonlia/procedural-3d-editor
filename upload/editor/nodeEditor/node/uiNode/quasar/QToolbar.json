@@ -1,0 +1,26 @@
+{
+  "id": "444A1784-2DE4-57FD-44C3-60816F825B80",
+  "treePath": "ui/quasar",
+  "name": "QToolbar",
+  "importStr": "import { QToolbar } from \"quasar\"",
+  "tag": "QToolbar",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/toolbar"
+  },
+  "props": {
+    "inset": {
+      "type": "Boolean",
+      "desc": "Apply an inset to content (useful for subsequent toolbars)",
+      "category": "content",
+      "desc_cn": "为内容应用一个内嵌（inset）效果（对于后续的工具栏很有用）"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽"
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "id": "vue-router-link-b2c3d4e5-f6a7-8901-bcde-f23456789012",
+  "treePath": "ui/VueRouter",
+  "name": "RouterLink",
+  "importStr": "import { RouterLink } from 'vue-router'",
+  "tag": "RouterLink",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://router.vuejs.org/api/#router-link-props"
+  },
+  "props": {
+    "to": {
+      "type": ["String", "Object"],
+      "desc": "Denotes the target route of the link. When clicked, the value of the to prop will be passed to router.push() internally.",
+      "examples": ["'/home'", "'about'", "{ name: 'user', params: { userId: '123' } }", "{ path: '/register', query: { plan: 'private' } }"],
+      "category": "navigation",
+      "required": true,
+      "desc_cn": "表示链接的目标路由。点击后，to 的值会作为 router.push() 的参数"
+    },
+    "replace": {
+      "type": "Boolean",
+      "desc": "Setting replace prop will call router.replace() instead of router.push() when clicked.",
+      "default": false,
+      "category": "navigation",
+      "desc_cn": "设置 replace 属性后，点击链接时会调用 router.replace() 而不是 router.push()"
+    },
+    "active-class": {
+      "type": "String",
+      "desc": "Class to apply when the link is active.",
+      "default": "router-link-active",
+      "examples": ["'my-active-class'"],
+      "category": "style",
+      "desc_cn": "链接激活时应用的 class"
+    },
+    "exact-active-class": {
+      "type": "String",
+      "desc": "Class to apply when the link is exactly active.",
+      "default": "router-link-exact-active",
+      "examples": ["'my-exact-active-class'"],
+      "category": "style",
+      "desc_cn": "链接精确激活时应用的 class"
+    },
+    "aria-current-value": {
+      "type": "String",
+      "desc": "Value passed to the attribute aria-current when the link is exactly active.",
+      "default": "page",
+      "values": ["page", "step", "location", "date", "time", "true", "false"],
+      "category": "accessibility",
+      "desc_cn": "链接精确激活时传递给 aria-current 属性的值"
+    },
+    "custom": {
+      "type": "Boolean",
+      "desc": "Whether RouterLink should not wrap its content in an <a> tag.",
+      "default": false,
+      "category": "behavior",
+      "desc_cn": "RouterLink 是否不将其内容包装在 <a> 标签中"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Content of the link. Can use scoped slot for custom rendering.",
+      "scope": {
+        "href": {
+          "type": "String",
+          "desc": "Resolved url",
+          "desc_cn": "解析后的 URL"
+        },
+        "route": {
+          "type": "Object",
+          "desc": "Resolved normalized route location",
+          "desc_cn": "解析后的标准化路由位置"
+        },
+        "navigate": {
+          "type": "Function",
+          "desc": "Function to trigger navigation",
+          "desc_cn": "触发导航的函数"
+        },
+        "isActive": {
+          "type": "Boolean",
+          "desc": "Whether the link is active",
+          "desc_cn": "链接是否激活"
+        },
+        "isExactActive": {
+          "type": "Boolean",
+          "desc": "Whether the link is exactly active",
+          "desc_cn": "链接是否精确激活"
+        }
+      },
+      "desc_cn": "链接的内容。可以使用作用域插槽进行自定义渲染"
+    }
+  },
+  "events": {},
+  "methods": {}
+}

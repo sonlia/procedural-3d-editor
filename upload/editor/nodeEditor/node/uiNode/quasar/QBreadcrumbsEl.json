@@ -1,0 +1,96 @@
+{
+  "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567809",
+  "treePath": "ui/quasar",
+  "name": "QBreadcrumbsEl",
+  "importStr": "import { QBreadcrumbsEl } from \"quasar\"",
+  "tag": "QBreadcrumbsEl",
+  "parentMustBe": ["QBreadcrumbs"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/breadcrumbs"
+  },
+  "props": {
+    "to": {
+      "type": ["String", "Object"],
+      "desc": "Equivalent to Vue Router <router-link> 'to' property",
+      "examples": ["/home/dashboard", "{ name: 'my-route-name' }"],
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'to' 属性"
+    },
+    "exact": {
+      "type": "Boolean",
+      "desc": "Equivalent to Vue Router <router-link> 'exact' property",
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'exact' 属性"
+    },
+    "replace": {
+      "type": "Boolean",
+      "desc": "Equivalent to Vue Router <router-link> 'replace' property",
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'replace' 属性"
+    },
+    "active-class": {
+      "type": "String",
+      "desc": "Equivalent to Vue Router <router-link> 'active-class' property",
+      "default": "q-router-link--active",
+      "examples": ["my-active-class"],
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'active-class' 属性"
+    },
+    "exact-active-class": {
+      "type": "String",
+      "desc": "Equivalent to Vue Router <router-link> 'exact-active-class' property",
+      "default": "q-router-link--exact-active",
+      "examples": ["my-exact-active-class"],
+      "category": "navigation",
+      "desc_cn": "等同于 Vue Router <router-link> 的 'exact-active-class' 属性"
+    },
+    "label": {
+      "type": "String",
+      "desc": "The label text for the breadcrumb",
+      "examples": ["Home"],
+      "category": "content",
+      "desc_cn": "面包屑的标签文本"
+    },
+    "icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention",
+      "examples": ["home", "ion-home"],
+      "category": "content",
+      "desc_cn": "遵循 Quasar 规范的图标名称"
+    },
+    "tag": {
+      "type": "String",
+      "desc": "HTML tag to use for the breadcrumb",
+      "default": "span",
+      "examples": ["a", "div"],
+      "category": "content",
+      "desc_cn": "用于面包屑的 HTML 标签"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "This is where custom content can go instead of using the 'label' prop",
+      "desc_cn": "自定义内容，使用时替代 'label' 属性"
+    }
+  },
+  "events": {
+    "click": {
+      "desc": "Emitted when the component is clicked",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "点击组件时触发"
+    }
+  }
+}

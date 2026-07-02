@@ -1,0 +1,637 @@
+{
+  "id": "5891CF2C-A85C-B8ED-F85B-FD201C1ECA10",
+  "treePath": "ui/quasar",
+  "name": "QBtnDropdown",
+  "importStr": "import { QBtnDropdown } from \"quasar\"",
+  "tag": "QBtnDropdown",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/button-dropdown"
+  },
+  "props": {
+    "transition-show": {
+      "type": "String",
+      "desc": "One of Quasar's embedded transitions",
+      "examples": [
+        "fade",
+        "slide-down"
+      ],
+      "category": "transition",
+      "default": "fade",
+      "required": false,
+      "desc_cn": "Quasar 内置的过渡效果之一"
+    },
+    "transition-hide": {
+      "type": "String",
+      "desc": "One of Quasar's embedded transitions",
+      "examples": [
+        "fade",
+        "slide-down"
+      ],
+      "category": "transition",
+      "default": "fade",
+      "required": false,
+      "desc_cn": "Quasar 内置的过渡效果之一"
+    },
+    "transition-duration": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Transition duration (in milliseconds, without unit)",
+      "default": 300,
+      "category": "transition",
+      "required": false,
+      "desc_cn": "过渡效果时长（单位毫秒，不需要带上单位）"
+    },
+    "model-value": {
+      "desc": "Controls Menu show/hidden state; Either use this property (along with a listener for 'update:modelValue' event) OR use v-model directive",
+      "required": false,
+      "syncable": true,
+      "category": "model",
+      "type": "Boolean",
+      "examples": [
+        "v-model=\"menuState\""
+      ],
+      "desc_cn": "控制菜单显示/隐藏的状态。可以将此属性与一个 'update:modelValue' 监听事件搭配使用，也可以直接使用 v-model"
+    },
+    "size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)",
+      "examples": [
+        "16px",
+        "2rem",
+        "xs",
+        "md"
+      ],
+      "category": "style",
+      "desc_cn": "带有 CSS 单位的尺寸大小，包括单位的名称或标准大小名称（xs | sm | md | lg | xl）"
+    },
+    "type": {
+      "type": "String",
+      "desc": "1) Define the button native type attribute (submit, reset, button) or 2) render component with <a> tag so you can access events even if disable or 3) Use 'href' prop and specify 'type' as a media tag",
+      "default": "button",
+      "examples": [
+        "a",
+        "submit",
+        "button",
+        "reset",
+        "image/png",
+        "href=\"https://quasar.dev\" target=\"_blank\""
+      ],
+      "category": "general",
+      "required": false,
+      "desc_cn": "1. 定义按钮的原生 type 属性（submit，reset，button） \n2. 使用 <a> 标签渲染组件，这样即使按钮被禁用，依然可以触发事件\n3. 使用 'href' 属性并将 'type' 声明为一个媒体标签"
+    },
+    "to": {
+      "type": [
+        "String",
+        "Object"
+      ],
+      "desc": "Equivalent to Vue Router <router-link> 'to' property; Superseded by 'href' prop if used",
+      "examples": [
+        "/home/dashboard",
+        ":to=\"{ name: 'my-route-name' }\""
+      ],
+      "category": "navigation",
+      "desc_cn": "等价于 Vue Router 中的 <router-link> 组件的 'to' 属性。如果还设置了 'href' 属性则优先使用 'href'，'to' 会被取代"
+    },
+    "replace": {
+      "type": "Boolean",
+      "desc": "Equivalent to Vue Router <router-link> 'replace' property; Superseded by 'href' prop if used",
+      "category": "navigation",
+      "desc_cn": "等价于 Vue Router 中的 <router-link> 组件的 'replace' 属性。如果还设置了 'href' 属性则优先使用 'href'，'replace' 会被取代"
+    },
+    "href": {
+      "type": "String",
+      "desc": "Native <a> link href attribute; Has priority over the 'to' and 'replace' props",
+      "examples": [
+        "https://quasar.dev",
+        "href=\"https://quasar.dev\" target=\"_blank\""
+      ],
+      "category": "navigation",
+      "addedIn": "v2.4",
+      "desc_cn": "原生的 <a> 链接 href 属性；优先级高于 'to' 和 'replace' 属性"
+    },
+    "target": {
+      "type": "String",
+      "desc": "Native <a> link target attribute; Use it only with 'to' or 'href' props",
+      "examples": [
+        "_blank",
+        "_self",
+        "_parent",
+        "_top"
+      ],
+      "category": "navigation",
+      "addedIn": "v2.4",
+      "desc_cn": "原生的 <a> 链接的 target 属性；只能与 'to' 或 'href' 属性一起使用"
+    },
+    "label": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "The text that will be shown on the button",
+      "examples": [
+        "Button Label"
+      ],
+      "category": "content",
+      "desc_cn": "显示在按钮上的文本"
+    },
+    "icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "图标的名称，需确保已经安装了相关的图标库，除非使用了 'img:' 前缀来引用本地的图片，如果设置为 'none'，则不会渲染图标"
+    },
+    "icon-right": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "图标的名称，需确保已经安装了相关的图标库，除非使用了 'img:' 前缀来引用本地的图片，如果设置为 'none'，则不会渲染图标"
+    },
+    "outline": {
+      "type": "Boolean",
+      "desc": "Use 'outline' design",
+      "category": "style",
+      "desc_cn": "使用“轮廓线”设计"
+    },
+    "flat": {
+      "type": "Boolean",
+      "desc": "Use 'flat' design",
+      "category": "style",
+      "desc_cn": "使用“扁平”设计"
+    },
+    "unelevated": {
+      "type": "Boolean",
+      "desc": "Remove shadow",
+      "category": "style",
+      "desc_cn": "移除阴影"
+    },
+    "rounded": {
+      "type": "Boolean",
+      "desc": "Applies a more prominent border-radius for a squared shape button",
+      "category": "style",
+      "desc_cn": "为方形按钮应用更突出的圆角边框（border-radius）"
+    },
+    "push": {
+      "type": "Boolean",
+      "desc": "Use 'push' design",
+      "category": "style",
+      "desc_cn": "使用“推”设计"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Removes border-radius so borders are squared",
+      "category": "style",
+      "addedIn": "v2.7.6",
+      "desc_cn": "删除边框圆角（border-radius），使边框为正方形"
+    },
+    "glossy": {
+      "type": "Boolean",
+      "desc": "Applies a glossy effect",
+      "category": "style",
+      "desc_cn": "应用光泽效果"
+    },
+    "fab": {
+      "type": "Boolean",
+      "desc": "Makes button size and shape to fit a Floating Action Button",
+      "category": "style",
+      "desc_cn": "使按钮大小和形状适合浮动操作按钮"
+    },
+    "fab-mini": {
+      "type": "Boolean",
+      "desc": "Makes button size and shape to fit a small Floating Action Button",
+      "category": "style",
+      "desc_cn": "使按钮的大小和形状适合一个小的浮动动作按钮"
+    },
+    "padding": {
+      "type": "String",
+      "desc": "Apply custom padding (vertical [horizontal]); Size in CSS units, including unit name or standard size name (none|xs|sm|md|lg|xl); Also removes the min width and height when set",
+      "examples": [
+        "16px",
+        "10px 5px",
+        "2rem",
+        "xs",
+        "md lg",
+        "2px 2px 5px 7px"
+      ],
+      "category": "style",
+      "desc_cn": "应用自定义内边距（垂直[水平]）。以 CSS 单位表示的尺寸，包括单位名称或标准尺寸名称（none | xs | sm | md | lg | xl）。设置时也会删除最小宽度和高度"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "组件的颜色，来自 Quasar 调色板的颜色名称"
+    },
+    "text-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Overrides text color (if needed); Color name from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "覆盖文本颜色（如果需要）。来自 Quasar 调色板的颜色名称"
+    },
+    "no-caps": {
+      "type": "Boolean",
+      "desc": "Avoid turning label text into caps (which happens by default)",
+      "category": "content",
+      "desc_cn": "避免将标签文本转换为大写（默认情况下会发生这种情况）"
+    },
+    "no-wrap": {
+      "type": "Boolean",
+      "desc": "Avoid label text wrapping",
+      "category": "content",
+      "desc_cn": "避免标签文本换行"
+    },
+    "dense": {
+      "type": "Boolean",
+      "desc": "Dense mode; occupies less space",
+      "category": "style",
+      "desc_cn": "紧凑模式，占用更少的空间"
+    },
+    "ripple": {
+      "type": [
+        "Boolean",
+        "Object"
+      ],
+      "desc": "Configure material ripple (disable it by setting it to 'false' or supply a config object)",
+      "default": true,
+      "examples": [
+        false,
+        "{ early: true, center: true, color: 'teal', keyCodes: [] }"
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "配置 material 水波动画（设置为 “false” 将其禁用或提供一个配置对象）"
+    },
+    "tabindex": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Tabindex HTML attribute value",
+      "examples": [
+        "0",
+        "100"
+      ],
+      "category": "general",
+      "desc_cn": "Tabindex HTML 属性值"
+    },
+    "align": {
+      "type": "String",
+      "desc": "Label or content alignment",
+      "default": "center",
+      "values": [
+        "left",
+        "right",
+        "center",
+        "around",
+        "between",
+        "evenly"
+      ],
+      "category": "content",
+      "required": false,
+      "desc_cn": "标签或内容的对齐方式"
+    },
+    "stack": {
+      "type": "Boolean",
+      "desc": "Stack icon and label vertically instead of on same line (like it is by default)",
+      "category": "content",
+      "desc_cn": "垂直堆叠图标和标签，而不是在同一行上（就像默认情况下一样）"
+    },
+    "stretch": {
+      "type": "Boolean",
+      "desc": "When used on flexbox parent, button will stretch to parent's height",
+      "category": "content",
+      "desc_cn": "当用于 flexbox 父元素时，按钮将拉伸到父元素的高度"
+    },
+    "loading": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Put button into loading state (displays a QSpinner -- can be overridden by using a 'loading' slot)",
+      "category": "behavior|state",
+      "required": false,
+      "desc_cn": "将按钮置于加载状态（显示一个 QSpinner——可以通过 'loading' 插槽来重写）"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式"
+    },
+    "split": {
+      "type": "Boolean",
+      "desc": "Split dropdown icon into its own button",
+      "category": "content|behavior",
+      "desc_cn": "将下拉图标拆分为自己的按钮"
+    },
+    "dropdown-icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "图标的名称，需确保已经安装了相关的图标库，除非使用了 'img:' 前缀来引用本地的图片，如果设置为 'none'，则不会渲染图标"
+    },
+    "disable-main-btn": {
+      "type": "Boolean",
+      "desc": "Disable main button (useful along with 'split' prop)",
+      "category": "behavior",
+      "desc_cn": "禁用主按钮（与 'split' 属性一起使用时很有用）"
+    },
+    "disable-dropdown": {
+      "type": "Boolean",
+      "desc": "Disables dropdown (dropdown button if using along 'split' prop)",
+      "category": "behavior",
+      "desc_cn": "禁用下拉（如果与 'split' 属性一起使用，则使用下拉按钮）"
+    },
+    "no-icon-animation": {
+      "type": "Boolean",
+      "desc": "Disables the rotation of the dropdown icon when state is toggled",
+      "category": "style",
+      "desc_cn": "在切换状态时禁用下拉图标的旋转"
+    },
+    "content-style": {
+      "type": [
+        "String",
+        "Array",
+        "Object"
+      ],
+      "tsType": "VueStyleProp",
+      "desc": "Style definitions to be attributed to the menu",
+      "examples": [
+        "background-color: #ff0000",
+        ":content-style=\"{ backgroundColor: '#ff0000' }\""
+      ],
+      "category": "style",
+      "desc_cn": "设置菜单的 style 属性"
+    },
+    "content-class": {
+      "type": [
+        "String",
+        "Array",
+        "Object"
+      ],
+      "tsType": "VueClassProp",
+      "desc": "Class definitions to be attributed to the menu",
+      "examples": [
+        "my-special-class",
+        ":content-class=\"{ 'my-special-class': <condition> }\""
+      ],
+      "category": "style",
+      "desc_cn": "设置菜单的 class 属性"
+    },
+    "cover": {
+      "type": "Boolean",
+      "desc": "Allows the menu to cover the button. When used, the 'menu-self' and 'menu-fit' props are no longer effective",
+      "category": "position",
+      "desc_cn": "允许菜单覆盖按钮。使用时，'menu-self' 和 'menu-fit' 属性不再有效"
+    },
+    "persistent": {
+      "type": "Boolean",
+      "desc": "Allows the menu to not be dismissed by a click/tap outside of the menu or by hitting the ESC key; Also, an app route change won't dismiss it",
+      "category": "behavior",
+      "desc_cn": "允许在菜单外单击/轻触或按 ESC 键时不关闭菜单。同时，路由切换也不会关闭它"
+    },
+    "no-route-dismiss": {
+      "type": "Boolean",
+      "desc": "Changing route app won't dismiss the popup; No need to set it if 'persistent' prop is also set",
+      "category": "behavior",
+      "desc_cn": "更改路由应用程序不会关闭弹出窗口。如果还设置了 'persistent' 属性，则无需设置它"
+    },
+    "auto-close": {
+      "type": "Boolean",
+      "desc": "Allows any click/tap in the menu to close it; Useful instead of attaching events to each menu item that should close the menu on click/tap",
+      "category": "behavior",
+      "desc_cn": "允许在菜单中单击/轻触以关闭它。而不是将应在单击/点击时关闭菜单的事件附加到每个菜单项"
+    },
+    "menu-anchor": {
+      "type": "String",
+      "desc": "Two values setting the starting position or anchor point of the menu relative to its target",
+      "values": [
+        "top left",
+        "top middle",
+        "top right",
+        "top start",
+        "top end",
+        "center left",
+        "center middle",
+        "center right",
+        "center start",
+        "center end",
+        "bottom left",
+        "bottom middle",
+        "bottom right",
+        "bottom start",
+        "bottom end"
+      ],
+      "default": "bottom end",
+      "category": "position",
+      "required": false,
+      "desc_cn": "设置菜单的弹出位置（相对于其目标起始位置的两个值）"
+    },
+    "menu-self": {
+      "type": "String",
+      "desc": "Two values setting the menu's own position relative to its target",
+      "values": [
+        "top left",
+        "top middle",
+        "top right",
+        "top start",
+        "top end",
+        "center left",
+        "center middle",
+        "center right",
+        "center start",
+        "center end",
+        "bottom left",
+        "bottom middle",
+        "bottom right",
+        "bottom start",
+        "bottom end"
+      ],
+      "default": "top end",
+      "category": "position",
+      "required": false,
+      "desc_cn": "设置菜单自身位置（相对于目标的两个值)"
+    },
+    "menu-offset": {
+      "type": "Array",
+      "desc": "An array of two numbers to offset the menu horizontally and vertically in pixels",
+      "examples": [
+        "[8, 8]",
+        "[5, 10]"
+      ],
+      "category": "position",
+      "desc_cn": "以像素为单位的两个数字数组，分别表示菜单在水平和垂直方向上的偏移量"
+    },
+    "toggle-aria-label": {
+      "type": "String",
+      "desc": "aria-label to be used on the dropdown toggle element",
+      "examples": [
+        "Open menu"
+      ],
+      "category": "accessibility",
+      "addedIn": "v2.8.4",
+      "desc_cn": "用于下拉菜单的切换组件上的 aria-label"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的默认插槽"
+    },
+    "label": {
+      "desc": "Customize main button's content through this slot, unless you're using the 'icon' and 'label' props",
+      "desc_cn": "通过此插槽自定义主按钮的内容，除非使用了 'icon' 和 'label' 属性"
+    },
+    "loading": {
+      "desc": "Override the default QSpinner when in 'loading' state",
+      "addedIn": "v2.8",
+      "desc_cn": "重写加载状态下的默认 QSpinner 组件"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when showing/hidden state changes; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Boolean",
+          "desc": "New state (showing/hidden)",
+          "desc_cn": "新的状态 （显示/隐藏）"
+        }
+      },
+      "desc_cn": "当显示/隐藏状态改变时触发，也会被 v-model 使用"
+    },
+    "show": {
+      "desc": "Emitted after component has triggered show()",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 show() 后发出"
+    },
+    "before-show": {
+      "desc": "Emitted when component triggers show() but before it finishes doing it",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 show() 之前发出"
+    },
+    "hide": {
+      "desc": "Emitted after component has triggered hide()",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 hide() 后发出"
+    },
+    "before-hide": {
+      "desc": "Emitted when component triggers hide() but before it finishes doing it",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 hide() 之前发出"
+    },
+    "click": {
+      "desc": "Emitted when user clicks/taps on the main button (not the icon one, if using 'split')",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "当用户单击/轻触主按钮时发出（如果使用 'split'，则不是图标按钮）"
+    }
+  },
+  "methods": {
+    "show": {
+      "desc": "Triggers component to show",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发组件显示"
+    },
+    "hide": {
+      "desc": "Triggers component to hide",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发组件隐藏"
+    },
+    "toggle": {
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc": "Triggers component to toggle between show/hide",
+      "desc_cn": "触发组件在显示/隐藏之间切换"
+    }
+  }
+}

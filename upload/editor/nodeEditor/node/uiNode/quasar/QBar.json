@@ -1,0 +1,37 @@
+{
+  "id": "8C305449-6904-89BF-CA55-06E52B0708C8",
+  "treePath": "ui/quasar",
+  "name": "QBar",
+  "importStr": "import { QBar } from \"quasar\"",
+  "tag": "QBar",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/bar"
+  },
+  "props": {
+    "dense": {
+      "type": "Boolean",
+      "desc": "Dense mode; occupies less space",
+      "category": "style",
+      "desc_cn": "紧凑模式，占用更少的空间"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "The component background color lights up the parent's background (as opposed to default behavior which is to darken it); Works unless you specify a CSS background color for it",
+      "category": "style",
+      "required": false,
+      "desc_cn": "组件背景颜色使父对象的背景变亮（与默认的深色行为相反）。除非为其指定 CSS 背景色，否则将正常工作"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的默认插槽"
+    }
+  }
+}

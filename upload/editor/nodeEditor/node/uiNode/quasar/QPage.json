@@ -1,0 +1,68 @@
+{
+  "id": "4F3C1FF4-0F4E-84B2-7EA8-14B15808122F",
+  "treePath": "ui/quasar",
+  "name": "QPage",
+  "importStr": "import { QPage } from \"quasar\"",
+  "tag": "QPage",
+  "parentMustBe": ["QPageContainer"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/layout/page",
+    "editorBehavior": {
+      "mode": "placeholder",
+      "reason": "需要 QPageContainer 上下文"
+    },
+    "editorConfig": {
+      "width": {
+        "type": "String",
+        "default": "100%"
+      },
+      "height": {
+        "type": "String",
+        "default": "200px"
+      }
+    }
+  },
+  "props": {
+    "padding": {
+      "type": "Boolean",
+      "desc": "Applies a default responsive page padding",
+      "category": "content",
+      "desc_cn": "应用默认的响应式页面内边距"
+    },
+    "style-fn": {
+      "type": "Function",
+      "desc": "Override default CSS style applied to the component (sets minHeight); Function(offset: Number) => CSS props/value: Object; For best performance, reference it from your scope and do not define it inline",
+      "params": {
+        "offset": {
+          "type": "Number",
+          "desc": "Header + Footer height (in pixels)",
+          "desc_cn": "页眉 + 页脚高度（以像素为单位）"
+        },
+        "height": {
+          "type": "Number",
+          "desc": "Value in pixels of container height (if containerized) or window height otherwise",
+          "desc_cn": "容器高度的像素值（如果有容器化）或窗口高度（否则）"
+        }
+      },
+      "returns": {
+        "type": "Object",
+        "desc": "Object with CSS properties to apply to Page DOM element",
+        "desc_cn": "应用于页面 DOM 元素的 CSS 属性对象"
+      },
+      "default": "(see source code)",
+      "examples": [
+        "(see source code)"
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "覆盖应用于组件的默认 CSS 样式（设置最小高度）；函数(offset: Number) => CSS 属性/值：对象；为了获得最佳性能，请从您的作用域中引用它，不要内联定义。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的 devland 未插槽内容中的默认插槽"
+    }
+  }
+}

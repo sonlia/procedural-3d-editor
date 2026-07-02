@@ -1,0 +1,900 @@
+{
+  "id": "1951635B-2CF1-AC5D-36FD-DA5DF637E229",
+  "treePath": "ui/quasar",
+  "name": "QRange",
+  "importStr": "import { QRange } from \"quasar\"",
+  "tag": "QRange",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/range"
+  },
+  "props": {
+    "name": {
+      "type": "String",
+      "desc": "Used to specify the name of the control; Useful if dealing with forms submitted directly to a URL",
+      "examples": [
+        "car_id"
+      ],
+      "category": "behavior",
+      "desc_cn": "用于指定控件的名称；如果处理直接提交到 URL 的表单时很有用"
+    },
+    "min": {
+      "type": "Number",
+      "desc": "Minimum value of the model; Set track's minimum value",
+      "default": 0,
+      "examples": [
+        ":min=\"0\""
+      ],
+      "category": "model",
+      "required": false,
+      "desc_cn": "模型的最小值；设置轨道的最小值"
+    },
+    "max": {
+      "type": "Number",
+      "desc": "Maximum value of the model; Set track's maximum value",
+      "default": 100,
+      "category": "model",
+      "required": false,
+      "desc_cn": "模型的最大值；设置轨道的最大值"
+    },
+    "inner-min": {
+      "type": "Number",
+      "desc": "Inner minimum value of the model; Use in case you need the model value to be inside of the track's min-max values; Needs to be higher or equal to 'min' prop; Defaults to 'min' prop",
+      "category": "model",
+      "addedIn": "v2.4",
+      "desc_cn": "组件的内部最小值；在需要将模型值限制在轨道的最小和最大值之间时使用；必须高于或等于 'min' 属性；默认为 'min' 属性。"
+    },
+    "inner-max": {
+      "type": "Number",
+      "desc": "Inner maximum value of the model; Use in case you need the model value to be inside of the track's min-max values; Needs to be lower or equal to 'max' prop; Defaults to 'max' prop",
+      "category": "model",
+      "addedIn": "v2.4",
+      "desc_cn": "组件的内部最大值；在需要将模型值限制在轨道的最小-最大值范围内时使用；必须小于或等于 'max' 属性；默认为 'max' 属性。"
+    },
+    "step": {
+      "type": "Number",
+      "desc": "Specify step amount between valid values (> 0.0); When step equals to 0 it defines infinite granularity",
+      "default": 1,
+      "category": "model",
+      "required": false,
+      "desc_cn": "指定有效值之间的步长（> 0.0）；当步长等于0时，定义了无限粒度"
+    },
+    "snap": {
+      "type": "Boolean",
+      "desc": "Snap on valid values, rather than sliding freely; Suggestion: use with 'step' prop",
+      "category": "behavior",
+      "desc_cn": "根据有效值进行捕捉，而不是自由滑动；建议：与 'step' 属性一起使用"
+    },
+    "reverse": {
+      "type": "Boolean",
+      "desc": "Work in reverse (changes direction)",
+      "category": "behavior",
+      "desc_cn": "逆向工作（改变方向）"
+    },
+    "vertical": {
+      "type": "Boolean",
+      "desc": "Display in vertical direction",
+      "category": "behavior",
+      "desc_cn": "在垂直方向显示"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "track-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for the track (can be 'transparent' too) from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "addedIn": "v2.4",
+      "desc_cn": "来自 Quasar 颜色调色板的轨道颜色名称（也可以是 'transparent'）"
+    },
+    "track-img": {
+      "type": "String",
+      "desc": "Apply a pattern image on the track",
+      "transformAssetUrls": true,
+      "examples": [
+        "~assets/my-pattern.png"
+      ],
+      "category": "style",
+      "addedIn": "v2.4",
+      "desc_cn": "在轨道上应用一个图案图片"
+    },
+    "inner-track-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for the inner track (can be 'transparent' too) from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "addedIn": "v2.4",
+      "desc_cn": "来自 Quasar 颜色调色板的内部轨道颜色名称（也可以是 'transparent'）"
+    },
+    "inner-track-img": {
+      "type": "String",
+      "desc": "Apply a pattern image on the inner track",
+      "transformAssetUrls": true,
+      "examples": [
+        "~assets/my-pattern.png"
+      ],
+      "category": "style",
+      "addedIn": "v2.4",
+      "desc_cn": "在内部轨道上应用图案图片"
+    },
+    "selection-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for the selection bar (can be 'transparent' too) from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "addedIn": "v2.4",
+      "desc_cn": "来自 Quasar 颜色调色板的选择栏颜色名称（也可以是 'transparent'）"
+    },
+    "selection-img": {
+      "type": "String",
+      "desc": "Apply a pattern image on the selection bar",
+      "transformAssetUrls": true,
+      "examples": [
+        "~assets/my-pattern.png"
+      ],
+      "category": "style",
+      "addedIn": "v2.4",
+      "desc_cn": "在选择栏上应用一个图案图片"
+    },
+    "label": {
+      "type": "Boolean",
+      "desc": "Popup a label when user clicks/taps on the slider thumb and moves it",
+      "category": "content",
+      "desc_cn": "当用户点击/触摸滑块拇指并移动时，弹出一个标签"
+    },
+    "label-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "label-text-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "switch-label-side": {
+      "type": "Boolean",
+      "desc": "Switch the position of the label (top <-> bottom or left <-> right)",
+      "category": "style",
+      "addedIn": "v2.4",
+      "desc_cn": "切换标签的位置（上 <-> 下或左 <-> 右）"
+    },
+    "label-always": {
+      "type": "Boolean",
+      "desc": "Always display the label",
+      "category": "behavior|content",
+      "desc_cn": "始终显示标签"
+    },
+    "markers": {
+      "type": [
+        "Boolean",
+        "Number"
+      ],
+      "desc": "Display markers on the track, one for each possible value for the model or using a custom step (when specifying a Number)",
+      "category": "content",
+      "examples": [
+        "markers",
+        ":markers=\"5\""
+      ],
+      "desc_cn": "在轨道上显示标记，每个可能的值都有一个标记，或者使用自定义步长（当指定为数字时）"
+    },
+    "marker-labels": {
+      "type": [
+        "Boolean",
+        "Array",
+        "Object",
+        "Function"
+      ],
+      "tsType": "SliderMarkerLabels",
+      "desc": "Configure the marker labels (or show the default ones if 'true'); Array of definition Objects or Object with key-value where key is the model and the value is the marker label definition",
+      "definition": {
+        "value": {
+          "type": "Number",
+          "required": true,
+          "desc": "Value of equivalent model where to position the marker",
+          "desc_cn": "等价模型的值，用于定位标记"
+        },
+        "label": {
+          "type": [
+            "Number",
+            "String"
+          ],
+          "desc": "Label to use",
+          "desc_cn": "要使用的标签"
+        },
+        "classes": {
+          "type": [
+            "String",
+            "Array",
+            "Object"
+          ],
+          "tsType": "VueClassProp",
+          "desc": "CSS classes to be attributed to the marker label",
+          "examples": [
+            "my-class-name"
+          ],
+          "desc_cn": "要分配给标记标签的 CSS 类"
+        },
+        "style": {
+          "type": "Object",
+          "tsType": "VueStyleObjectProp",
+          "desc": "Style definitions to be attributed to the marker label",
+          "examples": [
+            "{ height: '24px' }"
+          ],
+          "desc_cn": "标记标签的样式定义"
+        }
+      },
+      "params": {
+        "value": {
+          "type": "Number",
+          "desc": "The marker value to transform",
+          "required": true,
+          "desc_cn": "要转换的标记值"
+        }
+      },
+      "returns": {
+        "type": [
+          "String",
+          "Object"
+        ],
+        "desc": "Marker definition Object or directly a String for the label of the marker",
+        "definition": {
+          "value": {
+            "type": "Number",
+            "desc": "Value of equivalent model where to position the marker",
+            "desc_cn": "等价模型的值，用于定位标记"
+          },
+          "label": {
+            "type": [
+              "Number",
+              "String"
+            ],
+            "desc": "Label to use",
+            "desc_cn": "要使用的标签"
+          },
+          "classes": {
+            "type": [
+              "String",
+              "Array",
+              "Object"
+            ],
+            "tsType": "VueClassProp",
+            "desc": "CSS classes to be attributed to the marker label",
+            "examples": [
+              "my-class-name"
+            ],
+            "desc_cn": "要分配给标记标签的 CSS 类"
+          },
+          "style": {
+            "type": "Object",
+            "tsType": "VueStyleObjectProp",
+            "desc": "Style definitions to be attributed to the marker label",
+            "examples": [
+              "{ height: '24px' }"
+            ],
+            "desc_cn": "标记标签的样式定义"
+          }
+        },
+        "desc_cn": "标记定义对象或直接为标记的标签字符串"
+      },
+      "category": "content",
+      "examples": [
+        true,
+        "[ { value: 0, label: '0%' }, { value: 5, classes: 'my-class', style: { width: '24px' } } ]",
+        "{ 0: '0%', 5: { label: '5%', classes: 'my-class', style: { width: '24px' } } }",
+        "val => (10 * val) + '%'",
+        "val => ({ label: (10 * val) + '%', classes: 'my-class', style: { width: '24px' } })"
+      ],
+      "addedIn": "v2.4",
+      "desc_cn": "配置标记的标签（如果为'true'则显示默认值）；定义对象数组或键值对对象，其中键是模型，值是标记标签的定义。"
+    },
+    "marker-labels-class": {
+      "type": "String",
+      "desc": "CSS class(es) to apply to the marker labels container",
+      "examples": [
+        "text-orange"
+      ],
+      "category": "style",
+      "addedIn": "v2.4",
+      "desc_cn": "应用于标记标签容器的 CSS 类（们）"
+    },
+    "switch-marker-labels-side": {
+      "type": "Boolean",
+      "desc": "Switch the position of the marker labels (top <-> bottom or left <-> right)",
+      "category": "style",
+      "addedIn": "v2.4",
+      "desc_cn": "切换标记标签的位置（顶部 <-> 底部或左侧 <-> 右侧）"
+    },
+    "track-size": {
+      "type": "String",
+      "desc": "Track size (including CSS unit)",
+      "default": "4px",
+      "examples": [
+        "35px"
+      ],
+      "category": "style",
+      "addedIn": "v2.4",
+      "required": false,
+      "desc_cn": "轨道尺寸（包括 CSS 单位）"
+    },
+    "thumb-size": {
+      "type": "String",
+      "desc": "Thumb size (including CSS unit)",
+      "default": "20px",
+      "examples": [
+        "20px"
+      ],
+      "category": "style",
+      "addedIn": "v2.4",
+      "required": false,
+      "desc_cn": "缩略图大小（包括 CSS 单位）"
+    },
+    "thumb-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "addedIn": "v2.4",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "thumb-path": {
+      "type": "String",
+      "desc": "Set custom thumb svg path",
+      "default": "M 4, 10 a 6,6 0 1,0 12,0 a 6,6 0 1,0 -12,0",
+      "examples": [
+        "M5 5 h10 v10 h-10 v-10"
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "设置自定义的滑块 SVG 路径"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "通知组件背景颜色为深色"
+    },
+    "dense": {
+      "type": "Boolean",
+      "desc": "Dense mode; occupies less space",
+      "category": "style",
+      "desc_cn": "紧凑模式；占用较少空间"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式中"
+    },
+    "readonly": {
+      "type": "Boolean",
+      "desc": "Put component in readonly mode",
+      "category": "state",
+      "desc_cn": "将组件置于只读模式中"
+    },
+    "tabindex": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Tabindex HTML attribute value",
+      "examples": [
+        "0",
+        "100"
+      ],
+      "category": "general",
+      "desc_cn": "Tabindex HTML 属性的值"
+    },
+    "model-value": {
+      "desc": "Model of the component of type { min, max } (both values must be between global min/max); Either use this property (along with a listener for 'update:modelValue' event) OR use v-model directive",
+      "required": true,
+      "syncable": true,
+      "category": "model",
+      "type": [
+        "Object",
+        "null",
+        "undefined"
+      ],
+      "definition": {
+        "min": {
+          "type": [
+            "Number",
+            "null"
+          ],
+          "desc": "Model value for left thumb",
+          "desc_cn": "左滑块的模型值"
+        },
+        "max": {
+          "type": [
+            "Number",
+            "null"
+          ],
+          "desc": "Model value for right thumb",
+          "desc_cn": "右侧滑块的模型值"
+        }
+      },
+      "examples": [
+        "v-model=\"positionModel\""
+      ],
+      "desc_cn": "组件的 model 数据类型为 { min, max }（两个值都必须在全局最小/最大值之间）；可以使用该属性（以及监听 'update:modelValue' 事件的监听器），或者使用 v-model 指令。"
+    },
+    "drag-range": {
+      "type": "Boolean",
+      "desc": "User can drag range instead of just the two thumbs",
+      "category": "content",
+      "desc_cn": "用户可以拖动范围而不仅仅是两个滑块"
+    },
+    "drag-only-range": {
+      "type": "Boolean",
+      "desc": "User can drag only the range instead and NOT the two thumbs",
+      "category": "content",
+      "desc_cn": "用户只能拖动范围，而不能拖动两个滑块"
+    },
+    "left-label-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for left label background from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "labels",
+      "desc_cn": "从 Quasar 颜色调色板中选择的左侧标签背景颜色名称"
+    },
+    "left-label-text-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for left label text from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "labels",
+      "desc_cn": "从 Quasar 颜色调色板中选择的左侧标签文本的颜色名称"
+    },
+    "right-label-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for right label background from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "labels",
+      "desc_cn": "来自 Quasar 颜色调色板的右标签背景颜色名称"
+    },
+    "right-label-text-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for right label text from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "labels",
+      "desc_cn": "从 Quasar 颜色调色板中选择的右侧标签文本的颜色名称"
+    },
+    "left-label-value": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Override default label for min value",
+      "examples": [
+        ":left-label-value=\"model.min + 'px'\""
+      ],
+      "category": "labels",
+      "desc_cn": "覆盖最小值的默认标签"
+    },
+    "right-label-value": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Override default label for max value",
+      "examples": [
+        ":right-label-value=\"model.max + 'px'\""
+      ],
+      "category": "labels",
+      "desc_cn": "覆盖默认的最大值标签"
+    },
+    "left-thumb-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name (from the Quasar Color Palette) for left thumb",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "labels",
+      "addedIn": "v2.4",
+      "desc_cn": "左侧滑块的颜色名称（来自 Quasar 颜色调色板）"
+    },
+    "right-thumb-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name (from the Quasar Color Palette) for right thumb",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "labels",
+      "addedIn": "v2.4",
+      "desc_cn": "右侧滑块的颜色名称（来自 Quasar 颜色调色板）"
+    }
+  },
+  "slots": {
+    "marker-label": {
+      "desc": "What should the menu display after filtering options and none are left to be displayed; Suggestion: <div>",
+      "addedIn": "v2.4",
+      "scope": {
+        "marker": {
+          "type": "Object",
+          "tsType": "SliderMarkerLabelConfig",
+          "desc": "Config for current marker label",
+          "definition": {
+            "index": {
+              "type": "Number",
+              "desc": "Index of the marker label (0-based)",
+              "desc_cn": "标记标签的索引（从0开始）"
+            },
+            "value": {
+              "type": "Number",
+              "desc": "Equivalent model value for the marker label",
+              "desc_cn": "标记标签的等价模型值"
+            },
+            "label": {
+              "type": [
+                "Number",
+                "String"
+              ],
+              "desc": "Configured label for the marker",
+              "desc_cn": "配置标记的标签"
+            },
+            "classes": {
+              "type": "String",
+              "desc": "Required CSS classes to be applied to the marker element",
+              "desc_cn": "应用到标记元素的必需 CSS 类"
+            },
+            "style": {
+              "type": "Object",
+              "tsType": "VueStyleObjectProp",
+              "desc": "Style definitions to be attributed to the marker label",
+              "examples": [
+                "{ height: '24px' }"
+              ],
+              "desc_cn": "标记标签的样式定义"
+            }
+          },
+          "desc_cn": "当前标记的标签配置"
+        },
+        "markerList": {
+          "type": "Array",
+          "tsType": "SliderMarkerLabelArrayConfig",
+          "desc": "Array of marker label configs",
+          "definition": {
+            "index": {
+              "type": "Number",
+              "desc": "Index of the marker label (0-based)",
+              "desc_cn": "标记标签的索引（从0开始）"
+            },
+            "value": {
+              "type": "Number",
+              "desc": "Equivalent model value for the marker label",
+              "desc_cn": "标记标签的等价模型值"
+            },
+            "label": {
+              "type": [
+                "Number",
+                "String"
+              ],
+              "desc": "Configured label for the marker",
+              "desc_cn": "配置标记的标签"
+            },
+            "classes": {
+              "type": "String",
+              "desc": "Required CSS classes to be applied to the marker element",
+              "desc_cn": "应用到标记元素的必需 CSS 类"
+            },
+            "style": {
+              "type": "Object",
+              "tsType": "VueStyleObjectProp",
+              "desc": "Style definitions to be attributed to the marker label",
+              "examples": [
+                "{ height: '24px' }"
+              ],
+              "desc_cn": "标记标签的样式定义"
+            }
+          },
+          "desc_cn": "标记标签配置的数组"
+        },
+        "markerMap": {
+          "type": "Object",
+          "tsType": "SliderMarkerLabelObjectConfig",
+          "desc": "Object with key-value where key is the model and the value is the marker label config",
+          "definition": {
+            "...key": {
+              "type": "Object",
+              "desc": "Marker label config",
+              "definition": {
+                "index": {
+                  "type": "Number",
+                  "desc": "Index of the marker label (0-based)",
+                  "desc_cn": "标记标签的索引（从0开始）"
+                },
+                "value": {
+                  "type": "Number",
+                  "desc": "Equivalent model value for the marker label",
+                  "desc_cn": "标记标签的等价模型值"
+                },
+                "label": {
+                  "type": [
+                    "Number",
+                    "String"
+                  ],
+                  "desc": "Configured label for the marker",
+                  "desc_cn": "配置标记的标签"
+                },
+                "classes": {
+                  "type": "String",
+                  "desc": "Required CSS classes to be applied to the marker element",
+                  "desc_cn": "应用到标记元素的必需 CSS 类"
+                },
+                "style": {
+                  "type": "Object",
+                  "tsType": "VueStyleObjectProp",
+                  "desc": "Style definitions to be attributed to the marker label",
+                  "examples": [
+                    "{ height: '24px' }"
+                  ],
+                  "desc_cn": "标记标签的样式定义"
+                }
+              },
+              "desc_cn": "标记的标签配置"
+            }
+          },
+          "desc_cn": "具有键值对的对象，其中键是模型（model），值是标记（marker）标签配置。"
+        },
+        "classes": {
+          "type": "String",
+          "desc": "Required CSS classes to be applied to the marker element",
+          "desc_cn": "应用到标记元素的必需 CSS 类"
+        },
+        "getStyle": {
+          "type": "Function",
+          "desc": "Get CSS style Object to apply to a marker element at respective model value; For perf reasons, use only if requested model value is not already part of markerMap",
+          "params": {
+            "value": {
+              "type": "Number",
+              "desc": "The marker label equivalent model value",
+              "required": true,
+              "desc_cn": "标记标签的等价模型值"
+            }
+          },
+          "returns": {
+            "type": "Object",
+            "desc": "CSS style Object to apply to a marker element at respective model value",
+            "desc_cn": "应用于相应模型值的标记元素的 CSS 样式对象"
+          },
+          "desc_cn": "获取 CSS 样式对象，将其应用于相应模型值的标记元素；出于性能考虑，仅在请求的模型值尚未成为 markerMap 的一部分时使用。"
+        }
+      },
+      "desc_cn": "过滤选项后，如果没有剩余的选项可供显示，菜单应该显示什么；建议使用 <div>。"
+    },
+    "marker-label-group": {
+      "desc": "What should the menu display after filtering options and none are left to be displayed; Suggestion: <div>",
+      "addedIn": "v2.4",
+      "scope": {
+        "markerList": {
+          "type": "Array",
+          "tsType": "SliderMarkerLabelArrayConfig",
+          "desc": "Array of marker label configs",
+          "definition": {
+            "index": {
+              "type": "Number",
+              "desc": "Index of the marker label (0-based)",
+              "desc_cn": "标记标签的索引（从0开始）"
+            },
+            "value": {
+              "type": "Number",
+              "desc": "Equivalent model value for the marker label",
+              "desc_cn": "标记标签的等价模型值"
+            },
+            "label": {
+              "type": [
+                "Number",
+                "String"
+              ],
+              "desc": "Configured label for the marker",
+              "desc_cn": "配置标记的标签"
+            },
+            "classes": {
+              "type": "String",
+              "desc": "Required CSS classes to be applied to the marker element",
+              "desc_cn": "应用到标记元素的必需 CSS 类"
+            },
+            "style": {
+              "type": "Object",
+              "tsType": "VueStyleObjectProp",
+              "desc": "Style definitions to be attributed to the marker label",
+              "examples": [
+                "{ height: '24px' }"
+              ],
+              "desc_cn": "标记标签的样式定义"
+            }
+          },
+          "desc_cn": "标记标签配置的数组"
+        },
+        "markerMap": {
+          "type": "Object",
+          "tsType": "SliderMarkerLabelObjectConfig",
+          "desc": "Object with key-value where key is the model and the value is the marker label config",
+          "definition": {
+            "...key": {
+              "type": "Object",
+              "desc": "Marker label config",
+              "definition": {
+                "index": {
+                  "type": "Number",
+                  "desc": "Index of the marker label (0-based)",
+                  "desc_cn": "标记标签的索引（从0开始）"
+                },
+                "value": {
+                  "type": "Number",
+                  "desc": "Equivalent model value for the marker label",
+                  "desc_cn": "标记标签的等价模型值"
+                },
+                "label": {
+                  "type": [
+                    "Number",
+                    "String"
+                  ],
+                  "desc": "Configured label for the marker",
+                  "desc_cn": "配置标记的标签"
+                },
+                "classes": {
+                  "type": "String",
+                  "desc": "Required CSS classes to be applied to the marker element",
+                  "desc_cn": "应用到标记元素的必需 CSS 类"
+                },
+                "style": {
+                  "type": "Object",
+                  "tsType": "VueStyleObjectProp",
+                  "desc": "Style definitions to be attributed to the marker label",
+                  "examples": [
+                    "{ height: '24px' }"
+                  ],
+                  "desc_cn": "标记标签的样式定义"
+                }
+              },
+              "desc_cn": "标记的标签配置"
+            }
+          },
+          "desc_cn": "具有键值对的对象，其中键是模型（model），值是标记（marker）标签配置。"
+        },
+        "classes": {
+          "type": "String",
+          "desc": "Required CSS classes to be applied to the marker element",
+          "desc_cn": "应用到标记元素的必需 CSS 类"
+        },
+        "getStyle": {
+          "type": "Function",
+          "desc": "Get CSS style Object to apply to a marker element at respective model value; For perf reasons, use only if requested model value is not already part of markerMap",
+          "params": {
+            "value": {
+              "type": "Number",
+              "desc": "The marker label equivalent model value",
+              "required": true,
+              "desc_cn": "标记标签的等价模型值"
+            }
+          },
+          "returns": {
+            "type": "Object",
+            "desc": "CSS style Object to apply to a marker element at respective model value",
+            "desc_cn": "应用于相应模型值的标记元素的 CSS 样式对象"
+          },
+          "desc_cn": "获取 CSS 样式对象，将其应用于相应模型值的标记元素；出于性能考虑，仅在请求的模型值尚未成为 markerMap 的一部分时使用。"
+        }
+      },
+      "desc_cn": "过滤选项后，如果没有剩余的选项可供显示，菜单应该显示什么；建议使用 <div>。"
+    }
+  },
+  "events": {
+    "change": {
+      "desc": "Emitted on lazy model value change (after user slides then releases the thumb)",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的模型值"
+        }
+      },
+      "desc_cn": "在用户滑动并释放滑块后，懒加载模型值发生变化时触发"
+    },
+    "pan": {
+      "desc": "Triggered when user starts panning on the component",
+      "params": {
+        "phase": {
+          "type": "String",
+          "desc": "Phase of panning",
+          "values": [
+            "start",
+            "end"
+          ],
+          "desc_cn": "平移的阶段"
+        }
+      },
+      "desc_cn": "当用户在组件上开始拖动时触发"
+    },
+    "update:model-value": {
+      "desc": "Emitted when the component needs to change the model; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的模型值"
+        }
+      },
+      "desc_cn": "当组件需要更改模型时触发；也被 v-model 使用"
+    }
+  }
+}

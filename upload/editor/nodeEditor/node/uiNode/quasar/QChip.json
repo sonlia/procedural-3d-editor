@@ -1,0 +1,265 @@
+{
+  "id": "A4716C95-ECEB-EB8B-C280-9E5492668919",
+  "treePath": "ui/quasar",
+  "name": "QChip",
+  "importStr": "import { QChip } from \"quasar\"",
+  "tag": "QChip",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/chip"
+  },
+  "props": {
+    "dense": {
+      "type": "Boolean",
+      "desc": "Dense mode; occupies less space",
+      "category": "style",
+      "desc_cn": "紧凑模式，占用更少的空间"
+    },
+    "size": {
+      "type": "String",
+      "desc": "QChip size name or a CSS unit including unit name",
+      "examples": [
+        "xs",
+        "sm",
+        "md",
+        "lg",
+        "xl",
+        "25px",
+        "2rem"
+      ],
+      "category": "style",
+      "desc_cn": "设置 QChip 尺寸，可以填入标准大小名称或包含单位名称的 CSS 尺寸"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "设置组件背景为深色"
+    },
+    "icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "图标的名称，需确保已经安装了相关的图标库，除非使用了 'img:' 前缀来引用本地的图片，如果设置为 'none'，则不会渲染图标"
+    },
+    "icon-right": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "图标的名称，需确保已经安装了相关的图标库，除非使用了 'img:' 前缀来引用本地的图片，如果设置为 'none'，则不会渲染图标"
+    },
+    "icon-remove": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "图标的名称，需确保已经安装了相关的图标库，除非使用了 'img:' 前缀来引用本地的图片，如果设置为 'none'，则不会渲染图标"
+    },
+    "icon-selected": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "图标的名称，需确保已经安装了相关的图标库，除非使用了 'img:' 前缀来引用本地的图片，如果设置为 'none'，则不会渲染图标"
+    },
+    "label": {
+      "type": [
+        "String",
+        "Number"
+      ],
+      "desc": "Chip's content as string; overrides default slot if specified",
+      "examples": [
+        "John Doe",
+        "Book"
+      ],
+      "category": "content",
+      "desc_cn": "碎片内容为字符串；如果指定，则覆盖默认插槽"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "组件的颜色，来自 Quasar 调色板的颜色名称"
+    },
+    "text-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Overrides text color (if needed); Color name from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "覆盖文本颜色（如果需要的话）。来自 Quasar 调色板的颜色名称"
+    },
+    "model-value": {
+      "desc": "Model of the component determining if QChip should be rendered or not",
+      "required": false,
+      "syncable": true,
+      "category": "model",
+      "type": "Boolean",
+      "default": true,
+      "desc_cn": "组件的 model 数据，确定是否应该渲染 QChip。"
+    },
+    "selected": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "sync": true,
+      "desc": "Model for QChip if it's selected or not",
+      "examples": [
+        "v-model:selected=\"myState\""
+      ],
+      "category": "model",
+      "required": false,
+      "syncable": true,
+      "desc_cn": "确定是否选中的QChip的模型"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Sets a low value for border-radius instead of the default one, making it close to a square",
+      "category": "style",
+      "desc_cn": "设置较低的“边界半径”（border radius）值，而不是默认值，使其接近正方形"
+    },
+    "outline": {
+      "type": "Boolean",
+      "desc": "Display using the 'outline' design",
+      "category": "style",
+      "desc_cn": "使用 'outline' 设计显示"
+    },
+    "clickable": {
+      "type": "Boolean",
+      "desc": "Is QChip clickable? If it's the case, then it will add hover effects and emit 'click' events",
+      "category": "state",
+      "desc_cn": "QChip 是否可点击，如果是，那么它将添加悬停动画和 'click' 事件"
+    },
+    "removable": {
+      "type": "Boolean",
+      "desc": "If set, then it displays a 'remove' icon that when clicked the QChip emits 'remove' event",
+      "category": "state",
+      "desc_cn": "如果设置了，那么它会显示一个 '删除' 图标，当点击 QChip 时会触发 'remove' 事件"
+    },
+    "ripple": {
+      "type": [
+        "Boolean",
+        "Object"
+      ],
+      "desc": "Configure material ripple (disable it by setting it to 'false' or supply a config object)",
+      "default": true,
+      "examples": [
+        false,
+        "{ early: true, center: true, color: 'teal', keyCodes: [] }"
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "配置 material 水波动画（设置为 “false” 将其禁用或提供一个配置对象）"
+    },
+    "remove-aria-label": {
+      "type": "String",
+      "desc": "aria-label to be used on the remove icon",
+      "examples": [
+        "Remove item"
+      ],
+      "category": "accessibility",
+      "addedIn": "v2.8.4",
+      "desc_cn": "删除图标的 aria-label"
+    },
+    "tabindex": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Tabindex HTML attribute value",
+      "examples": [
+        "0",
+        "100"
+      ],
+      "category": "general",
+      "desc_cn": "Tabindex HTML 属性值"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "This is where QChip content goes, if not using 'label' property",
+      "desc_cn": "如果不使用 'label' 属性，这就是 QChip 内容的放置位置"
+    }
+  },
+  "events": {
+    "click": {
+      "desc": "Emitted on QChip click if 'clickable' property is set",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "如果设置了 'clickable' 属性，则在 QChip 被点击后触发"
+    },
+    "update:selected": {
+      "desc": "Used by Vue on 'v-model:selected' for updating its value",
+      "params": {
+        "state": {
+          "type": "Boolean",
+          "desc": "Selected state",
+          "desc_cn": "选定的状态"
+        }
+      },
+      "desc_cn": "Vue 会使用 'v-model:selected' 更新其值"
+    },
+    "remove": {
+      "desc": "Works along with 'value' and 'removable' prop. Emitted when toggling rendering state of the QChip",
+      "params": {
+        "state": {
+          "type": "Boolean",
+          "desc": "Render state (render or not)",
+          "desc_cn": "渲染状态（渲染或不渲染）"
+        }
+      },
+      "desc_cn": "与 'value' 和 'removable' 属性一起使用。切换 QChip 的渲染状态时触发"
+    }
+  }
+}

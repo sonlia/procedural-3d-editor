@@ -1,0 +1,748 @@
+{
+  "id": "02826E9C-2853-3CB1-0302-EDA0DEC1C021",
+  "treePath": "ui/quasar",
+  "name": "QFile",
+  "importStr": "import { QFile } from \"quasar\"",
+  "tag": "QFile",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/file"
+  },
+  "props": {
+    "name": {
+      "type": "String",
+      "desc": "Used to specify the name of the control; Useful if dealing with forms; If not specified, it takes the value of 'for' prop, if it exists",
+      "examples": [
+        "car_id",
+        "car_id"
+      ],
+      "category": "behavior",
+      "desc_cn": "用于指定控件的名称；在处理表单时非常有用；如果未指定，则使用 'for' 属性的值，如果存在的话。"
+    },
+    "multiple": {
+      "type": "Boolean",
+      "desc": "Allow multiple file uploads",
+      "category": "behavior",
+      "desc_cn": "允许多个文件上传"
+    },
+    "accept": {
+      "type": "String",
+      "desc": "Comma separated list of unique file type specifiers. Maps to 'accept' attribute of native input type=file element",
+      "examples": [
+        ".jpg, .pdf, image/*",
+        "image/jpeg, .pdf"
+      ],
+      "category": "behavior",
+      "desc_cn": "逗号分隔的唯一文件类型规范列表。映射到原生输入类型为 file 的元素的 'accept' 属性"
+    },
+    "capture": {
+      "type": "String",
+      "desc": "Optionally, specify that a new file should be captured, and which device should be used to capture that new media of a type defined by the 'accept' prop. Maps to 'capture' attribute of native input type=file element",
+      "values": [
+        "user",
+        "environment"
+      ],
+      "category": "behavior",
+      "desc_cn": "可选地，指定应捕获新文件，并指定用于捕获由 'accept' 属性定义的新媒体的设备。映射到原生 input type=file 元素的 'capture' 属性。"
+    },
+    "max-file-size": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Maximum size of individual file in bytes",
+      "examples": [
+        1024,
+        1048576
+      ],
+      "category": "behavior",
+      "desc_cn": "单个文件的最大大小（以字节为单位）"
+    },
+    "max-total-size": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Maximum size of all files combined in bytes",
+      "category": "behavior",
+      "desc_cn": "所有文件组合的最大大小（以字节为单位）"
+    },
+    "max-files": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Maximum number of files to contain",
+      "category": "behavior",
+      "desc_cn": "包含的文件数量上限"
+    },
+    "filter": {
+      "type": "Function",
+      "desc": "Custom filter for added files; Only files that pass this filter will be added to the queue and uploaded; For best performance, reference it from your scope and do not define it inline",
+      "params": {
+        "files": {
+          "type": [
+            "FileList",
+            "Array"
+          ],
+          "desc": "Candidate files to be added to queue",
+          "desc_cn": "候选文件将被添加到队列中"
+        }
+      },
+      "returns": {
+        "type": "Array",
+        "desc": "Filtered files to be added to queue",
+        "desc_cn": "筛选后的文件将被添加到队列中"
+      },
+      "examples": [
+        ":filter=\"files => files.filter(file => file.size === 1024)\""
+      ],
+      "category": "behavior",
+      "desc_cn": "自定义过滤器用于添加的文件；只有通过此过滤器的文件才会被添加到队列并上传；为了获得最佳性能，请从您的作用域中引用它，不要内联定义。"
+    },
+    "model-value": {
+      "desc": "Model of the component; Must be FileList or Array if using 'multiple' prop; Either use this property (along with a listener for 'update:modelValue' event) OR use v-model directive",
+      "required": true,
+      "syncable": true,
+      "category": "model",
+      "type": [
+        "File",
+        "FileList",
+        "Array",
+        "null",
+        "undefined"
+      ],
+      "examples": [
+        "v-model=\"myModel\""
+      ],
+      "desc_cn": "组件的 model 数据；如果使用 'multiple' 属性，则必须是 FileList 或 Array 类型；可以使用此属性（以及监听 'update:modelValue' 事件的侦听器）或者使用 v-model 指令。"
+    },
+    "error": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Does field have validation errors?",
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "字段是否有验证错误？"
+    },
+    "error-message": {
+      "type": "String",
+      "desc": "Validation error message (gets displayed only if 'error' is set to 'true')",
+      "examples": [
+        "Username must have at least 5 characters"
+      ],
+      "category": "content",
+      "desc_cn": "验证错误消息（仅在 'error' 设置为 'true' 时显示）"
+    },
+    "no-error-icon": {
+      "type": "Boolean",
+      "desc": "Hide error icon when there is an error",
+      "category": "content",
+      "desc_cn": "当出现错误时隐藏错误图标"
+    },
+    "rules": {
+      "type": "Array",
+      "tsType": "ValidationRule",
+      "desc": "Array of Functions/Strings; If String, then it must be a name of one of the embedded validation rules",
+      "examples": [
+        ":rules=\"[ val => val.length <= 3 || 'Please use maximum 3 characters' ]\"",
+        ":rules=\"[ 'fulltime' ]\"",
+        ":rules=\"[ (val, rules) => rules.email(val) || 'Please enter a valid email address' ]\""
+      ],
+      "category": "behavior",
+      "desc_cn": "函数/字符串数组；如果是字符串，则必须是内置验证规则之一的名称"
+    },
+    "reactive-rules": {
+      "type": "Boolean",
+      "desc": "By default a change in the rules does not trigger a new validation until the model changes; If set to true then a change in the rules will trigger a validation; Has a performance penalty, so use it only when you really need it",
+      "category": "behavior",
+      "desc_cn": "默认情况下，规则的更改不会触发新的验证，直到发生 model 数据变化；如果设置为 true，则规则的更改将触发验证；这会带来性能损失，所以只在真正需要时使用。"
+    },
+    "lazy-rules": {
+      "type": [
+        "Boolean",
+        "String"
+      ],
+      "desc": "If set to boolean true then it checks validation status against the 'rules' only after field loses focus for first time; If set to 'ondemand' then it will trigger only when component's validate() method is manually called or when the wrapper QForm submits itself",
+      "values": [
+        "(Boolean) true",
+        "(Boolean) false",
+        "ondemand"
+      ],
+      "category": "behavior",
+      "desc_cn": "如果设置为布尔值 true，则仅在字段第一次失去焦点后，根据 'rules' 检查验证状态；如果设置为 'ondemand'，则只有在手动调用组件的 validate() 方法或者当包装器 QForm 提交自身时才会触发。"
+    },
+    "label": {
+      "type": "String",
+      "desc": "A text label that will “float” up above the input field, once the field gets focus",
+      "examples": [
+        "Username"
+      ],
+      "category": "content",
+      "desc_cn": "输入框获得焦点后，会在输入字段上方“浮动”显示的文本标签"
+    },
+    "stack-label": {
+      "type": "Boolean",
+      "desc": "Label will be always shown above the field regardless of field content (if any)",
+      "category": "content",
+      "desc_cn": "标签将始终显示在字段上方，无论字段内容如何（如果有的话）"
+    },
+    "hint": {
+      "type": "String",
+      "desc": "Helper (hint) text which gets placed below your wrapped form component",
+      "examples": [
+        "Fill in between 3 and 12 characters"
+      ],
+      "category": "content",
+      "desc_cn": "包装的表单组件下方显示的辅助（提示）文本"
+    },
+    "hide-hint": {
+      "type": "Boolean",
+      "desc": "Hide the helper (hint) text when field doesn't have focus",
+      "category": "content",
+      "desc_cn": "当字段没有焦点时隐藏辅助（提示）文本"
+    },
+    "prefix": {
+      "type": "String",
+      "desc": "Prefix",
+      "examples": [
+        "$"
+      ],
+      "category": "content",
+      "desc_cn": "前缀"
+    },
+    "suffix": {
+      "type": "String",
+      "desc": "Suffix",
+      "examples": [
+        "@gmail.com"
+      ],
+      "category": "content",
+      "desc_cn": "后缀"
+    },
+    "label-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for the label from the Quasar Color Palette; Overrides the 'color' prop; The difference from 'color' prop is that the label will always have this color, even when field is not focused",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "从 Quasar 颜色调色板中选择的标签颜色名称；覆盖 'color' 属性；与 'color' 属性的区别在于，即使字段没有聚焦，标签也始终具有此颜色。"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的颜色名称"
+    },
+    "bg-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的颜色名称"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "设置组件背景颜色为深色"
+    },
+    "loading": {
+      "type": "Boolean",
+      "desc": "Signals the user a process is in progress by displaying a spinner; Spinner can be customized by using the 'loading' slot.",
+      "category": "behavior|content",
+      "desc_cn": "通过显示一个旋转器来向用户表示进程正在进行中；可以使用 'loading' 插槽自定义旋转器。"
+    },
+    "clearable": {
+      "type": "Boolean",
+      "desc": "Appends clearable icon when a value (not undefined or null) is set; When clicked, model becomes null",
+      "category": "behavior|content",
+      "desc_cn": "当设置了一个值（不是 undefined 或 null）时，添加可清除的图标；点击后，model 数据变为 null"
+    },
+    "clear-icon": {
+      "type": "String",
+      "desc": "Custom icon to use for the clear button when using along with 'clearable' prop",
+      "examples": [
+        "close"
+      ],
+      "category": "content",
+      "desc_cn": "当与 'clearable' 属性一起使用时，用于清除按钮的自定义图标"
+    },
+    "filled": {
+      "type": "Boolean",
+      "desc": "Use 'filled' design for the field",
+      "category": "style",
+      "desc_cn": "为字段使用 'filled'（填充）设计"
+    },
+    "outlined": {
+      "type": "Boolean",
+      "desc": "Use 'outlined' design for the field",
+      "category": "style",
+      "desc_cn": "为字段使用 'outlined'（轮廓）设计"
+    },
+    "borderless": {
+      "type": "Boolean",
+      "desc": "Use 'borderless' design for the field",
+      "category": "style",
+      "desc_cn": "为字段使用 'borderless'（无边框）设计"
+    },
+    "standout": {
+      "type": [
+        "Boolean",
+        "String"
+      ],
+      "desc": "Use 'standout' design for the field; Specifies classes to be applied when focused (overriding default ones)",
+      "examples": [
+        "standout",
+        "standout=\"bg-primary text-white\""
+      ],
+      "category": "style",
+      "desc_cn": "为字段使用 'standout'（突出显示）设计；指定在焦点状态下应用的类（覆盖默认类）"
+    },
+    "label-slot": {
+      "type": "Boolean",
+      "desc": "Enables label slot; You need to set it to force use of the 'label' slot if the 'label' prop is not set",
+      "category": "content",
+      "desc_cn": "启用标签插槽；如果未设置 'label' 属性，则需要将其设置为强制使用 'label' 插槽。"
+    },
+    "bottom-slots": {
+      "type": "Boolean",
+      "desc": "Enables bottom slots ('error', 'hint', 'counter')",
+      "category": "content",
+      "desc_cn": "启用底部插槽（'error'，'hint'，'counter'）"
+    },
+    "hide-bottom-space": {
+      "type": "Boolean",
+      "desc": "Do not reserve space for hint/error/counter anymore when these are not used; As a result, it also disables the animation for those; It also allows the hint/error area to stretch vertically based on its content",
+      "category": "style",
+      "desc_cn": "不再在未使用提示/错误/计数器时保留空间；因此，这也禁用了这些部分的动画效果；它还允许提示/错误区域根据其内容垂直拉伸"
+    },
+    "counter": {
+      "type": "Boolean",
+      "desc": "Show an automatic counter on bottom right",
+      "category": "content",
+      "desc_cn": "在右下角显示一个自动计数器"
+    },
+    "rounded": {
+      "type": "Boolean",
+      "desc": "Applies a small standard border-radius for a squared shape of the component",
+      "category": "style",
+      "desc_cn": "为组件的方形形状应用了一个小的标准边框半径"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Remove border-radius so borders are squared; Overrides 'rounded' prop",
+      "category": "style",
+      "desc_cn": "移除边框半径以使边框变为方形；覆盖 'rounded' 属性"
+    },
+    "dense": {
+      "type": "Boolean",
+      "desc": "Dense mode; occupies less space",
+      "category": "style",
+      "desc_cn": "紧凑模式；占用较少空间"
+    },
+    "item-aligned": {
+      "type": "Boolean",
+      "desc": "Match inner content alignment to that of QItem",
+      "category": "style",
+      "desc_cn": "将内部内容的对齐方式与 QItem 的对齐方式匹配"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式中"
+    },
+    "readonly": {
+      "type": "Boolean",
+      "desc": "Put component in readonly mode",
+      "category": "state",
+      "desc_cn": "将组件置于只读模式中"
+    },
+    "autofocus": {
+      "type": "Boolean",
+      "desc": "Focus field on initial component render",
+      "category": "behavior",
+      "desc_cn": "在初始组件渲染时聚焦字段"
+    },
+    "for": {
+      "type": "String",
+      "desc": "Used to specify the 'id' of the control and also the 'for' attribute of the label that wraps it; If no 'name' prop is specified, then it is used for this attribute as well",
+      "examples": [
+        "myFieldsId"
+      ],
+      "category": "behavior",
+      "desc_cn": "用于指定控件的 'id'，同时也是包裹它的标签的 'for' 属性；如果未指定 'name' 属性，则也将用于此属性。"
+    },
+    "append": {
+      "type": "Boolean",
+      "desc": "Append file(s) to current model rather than replacing them; Has effect only when using 'multiple' mode",
+      "category": "behavior",
+      "desc_cn": "将文件添加到当前模型而不是替换它们；仅在使用 'multiple' 模式时有效"
+    },
+    "display-value": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Override default selection string, if not using 'file' or 'selected' scoped slots and if not using 'use-chips' prop",
+      "examples": [
+        "Options: x, y, z"
+      ],
+      "category": "selection",
+      "desc_cn": "如果没有使用 'file' 或 'selected' 作用域插槽，并且没有使用 'use-chips' 属性，则覆盖默认的选择字符串"
+    },
+    "use-chips": {
+      "type": "Boolean",
+      "desc": "Use QChip to show picked files",
+      "category": "selection",
+      "desc_cn": "使用 QChip 来显示选择的文件"
+    },
+    "counter-label": {
+      "type": "Function",
+      "desc": "Label for the counter; The 'counter' prop is necessary to enable this one",
+      "params": {
+        "props": {
+          "type": "Object",
+          "desc": "Object containing counter label information",
+          "definition": {
+            "totalSize": {
+              "type": "String",
+              "required": true,
+              "desc": "The total size of files in human readable format",
+              "examples": [
+                "1.42MB"
+              ],
+              "desc_cn": "文件的总大小，以人类可读的格式显示"
+            },
+            "filesNumber": {
+              "type": "Number",
+              "required": true,
+              "desc": "Number of picked files",
+              "desc_cn": "选择的文件数量"
+            },
+            "maxFiles": {
+              "type": [
+                "Number",
+                "String"
+              ],
+              "required": true,
+              "desc": "Maximum number of files (same as 'max-files' prop, if specified); When 'max-files' is not specified, this has 'void 0' as value",
+              "desc_cn": "最大文件数量（与 'max-files' 属性相同，如果指定的话）；当未指定 'max-files' 时，其值为 'void 0'"
+            }
+          },
+          "desc_cn": "包含计数器标签信息的对象"
+        }
+      },
+      "returns": {
+        "type": "String",
+        "desc": "String to display for the counter label",
+        "desc_cn": "计数器标签显示的字符串"
+      },
+      "examples": [
+        ":counter-label=\"counterLabelFn\""
+      ],
+      "category": "behavior",
+      "desc_cn": "计数器的标签；'counter' 属性是启用此功能所必需的。"
+    },
+    "tabindex": {
+      "type": [
+        "Number",
+        "String"
+      ],
+      "desc": "Tabindex HTML attribute value",
+      "examples": [
+        "0",
+        "100"
+      ],
+      "category": "general",
+      "desc_cn": "Tabindex HTML 属性的值"
+    },
+    "input-class": {
+      "type": [
+        "String",
+        "Array",
+        "Object"
+      ],
+      "tsType": "VueClassProp",
+      "desc": "Class definitions to be attributed to the underlying selection container",
+      "examples": [
+        "my-special-class",
+        ":input-class=\"{ 'my-special-class': <condition> }\""
+      ],
+      "category": "style",
+      "desc_cn": "用于标记底层选择容器的类定义"
+    },
+    "input-style": {
+      "type": [
+        "String",
+        "Array",
+        "Object"
+      ],
+      "tsType": "VueStyleProp",
+      "desc": "Style definitions to be attributed to the underlying selection container",
+      "examples": [
+        "background-color: #ff0000",
+        ":input-style=\"{ backgroundColor: '#ff0000' }\""
+      ],
+      "category": "style",
+      "desc_cn": "将样式定义归属于底层选择容器"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Field main content",
+      "desc_cn": "主要内容字段"
+    },
+    "prepend": {
+      "desc": "Prepend inner field; Suggestions: QIcon, QBtn",
+      "desc_cn": "在内部字段之前插入; 建议：QIcon，QBtn"
+    },
+    "append": {
+      "desc": "Append to inner field; Suggestions: QIcon, QBtn",
+      "desc_cn": "追加到内部字段；建议使用：QIcon、QBtn"
+    },
+    "before": {
+      "desc": "Prepend outer field; Suggestions: QIcon, QBtn",
+      "desc_cn": "在外部字段之前添加；建议使用：QIcon、QBtn"
+    },
+    "after": {
+      "desc": "Append outer field; Suggestions: QIcon, QBtn",
+      "desc_cn": "追加外部字段；建���使用：QIcon、QBtn"
+    },
+    "label": {
+      "desc": "Slot for label; Used only if 'label-slot' prop is set or the 'label' prop is set; When it is used the text in the 'label' prop is ignored",
+      "desc_cn": "标签的插槽；仅在设置了 'label-slot' 属性或者设置了 'label' 属性时使用；当使用插槽时，忽略 'label' 属性中的文本"
+    },
+    "error": {
+      "desc": "Slot for errors; Enabled only if 'bottom-slots' prop is used; Suggestion: <div>",
+      "desc_cn": "错误插槽；仅在使用 'bottom-slots' 属性时启用；建议使用：<div>"
+    },
+    "hint": {
+      "desc": "Slot for hint text; Enabled only if 'bottom-slots' prop is used; Suggestion: <div>",
+      "desc_cn": "提示文本的插槽；仅在使用 'bottom-slots' 属性时启用；建议使用：<div>"
+    },
+    "counter": {
+      "desc": "Slot for counter text; Enabled only if 'bottom-slots' prop is used; Suggestion: <div>",
+      "desc_cn": "计数器文本的插槽；仅在使用 'bottom-slots' 属性时启用；建议使用：<div>"
+    },
+    "loading": {
+      "desc": "Override default spinner when component is in loading mode; Use in conjunction with 'loading' prop",
+      "desc_cn": "在组件处于加载模式时覆盖默认的旋转器；与 'loading' 属性一起使用"
+    },
+    "file": {
+      "desc": "Override default node to render a file from the user picked list",
+      "scope": {
+        "index": {
+          "type": "Number",
+          "desc": "Selection index",
+          "desc_cn": "选择索引"
+        },
+        "file": {
+          "type": "File",
+          "desc": "File object",
+          "desc_cn": "文件对象"
+        },
+        "ref": {
+          "type": "Component",
+          "tsType": "QFile",
+          "desc": "Reference to the QFile component",
+          "desc_cn": "QFile 组件的引用"
+        }
+      },
+      "desc_cn": "覆盖默认节点以从用户选择的列表中渲染文件"
+    },
+    "selected": {
+      "desc": "Override default selection slot; Suggestion: QChip",
+      "scope": {
+        "files": {
+          "type": [
+            "FileList",
+            "Array"
+          ],
+          "desc": "Array of File objects",
+          "desc_cn": "文件对象数组"
+        },
+        "ref": {
+          "type": "Component",
+          "tsType": "QFile",
+          "desc": "Reference to the QFile component",
+          "desc_cn": "QFile 组件的引用"
+        }
+      },
+      "desc_cn": "覆盖默认的选择插槽；建议使用 QChip。"
+    }
+  },
+  "events": {
+    "rejected": {
+      "desc": "Emitted after files are picked and some do not pass the validation props (accept, max-file-size, max-total-size, filter, etc)",
+      "params": {
+        "rejectedEntries": {
+          "type": "Array",
+          "tsType": "QRejectedEntry",
+          "desc": "Array of { failedPropValidation: string, file: File } Objects for files that do not pass the validation",
+          "desc_cn": "不通过验证的文件的 { failedPropValidation: string, file: File } 对象数组"
+        }
+      },
+      "desc_cn": "在选择文件后，如果有些文件未通过验证属性（accept、max-file-size、max-total-size、filter 等）的检查，则会触发此事件。"
+    },
+    "clear": {
+      "desc": "When using the 'clearable' property, this event is emitted when the clear icon is clicked",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "The previous value before clearing it",
+          "desc_cn": "清除之前的值"
+        }
+      },
+      "desc_cn": "当使用 'clearable' 属性时，点击清除图标会触发此事件"
+    },
+    "update:model-value": {
+      "desc": "Emitted when the component needs to change the model; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "New model value",
+          "required": true,
+          "desc_cn": "新的模型值"
+        }
+      },
+      "desc_cn": "当组件需要更改模型时触发；也被 v-model 使用"
+    }
+  },
+  "methods": {
+    "pickFiles": {
+      "desc": "Trigger file pick; Must be called as a direct consequence of user interaction (eg. in a click handler), due to browsers security policy",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发文件选择；必须作为用户交互的直接结果调用（例如在点击处理程序中），因为浏览器安全策略。"
+    },
+    "addFiles": {
+      "desc": "Add files programmatically",
+      "params": {
+        "files": {
+          "type": [
+            "FileList",
+            "Array"
+          ],
+          "desc": "Array of files (instances of File)",
+          "required": true,
+          "desc_cn": "文件数组（File 的实例）"
+        }
+      },
+      "desc_cn": "以编程方式添加文件"
+    },
+    "resetValidation": {
+      "desc": "Reset validation status",
+      "desc_cn": "重置验证状态"
+    },
+    "validate": {
+      "desc": "Trigger a validation",
+      "params": {
+        "value": {
+          "type": "Any",
+          "desc": "Optional value to validate against",
+          "desc_cn": "可选的值进行验证"
+        }
+      },
+      "returns": {
+        "type": [
+          "Boolean",
+          "Promise<boolean>"
+        ],
+        "desc": "True/false if no async rules, otherwise a Promise with the outcome (true -> validation was a success, false -> invalid models detected)",
+        "examples": [
+          "true",
+          "validate().then(outcome => { ... })"
+        ],
+        "desc_cn": "如果没有异步规则，则为 true/false，否则为一个带有结果的 Promise（true -> 验证成功，false -> 检测到无效模型）"
+      },
+      "desc_cn": "触发验证"
+    },
+    "focus": {
+      "desc": "Focus component",
+      "desc_cn": "聚焦组件"
+    },
+    "blur": {
+      "desc": "Blur component (lose focus)",
+      "desc_cn": "模糊（失去焦点）组件"
+    },
+    "removeAtIndex": {
+      "desc": "Remove file located at specific index in the model",
+      "params": {
+        "index": {
+          "type": "Number",
+          "desc": "Index at which to remove selection",
+          "required": true,
+          "desc_cn": "要删除选择的索引位置"
+        }
+      },
+      "desc_cn": "从模型中删除位于特定索引处的文件"
+    },
+    "removeFile": {
+      "desc": "Remove specified file from the model",
+      "params": {
+        "file": {
+          "type": "File",
+          "desc": "File to remove (instance of File)",
+          "required": true,
+          "desc_cn": "要删除的文件（File 的实例）"
+        }
+      },
+      "desc_cn": "从模型中删除指定的文件"
+    },
+    "getNativeElement": {
+      "desc": "DEPRECATED; Access 'nativeEl' directly; Gets the native input DOM Element",
+      "returns": {
+        "type": "Element",
+        "tsType": "QFileNativeElement",
+        "desc": "The underlying native input DOM Element",
+        "desc_cn": "底层的原生输入 DOM 元素"
+      },
+      "desc_cn": "已弃用；直接访问 'nativeEl' 属性；获取原生输入 DOM 元素"
+    }
+  },
+  "computedProps": {
+    "hasError": {
+      "type": "Boolean",
+      "desc": "Whether the component is in error state",
+      "desc_cn": "组件是否处于错误状态"
+    },
+    "nativeEl": {
+      "type": "Element",
+      "tsType": "QFileNativeElement",
+      "desc": "The native input DOM Element",
+      "addedIn": "v2.10.1",
+      "desc_cn": "原生的输入 DOM 元素"
+    }
+  }
+}

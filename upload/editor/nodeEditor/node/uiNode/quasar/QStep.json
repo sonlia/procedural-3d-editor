@@ -1,0 +1,136 @@
+{
+  "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567801",
+  "treePath": "ui/quasar",
+  "name": "QStep",
+  "importStr": "import { QStep } from \"quasar\"",
+  "tag": "QStep",
+  "parentMustBe": ["QStepper"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/stepper"
+  },
+  "props": {
+    "name": {
+      "type": ["Any"],
+      "desc": "Panel name",
+      "required": true,
+      "examples": ["accounts-panel", "mail-panel"],
+      "category": "general",
+      "desc_cn": "面板名称"
+    },
+    "disable": {
+      "type": "Boolean",
+      "desc": "Put component in disabled mode",
+      "category": "state",
+      "desc_cn": "将组件置于禁用模式"
+    },
+    "icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention",
+      "examples": ["map", "ion-add"],
+      "category": "content",
+      "desc_cn": "遵循 Quasar 规范的图标名称"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": ["primary", "teal", "teal-10"],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的组件颜色名称"
+    },
+    "title": {
+      "type": "String",
+      "desc": "Step title",
+      "required": true,
+      "examples": ["Ad Groups"],
+      "category": "content",
+      "desc_cn": "步骤标题"
+    },
+    "caption": {
+      "type": "String",
+      "desc": "Step's additional information that appears beneath the title",
+      "examples": ["Create an ad group"],
+      "category": "content",
+      "desc_cn": "显示在标题下方的步骤附加信息"
+    },
+    "prefix": {
+      "type": ["String", "Number"],
+      "desc": "Step's prefix (max 2 characters) which replaces the icon if step doesn't have error, is not complete or is being edited. If not given, the icon or the step number (based on position) will be used.",
+      "examples": ["1", "A"],
+      "category": "content",
+      "desc_cn": "步骤的前缀（最多2个字符），在步骤无错误、未完成或正在编辑时替代图标。如果未提供，则使用图标或步骤编号。"
+    },
+    "done-icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix",
+      "examples": ["map", "ion-add"],
+      "category": "header",
+      "desc_cn": "遵循 Quasar 规范的图标名称，步骤完成时显示"
+    },
+    "done-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette (to be used when step is done)",
+      "examples": ["primary", "teal"],
+      "category": "header",
+      "desc_cn": "步骤完成时的颜色名称"
+    },
+    "active-icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix",
+      "examples": ["map", "ion-add"],
+      "category": "header",
+      "desc_cn": "步骤激活时的图标名称"
+    },
+    "active-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette (to be used when step is active)",
+      "examples": ["primary", "teal"],
+      "category": "header",
+      "desc_cn": "步骤激活时的颜色名称"
+    },
+    "error-icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix",
+      "examples": ["map", "ion-add"],
+      "category": "header",
+      "desc_cn": "步骤出错时的图标名称"
+    },
+    "error-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette (to be used when step has error)",
+      "examples": ["primary", "teal"],
+      "category": "header",
+      "desc_cn": "步骤出错时的颜色名称"
+    },
+    "header-nav": {
+      "type": "Boolean",
+      "desc": "Allow navigation through the header",
+      "default": true,
+      "category": "behavior",
+      "desc_cn": "允许通过点击头部导航"
+    },
+    "done": {
+      "type": "Boolean",
+      "desc": "Mark the step as 'done'",
+      "category": "state",
+      "desc_cn": "将步骤标记为已完成"
+    },
+    "error": {
+      "type": "Boolean",
+      "desc": "Mark the step as having an error",
+      "category": "state",
+      "desc_cn": "将步骤标记为有错误"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "The content of the step; Can also contain a QStepperNavigation if you want to handle that specific step differently",
+      "desc_cn": "步骤的内容；如果需要对特定步骤进行不同处理，也可以包含 QStepperNavigation"
+    }
+  },
+  "events": {}
+}

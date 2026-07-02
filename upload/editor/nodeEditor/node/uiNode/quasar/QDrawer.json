@@ -1,0 +1,338 @@
+{
+  "id": "8C63F95B-D25F-BE78-8B48-8F10C0F5470D",
+  "treePath": "ui/quasar",
+  "name": "QDrawer",
+  "importStr": "import { QDrawer } from \"quasar\"",
+  "tag": "QDrawer",
+  "parentMustBe": ["QLayout"],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/layout/drawer",
+    "editorBehavior": {
+      "mode": "forceRender",
+      "propsOverride": { "model-value": true, "overlay": false }
+    },
+    "editorConfig": {
+      "width": {
+        "type": "String",
+        "default": "300px"
+      },
+      "height": {
+        "type": "String",
+        "default": "100%"
+      }
+    }
+  },
+  "props": {
+    "model-value": {
+      "type": "Boolean",
+      "desc": "Model of the component defining shown/hidden state; Either use this property (along with a listener for 'update:model-value' event) OR use v-model directive",
+      "category": "model",
+      "desc_cn": "此组件的 model 数据，控制组件显示/隐藏的状态。可使用此属性（搭配一个 'update:model-value' 监听事件）或者直接使用 v-model 指令。"
+    },
+    "side": {
+      "type": "String",
+      "desc": "Side to attach to",
+      "values": [
+        "left",
+        "right"
+      ],
+      "default": "left",
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "要附加到的一侧"
+    },
+    "overlay": {
+      "type": "Boolean",
+      "desc": "Puts drawer into overlay mode (does not occupy space on screen, narrowing the page)",
+      "category": "behavior",
+      "desc_cn": "将侧滑菜单置于覆盖（overlay）模式（不占用屏幕空间，缩小页面）"
+    },
+    "width": {
+      "type": "Number",
+      "desc": "Width of drawer (in pixels)",
+      "default": 300,
+      "examples": [
+        ":width=\"350\""
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "侧滑菜单宽度（像素）"
+    },
+    "mini": {
+      "type": "Boolean",
+      "desc": "Puts drawer into mini mode",
+      "category": "behavior",
+      "desc_cn": "将侧滑菜单置于迷你（mini）模式"
+    },
+    "mini-width": {
+      "type": "Number",
+      "desc": "Width of drawer (in pixels) when in mini mode",
+      "default": 60,
+      "examples": [
+        ":mini-width=\"100\""
+      ],
+      "category": "style",
+      "required": false,
+      "desc_cn": "处于迷你（mini）模式时侧滑菜单的宽度（像素）"
+    },
+    "mini-to-overlay": {
+      "type": "Boolean",
+      "desc": "Mini mode will expand as an overlay",
+      "category": "behavior",
+      "desc_cn": "迷你模式将扩展为覆盖（overlay）"
+    },
+    "no-mini-animation": {
+      "type": "Boolean",
+      "desc": "Disables animation of the drawer when toggling mini mode",
+      "category": "behavior",
+      "addedIn": "v2.12.0",
+      "desc_cn": "当抽屉切换到 mini 模式时禁用动画"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "设置组件背景为深色"
+    },
+    "breakpoint": {
+      "type": "Number",
+      "desc": "Breakpoint (in pixels) of layout width up to which mobile mode is used",
+      "default": 1023,
+      "examples": [
+        1200,
+        ":breakpoint=\"1400\""
+      ],
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "使用移动模式的布局宽度的断点（像素）"
+    },
+    "behavior": {
+      "type": "String",
+      "desc": "Overrides the default dynamic mode into which the drawer is put on",
+      "values": [
+        "default",
+        "desktop",
+        "mobile"
+      ],
+      "default": "default",
+      "category": "behavior",
+      "required": false,
+      "desc_cn": "重写侧滑菜单默认的动态模式。"
+    },
+    "bordered": {
+      "type": "Boolean",
+      "desc": "Applies a default border to the component",
+      "category": "style",
+      "desc_cn": "将默认边框应用于组件"
+    },
+    "elevated": {
+      "type": "Boolean",
+      "desc": "Adds a default shadow to the header",
+      "category": "style",
+      "desc_cn": "向头部添加默认阴影"
+    },
+    "persistent": {
+      "type": "Boolean",
+      "desc": "Prevents drawer from auto-closing when app's route changes; Also, an app route change won't hide it",
+      "category": "behavior",
+      "desc_cn": "当应用程序的路由改变时防止侧滑菜单自动关闭。同时路由切换也不会关闭它"
+    },
+    "show-if-above": {
+      "type": "Boolean",
+      "desc": "Forces drawer to be shown on screen on initial render if the layout width is above breakpoint, regardless of v-model; This is the default behavior when SSR is taken over by client on initial render",
+      "category": "behavior",
+      "desc_cn": "如果布局宽度高于断点，则强制侧滑菜单在初始渲染时显示在屏幕上，而不考虑 v-model；这是初始渲染时客户端接管 SSR 时的默认行为"
+    },
+    "no-swipe-open": {
+      "type": "Boolean",
+      "desc": "Disables the default behavior where drawer can be swiped into view; Useful for iOS platforms where it might interfere with Safari's 'swipe to go to previous/next page' feature",
+      "category": "behavior",
+      "desc_cn": "禁用侧滑菜单可以滑入视图的默认行为；对于可能干扰 Safari “滑动到上一页/下一页” 功能的 iOS 平台非常有用"
+    },
+    "no-swipe-close": {
+      "type": "Boolean",
+      "desc": "Disables the default behavior where drawer can be swiped out of view (applies to drawer content only); Useful for iOS platforms where it might interfere with Safari's 'swipe to go to previous/next page' feature",
+      "category": "behavior",
+      "desc_cn": "禁用侧滑菜单可以从视图中滑出的默认行为（仅适用于侧滑菜单内容）；对于可能干扰 Safari “滑动到上一页/下一页”功能的 iOS 平台非常有用"
+    },
+    "no-swipe-backdrop": {
+      "type": "Boolean",
+      "desc": "Disables the default behavior where drawer backdrop can be swiped",
+      "category": "behavior",
+      "desc_cn": "禁用滑动侧滑背景幕布可以被滑动的默认行为。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component (overridden by 'mini' slot if used and drawer is in mini mode)",
+      "desc_cn": "组件的默认插槽（如果已使用且侧滑菜单处于迷你模式，则由 'mini' 插槽覆盖）"
+    },
+    "mini": {
+      "desc": "Content to show when in mini mode (overrides 'default' slot)",
+      "desc_cn": "处于迷你模式时要显示的内容（覆盖 'default' 插槽）"
+    }
+  },
+  "events": {
+    "update:model-value": {
+      "desc": "Emitted when showing/hidden state changes; Is also used by v-model",
+      "params": {
+        "value": {
+          "type": "Boolean",
+          "desc": "New state (showing/hidden)",
+          "desc_cn": "新的状态（显示/隐藏）"
+        }
+      },
+      "desc_cn": "当前显示/隐藏的状态切换时触发，也会被 v-model 使用"
+    },
+    "show": {
+      "desc": "Emitted after component has triggered show()",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 show() 后触发"
+    },
+    "before-show": {
+      "desc": "Emitted when component triggers show() but before it finishes doing it",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 show() 之前触发"
+    },
+    "hide": {
+      "desc": "Emitted after component has triggered hide()",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 hide() 后触发"
+    },
+    "before-hide": {
+      "desc": "Emitted when component triggers hide() but before it finishes doing it",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS事件对象"
+        }
+      },
+      "desc_cn": "在组件触发 hide() 之前触发"
+    },
+    "on-layout": {
+      "desc": "Emitted when drawer toggles between occupying space on page or not",
+      "params": {
+        "state": {
+          "type": "Boolean",
+          "desc": "New state",
+          "desc_cn": "新状态"
+        }
+      },
+      "desc_cn": "当侧滑菜单在页面上占用空间或不占用空间之间切换时触发。"
+    },
+    "click": {
+      "desc": "Emitted when user clicks/taps on the component and drawer is NOT in mobile mode; Useful for when taking a decision to toggle mini mode",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "当用户在组件上单击/轻触且侧滑菜单不处于移动模式时触发；有助于切换迷你模式的决策"
+    },
+    "mouseover": {
+      "desc": "Emitted when user moves mouse cursor over the component and drawer is NOT in mobile mode; Useful for when taking a decision to toggle mini mode",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "当用户将鼠标光标移到组件上且侧滑菜单不处于移动模式时触发；有助于切换迷你模式的决策"
+    },
+    "mouseout": {
+      "desc": "Emitted when user moves mouse cursor out of the component and drawer is NOT in mobile mode; Useful for when taking a decision to toggle mini mode",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": true,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "当用户将鼠标光标移出组件且侧滑菜单不处于移动模式时触发；有助于切换迷你模式的决策"
+    },
+    "mini-state": {
+      "desc": "Emitted when drawer changes the mini-mode state (sometimes it is forced to do so)",
+      "params": {
+        "state": {
+          "type": "Boolean",
+          "desc": "New state",
+          "desc_cn": "新状态"
+        }
+      },
+      "desc_cn": "侧滑菜单切换迷你模式的状态时触发（有时强制执行）"
+    }
+  },
+  "methods": {
+    "show": {
+      "desc": "Triggers component to show",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发组件显示"
+    },
+    "hide": {
+      "desc": "Triggers component to hide",
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc_cn": "触发组件隐藏"
+    },
+    "toggle": {
+      "params": {
+        "evt": {
+          "type": "Event",
+          "desc": "JS event object",
+          "required": false,
+          "desc_cn": "JS 事件对象"
+        }
+      },
+      "desc": "Triggers component to toggle between show/hide",
+      "desc_cn": "触发组件在显示/隐藏之间切换"
+    }
+  }
+}

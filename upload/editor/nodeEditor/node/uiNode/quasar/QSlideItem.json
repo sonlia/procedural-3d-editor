@@ -1,0 +1,257 @@
+{
+  "id": "D73E09E2-9FED-ACC2-5E71-85FDAF41DE79",
+  "treePath": "ui/quasar",
+  "name": "QSlideItem",
+  "importStr": "import { QSlideItem } from \"quasar\"",
+  "tag": "QSlideItem",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/slide-item"
+  },
+  "props": {
+    "left-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for left-side background from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "Quasar 颜色调色板中左侧背景的颜色名称"
+    },
+    "right-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for right-side background from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "来自 Quasar 颜色调色板的右侧背景颜色名称"
+    },
+    "top-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for top-side background from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "Quasar 颜色调色板中用于顶部背景的颜色名称"
+    },
+    "bottom-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for bottom-side background from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "Quasar 颜色调色板中底部背景的颜色名称"
+    },
+    "dark": {
+      "type": [
+        "Boolean",
+        "null"
+      ],
+      "default": null,
+      "desc": "Notify the component that the background is a dark color",
+      "category": "style",
+      "required": false,
+      "desc_cn": "通知组件背景颜色为深色"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "This is where item's sections go; Suggestion: QItemSection",
+      "desc_cn": "这是项目的部分所在的位置；建议使用：QItemSection"
+    },
+    "left": {
+      "desc": "Left side content when sliding",
+      "desc_cn": "滑动时的左侧内容"
+    },
+    "right": {
+      "desc": "Right side content when sliding",
+      "desc_cn": "滑动时的右侧内容"
+    },
+    "top": {
+      "desc": "Top side content when sliding",
+      "desc_cn": "滑动时的顶部侧边内容"
+    },
+    "bottom": {
+      "desc": "Bottom side content when sliding",
+      "desc_cn": "滑动时底部的侧边内容"
+    }
+  },
+  "events": {
+    "left": {
+      "desc": "Emitted when user finished sliding the item to the left",
+      "params": {
+        "details": {
+          "type": "Object",
+          "desc": "Details",
+          "definition": {
+            "reset": {
+              "type": "Function",
+              "required": true,
+              "desc": "When called, it resets the component to its initial non-slided state",
+              "params": null,
+              "returns": null,
+              "desc_cn": "当调用时，它将组件重置为初始的非滑动状态。"
+            }
+          },
+          "desc_cn": "详情"
+        }
+      },
+      "desc_cn": "用户将项目向左滑动完成时触发"
+    },
+    "right": {
+      "desc": "Emitted when user finished sliding the item to the right",
+      "params": {
+        "details": {
+          "type": "Object",
+          "desc": "Details",
+          "definition": {
+            "reset": {
+              "type": "Function",
+              "required": true,
+              "desc": "When called, it resets the component to its initial non-slided state",
+              "params": null,
+              "returns": null,
+              "desc_cn": "当调用时，它将组件重置为初始的非滑动状��。"
+            }
+          },
+          "desc_cn": "详情"
+        }
+      },
+      "desc_cn": "用户将项目向右滑动完成时触发"
+    },
+    "top": {
+      "desc": "Emitted when user finished sliding the item up",
+      "params": {
+        "details": {
+          "type": "Object",
+          "desc": "Details",
+          "definition": {
+            "reset": {
+              "type": "Function",
+              "required": true,
+              "desc": "When called, it resets the component to its initial non-slided state",
+              "params": null,
+              "returns": null,
+              "desc_cn": "当调用时，它将组件重置为初始的非滑动状态。"
+            }
+          },
+          "desc_cn": "详情"
+        }
+      },
+      "desc_cn": "用户完成向上滑动项目时触发"
+    },
+    "bottom": {
+      "desc": "Emitted when user finished sliding the item down",
+      "params": {
+        "details": {
+          "type": "Object",
+          "desc": "Details",
+          "definition": {
+            "reset": {
+              "type": "Function",
+              "required": true,
+              "desc": "When called, it resets the component to its initial non-slided state",
+              "params": null,
+              "returns": null,
+              "desc_cn": "当调用时，它将组件重置为初始的非滑动状态。"
+            }
+          },
+          "desc_cn": "详情"
+        }
+      },
+      "desc_cn": "用户完成向下滑动项目时触发"
+    },
+    "slide": {
+      "desc": "Emitted while user is sliding the item to one of the available sides",
+      "params": {
+        "details": {
+          "type": "Object",
+          "desc": "Details",
+          "definition": {
+            "side": {
+              "type": "String",
+              "required": true,
+              "desc": "Side to which sliding is taking effect",
+              "values": [
+                "left",
+                "right",
+                "top",
+                "bottom"
+              ],
+              "desc_cn": "滑动效果生效的侧边栏"
+            },
+            "ratio": {
+              "type": "Number",
+              "required": true,
+              "desc": "Ratio of how much of the required slide was performed (0 <= x <= 1)",
+              "desc_cn": "所需幻灯片完成的比例（0 <= x <= 1）"
+            },
+            "isReset": {
+              "type": "Boolean",
+              "required": true,
+              "desc": "Ratio has been reset",
+              "desc_cn": "比例已重置"
+            }
+          },
+          "desc_cn": "详情"
+        }
+      },
+      "desc_cn": "用户将项目滑动到可用侧面时触发"
+    },
+    "action": {
+      "desc": "Emitted when user finished sliding the item to either sides",
+      "params": {
+        "details": {
+          "type": "Object",
+          "desc": "Details",
+          "definition": {
+            "side": {
+              "type": "String",
+              "required": true,
+              "desc": "Side to which sliding has taken effect",
+              "values": [
+                "left",
+                "right",
+                "top",
+                "bottom"
+              ],
+              "desc_cn": "滑动效果生效的侧边栏"
+            },
+            "reset": {
+              "type": "Function",
+              "required": true,
+              "desc": "When called, it resets the component to its initial non-slided state",
+              "params": null,
+              "returns": null,
+              "desc_cn": "当调用时，它将组件重置为初始的非滑动状态。"
+            }
+          },
+          "desc_cn": "详情"
+        }
+      },
+      "desc_cn": "当用户完成将项目滑动到两侧时触发"
+    }
+  },
+  "methods": {
+    "reset": {
+      "desc": "Reset to initial state (not swiped to any side)",
+      "desc_cn": "重置为初始状态（未向任何一侧滑动）"
+    }
+  }
+}

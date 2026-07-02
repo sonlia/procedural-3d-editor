@@ -1,0 +1,90 @@
+{
+  "id": "6CDD6713-8EAC-E4B9-1EE3-47AE692CD26D",
+  "treePath": "ui/quasar",
+  "name": "QAvatar",
+  "importStr": "import { QAvatar } from \"quasar\"",
+  "tag": "QAvatar",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/avatar"
+  },
+  "props": {
+    "size": {
+      "type": "String",
+      "desc": "Size in CSS units, including unit name or standard size name (xs|sm|md|lg|xl)",
+      "examples": [
+        "16px",
+        "2rem",
+        "xs",
+        "md"
+      ],
+      "category": "style",
+      "desc_cn": "带有 CSS 单位的尺寸大小，包括单位的名称或标准大小名称（xs | sm | md | lg | xl）"
+    },
+    "font-size": {
+      "type": "String",
+      "desc": "The size in CSS units, including unit name, of the content (icon, text)",
+      "examples": [
+        "18px",
+        "2rem"
+      ],
+      "category": "style",
+      "desc_cn": "内容（图标、文本）的大小（CSS 单位），包括单位名称"
+    },
+    "color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Color name for component from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "组件的颜色，来自 Quasar 调色板的颜色名称"
+    },
+    "text-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "Overrides text color (if needed); Color name from the Quasar Color Palette",
+      "examples": [
+        "primary",
+        "teal",
+        "teal-10"
+      ],
+      "category": "style",
+      "desc_cn": "覆盖文本颜色（如果需要）；来自 Quasar 调色板的颜色名称"
+    },
+    "icon": {
+      "type": "String",
+      "desc": "Icon name following Quasar convention; Make sure you have the icon library installed unless you are using 'img:' prefix; If 'none' (String) is used as value then no icon is rendered (but screen real estate will still be used for it)",
+      "examples": [
+        "map",
+        "ion-add",
+        "img:https://cdn.quasar.dev/logo-v2/svg/logo.svg",
+        "img:path/to/some_image.png"
+      ],
+      "category": "content",
+      "desc_cn": "图标的名称，需确保已经安装了相关的图标库，除非使用了 'img:' 前缀来引用本地的图片，如果设置为 'none'，则不会渲染图标"
+    },
+    "square": {
+      "type": "Boolean",
+      "desc": "Removes border-radius so borders are squared",
+      "category": "style",
+      "desc_cn": "删除边框圆角（border-radius），使边框为正方形"
+    },
+    "rounded": {
+      "type": "Boolean",
+      "desc": "Applies a small standard border-radius for a squared shape of the component",
+      "category": "style",
+      "desc_cn": "为组件应用较小标准的边框圆角（border-radius）"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Optional; Suggestions: one character string, <img> tag",
+      "desc_cn": "可选。建议：一个字符串，<img> 标签"
+    }
+  }
+}

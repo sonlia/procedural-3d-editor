@@ -1,0 +1,90 @@
+{
+  "id": "4466AB0D-C3FD-C40D-055B-D0AEC41AB47C",
+  "treePath": "ui/quasar",
+  "name": "QParallax",
+  "importStr": "import { QParallax } from \"quasar\"",
+  "tag": "QParallax",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/parallax"
+  },
+  "props": {
+    "src": {
+      "type": "String",
+      "desc": "Path to image (unless a 'media' slot is used)",
+      "transformAssetUrls": true,
+      "examples": [
+        "(public folder) src=\"img/something.png\"",
+        "(assets folder) src=\"~assets/my-img.png\"",
+        "(relative path format) :src=\"require('./my_img.jpg')\"",
+        "(URL) src=\"https://some-site.net/some-img.jpg\""
+      ],
+      "category": "model",
+      "desc_cn": "图片的路径（除非使用了 'media' 插槽）"
+    },
+    "height": {
+      "type": "Number",
+      "desc": "Height of component (in pixels)",
+      "default": 500,
+      "category": "style",
+      "required": false,
+      "desc_cn": "组件的高度（以像素为单位）"
+    },
+    "speed": {
+      "type": "Number",
+      "desc": "Speed of parallax effect (0.0 < x < 1.0)",
+      "category": "behavior",
+      "desc_cn": "视差效果的速度（0.0 < x < 1.0）"
+    },
+    "scroll-target": {
+      "type": [
+        "Element",
+        "String"
+      ],
+      "desc": "CSS selector or DOM element to be used as a custom scroll container instead of the auto detected one",
+      "examples": [
+        ":scroll-target=\"$refs.scrollTarget\"",
+        "scroll-target=\".scroll-target-class\"",
+        "scroll-target=\"#scroll-target-id\"",
+        "scroll-target=\"body\""
+      ],
+      "category": "behavior",
+      "desc_cn": "用作自定义滚动容器的 CSS 选择器或 DOM 元素，而不是自动检测到的容器。"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot can be used for content that gets displayed on top of the component",
+      "desc_cn": "默认插槽可用于在组件顶部显示的内容。"
+    },
+    "media": {
+      "desc": "Slot for describing <img> or <video> tags",
+      "desc_cn": "用于描述 <img> 或 <video> 标签的插槽"
+    },
+    "content": {
+      "desc": "Scoped slot for describing content that gets displayed on top of the component; If specified, it overrides the default slot",
+      "scope": {
+        "percentScrolled": {
+          "type": "Number",
+          "desc": "Percentage (0.0 < x < 1.0) of scroll in regards to QParallax",
+          "desc_cn": "相对于 QParallax 的滚动百分比（0.0 < x < 1.0）"
+        }
+      },
+      "desc_cn": "用于描述显示在组件顶部的内容的作用域插槽；如果指定了，则会覆盖默认插槽。"
+    }
+  },
+  "events": {
+    "scroll": {
+      "desc": "Emitted when scrolling occurs",
+      "params": {
+        "percentage": {
+          "type": "Number",
+          "desc": "Number between 0.0 and 1.0 defining the scrolled percentage of the component",
+          "desc_cn": "0.0 到 1.0 之间的数字，用于定义组件滚动的百分比"
+        }
+      },
+      "desc_cn": "滚动发生时触发"
+    }
+  }
+}

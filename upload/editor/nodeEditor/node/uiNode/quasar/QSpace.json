@@ -1,0 +1,12 @@
+{
+  "id": "08F9288B-C5EF-FE7A-D575-83BF39ED153C",
+  "treePath": "ui/quasar",
+  "name": "QSpace",
+  "importStr": "import { QSpace } from \"quasar\"",
+  "tag": "QSpace",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/space"
+  }
+}

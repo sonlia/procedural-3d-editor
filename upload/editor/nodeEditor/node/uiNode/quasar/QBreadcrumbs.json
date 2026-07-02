@@ -1,0 +1,69 @@
+{
+  "id": "235CF311-6904-9569-9838-B303F87E46E9",
+  "treePath": "ui/quasar",
+  "name": "QBreadcrumbs",
+  "importStr": "import { QBreadcrumbs } from \"quasar\"",
+  "tag": "QBreadcrumbs",
+  "parentMustBe": [],
+  "type": "component",
+  "meta": {
+    "docsUrl": "https://v2.quasar.dev/vue-components/breadcrumbs"
+  },
+  "props": {
+    "separator": {
+      "type": "String",
+      "desc": "The string used to separate the breadcrumbs",
+      "default": "/",
+      "examples": ["-", "|", ">"],
+      "category": "content",
+      "required": false,
+      "desc_cn": "用来分割面包屑的字符串"
+    },
+    "active-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "The color of the active breadcrumb, which can be any color from the Quasar Color Palette",
+      "examples": ["primary", "teal", "teal-10"],
+      "category": "style",
+      "default": "primary",
+      "required": false,
+      "desc_cn": "被激活的面包屑的颜色，可以是 Quasar 调色板中的任何颜色"
+    },
+    "gutter": {
+      "type": "String",
+      "desc": "The gutter value allows you control over the space between the breadcrumb elements.",
+      "default": "sm",
+      "values": ["none", "xs", "sm", "md", "lg", "xl"],
+      "category": "content",
+      "required": false,
+      "desc_cn": "gutter 值控制面包屑元素之间的间隔。"
+    },
+    "separator-color": {
+      "type": "String",
+      "tsType": "NamedColor",
+      "desc": "The color used to color the separator, which can be any color from the Quasar Color Palette",
+      "examples": ["primary", "teal", "teal-10"],
+      "category": "style",
+      "desc_cn": "设置分隔符的颜色，可以是 Quasar 调色板中的任何颜色"
+    },
+    "align": {
+      "type": "String",
+      "default": "left",
+      "desc": "Specify how to align the breadcrumbs horizontally",
+      "values": ["left", "center", "right", "between", "around", "evenly"],
+      "category": "content",
+      "required": false,
+      "desc_cn": "设置面包屑的水平对齐方式"
+    }
+  },
+  "slots": {
+    "default": {
+      "desc": "Default slot in the devland unslotted content of the component",
+      "desc_cn": "组件的默认插槽"
+    },
+    "separator": {
+      "desc": "HTML or component you can slot in to separate the breadcrumbs",
+      "desc_cn": "HTML 或 组件，用于自定义分隔符插槽"
+    }
+  }
+}
