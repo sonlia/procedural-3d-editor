@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
 import { Snapper, flipNormals, mirrorGeometry } from "@/lib/editor/snapping.js";
+import { MeshEditor } from "@/lib/editor/meshEdit/index.js";
 // All Three.js model loaders (one per format in MODEL_FORMATS)
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
@@ -40,7 +41,8 @@ export function Viewport() {
   const [boxSelectRect, setBoxSelectRect] = useState({ visible: false });
   const [uiState, setUiState] = useState({ dropdown: null });
   const [snapEnabled, setSnapEnabled] = useState(false);
-  const [activeTool, setActiveTool] = useState("select"); // select|move|rotate|scale
+  const [activeTool, setActiveTool] = useState("select");
+  const [editMode, setEditMode] = useState("object"); // object|face|vertex|edge
 
   const displayMode = useEditor((s) => s.displayMode);
   const gizmoMode = useEditor((s) => s.gizmoMode);
@@ -65,6 +67,7 @@ export function Viewport() {
   const defaultLightRef = useRef(null); // auto-managed default lights
   const axesGizmoRef = useRef(null); // corner axes gizmo preview
   const snapperRef = useRef(null); // vertex snapping helper
+  const meshEditorRef = useRef(null); // mesh edit (face/vertex/edge selection)
   const boxSelectStateRef = useRef({ active: false, startX: 0, startY: 0, shift: false });
   const loadersRef = useRef({});
   const navRef = useRef({
@@ -137,6 +140,9 @@ export function Viewport() {
 
     // ---- snapper ----
     snapperRef.current = new Snapper();
+
+    // ---- mesh editor ----
+    meshEditorRef.current = new MeshEditor(scene);
 
     const defaultDirLight = new THREE.DirectionalLight(0xffffff, 1.0);
     defaultDirLight.position.set(5, 8, 4);
@@ -300,11 +306,19 @@ export function Viewport() {
       const store = useEditor.getState();
       const isShift = e.shiftKey;
 
+      // Edit mode (face/vertex/edge)
+      if (store.editMode !== "object" && meshEditorRef.current) {
+        const result = meshEditorRef.current.onClick(ray, isShift);
+        if (result) {
+          store.setSelectedElements(result.indices);
+          return;
+        }
+      }
+
       // Object mode: select whole mesh/group
       const intersects = ray.intersectObject(userGroup, true);
       if (intersects.length > 0) {
         const hit = intersects[0].object;
-        // Walk up to find ancestor tagged with nodeId (set by nodes like ImportModel/Geometry)
         let tagged = hit;
         while (tagged && tagged.userData?.nodeId == null && tagged.parent) {
           tagged = tagged.parent;
@@ -455,6 +469,12 @@ export function Viewport() {
           bs.moved = true;
           updateBoxSelectOverlay(bs.startX, bs.startY, e.clientX, e.clientY);
         }
+      } else if (meshEditorRef.current && useEditor.getState().editMode !== "object") {
+        // Edit mode hover — highlight face/vertex/edge under cursor
+        const ndc = getMouseNDC(e);
+        const ray = new THREE.Raycaster();
+        ray.setFromCamera(new THREE.Vector2(ndc.x, ndc.y), camera);
+        meshEditorRef.current.onHover(ray);
       }
     };
 
@@ -1422,6 +1442,40 @@ return {
         >
           Mirror Z
         </button>
+        {/* Separator */}
+        <div className="w-px h-4 bg-zinc-700 mx-1" />
+        {/* Edit mode: Object / Face / Vertex / Edge */}
+        {["object", "face", "vertex", "edge"].map((m) => (
+          <button
+            key={m}
+            onClick={() => {
+              setEditMode(m);
+              useEditor.getState().setEditMode(m);
+              // Setup mesh editor with selected mesh
+              if (meshEditorRef.current) {
+                if (m === "object") {
+                  meshEditorRef.current.setMode("object", null);
+                } else {
+                  const selId = useEditor.getState().selectedObjectId;
+                  let mesh = null;
+                  if (selId) {
+                    userGroup.traverse((o) => {
+                      if (!mesh && o.isMesh && (String(o.userData?.nodeId) === String(selId) || o.uuid === selId)) mesh = o;
+                    });
+                  }
+                  meshEditorRef.current.setMode(m, mesh);
+                }
+              }
+            }}
+            className={`px-2 h-[22px] text-[10px] font-medium rounded border transition-colors capitalize ${
+              editMode === m
+                ? "bg-cyan-500 text-black border-cyan-400"
+                : "bg-black/40 text-zinc-400 border-zinc-700/50 hover:text-zinc-200"
+            }`}
+          >
+            {m}
+          </button>
+        ))}
         {/* Separator */}
         <div className="w-px h-4 bg-zinc-700 mx-1" />
         {/* Snap toggle */}

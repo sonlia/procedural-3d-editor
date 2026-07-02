@@ -24,6 +24,12 @@ export const useEditor = create((set, get) => ({
   // Single selected object (for backward compat / properties panel)
   selectedObjectId: null,
   setSelectedObjectId: (id) => set({ selectedObjectId: id }),
+  // Edit mode: 'object' | 'face' | 'vertex' | 'edge'
+  editMode: "object",
+  setEditMode: (m) => set({ editMode: m }),
+  // Selected elements (vertex/edge/face indices)
+  selectedElements: [],
+  setSelectedElements: (els) => set({ selectedElements: els }),
   // Isolate mode: only show selected objects, hide/dim others
   isolateMode: false,
   setIsolateMode: (v) => set({ isolateMode: v }),
