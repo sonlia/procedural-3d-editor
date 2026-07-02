@@ -207,9 +207,12 @@ export function Viewport() {
     tc.setSize(0.8);
     tc.addEventListener("dragging-changed", (e) => {
       gizmoDraggingRef.current = e.value;
-      // Hide wireframe overlays during drag (they don't follow the group)
       if (selectionOverlaysRef.current) {
         selectionOverlaysRef.current.visible = !e.value;
+      }
+      // When gizmo is released, force selection overlay rebuild with new positions
+      if (!e.value) {
+        lastSelIdsRef.current = null; // force selChanged=true on next frame
       }
     });
 
