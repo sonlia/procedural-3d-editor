@@ -1458,8 +1458,8 @@ return {
                 } else {
                   const selId = useEditor.getState().selectedObjectId;
                   let mesh = null;
-                  if (selId) {
-                    userGroup.traverse((o) => {
+                  if (selId && window._viewportUserGroup) {
+                    window._viewportUserGroup.traverse((o) => {
                       if (!mesh && o.isMesh && (String(o.userData?.nodeId) === String(selId) || o.uuid === selId)) mesh = o;
                     });
                   }
