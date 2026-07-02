@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
+import { Snapper, flipNormals, mirrorGeometry } from "@/lib/editor/snapping.js";
 // All Three.js model loaders (one per format in MODEL_FORMATS)
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
@@ -37,7 +38,9 @@ export function Viewport() {
   const containerRef = useRef(null);
   const [stats, setStats] = useState({ fps: 0, triangles: 0, drawCalls: 0 });
   const [boxSelectRect, setBoxSelectRect] = useState({ visible: false });
-  const [uiState, setUiState] = useState({ dropdown: null }); // 'display' | 'camera' | null
+  const [uiState, setUiState] = useState({ dropdown: null });
+  const [snapEnabled, setSnapEnabled] = useState(false);
+  const [activeTool, setActiveTool] = useState("select"); // select|move|rotate|scale
 
   const displayMode = useEditor((s) => s.displayMode);
   const gizmoMode = useEditor((s) => s.gizmoMode);
@@ -61,6 +64,7 @@ export function Viewport() {
   const clockRef = useRef(null);
   const defaultLightRef = useRef(null); // auto-managed default lights
   const axesGizmoRef = useRef(null); // corner axes gizmo preview
+  const snapperRef = useRef(null); // vertex snapping helper
   const boxSelectStateRef = useRef({ active: false, startX: 0, startY: 0, shift: false });
   const loadersRef = useRef({});
   const navRef = useRef({
@@ -130,6 +134,9 @@ export function Viewport() {
     axesCam.position.set(0, 0, 5);
     axesScene.add(new THREE.AxesHelper(1));
     axesGizmoRef.current = { scene: axesScene, camera: axesCam };
+
+    // ---- snapper ----
+    snapperRef.current = new Snapper();
 
     const defaultDirLight = new THREE.DirectionalLight(0xffffff, 1.0);
     defaultDirLight.position.set(5, 8, 4);
@@ -210,9 +217,33 @@ export function Viewport() {
       if (selectionOverlaysRef.current) {
         selectionOverlaysRef.current.visible = !e.value;
       }
-      // When gizmo is released, force selection overlay rebuild with new positions
       if (!e.value) {
-        lastSelIdsRef.current = null; // force selChanged=true on next frame
+        lastSelIdsRef.current = null;
+        // Clear snap indicator on release
+        if (snapperRef.current) snapperRef.current.updateIndicator(scene, null);
+      }
+    });
+    // Snapping during drag: check if object is near a vertex
+    tc.addEventListener("objectChange", () => {
+      if (!snapperRef.current || !snapperRef.current.enabled) return;
+      const obj = tc.object;
+      if (!obj) return;
+      // Get object world position
+      const worldPos = new THREE.Vector3();
+      obj.getWorldPosition(worldPos);
+      // Collect vertices from other objects
+      const verts = snapperRef.current.collectVertices(userGroup, obj);
+      const snapPoint = snapperRef.current.findNearest(worldPos, verts);
+      if (snapPoint) {
+        // Snap: move object to the snap point
+        if (obj.parent) {
+          const localSnap = snapPoint.clone();
+          obj.parent.worldToLocal(localSnap);
+          obj.position.copy(localSnap);
+        }
+        snapperRef.current.updateIndicator(scene, snapPoint);
+      } else {
+        snapperRef.current.updateIndicator(scene, null);
       }
     });
 
@@ -614,7 +645,21 @@ export function Viewport() {
         return;
       }
       const store = useEditor.getState();
-      if (e.key === "f" || e.key === "F") frameSelected();
+      if (e.key === "f" || e.key === "F") {
+        // F = flip normals of selected object (if it has geometry)
+        const selId = store.selectedObjectId;
+        if (selId) {
+          let mesh = null;
+          userGroup.traverse((o) => {
+            if (!mesh && o.isMesh && (String(o.userData?.nodeId) === String(selId) || o.uuid === selId)) mesh = o;
+          });
+          if (mesh && mesh.geometry) {
+            flipNormals(mesh.geometry);
+            mesh.geometry.computeVertexNormals();
+            store.bumpVersion();
+          }
+        }
+      }
       else if (e.key === "a" || e.key === "A") frameAll();
       else if (e.key === "w" || e.key === "W") store.setGizmoMode("translate");
       else if (e.key === "e" || e.key === "E") store.setGizmoMode("rotate");
@@ -1287,15 +1332,126 @@ return {
       ref={containerRef}
       className="relative w-full h-full overflow-hidden bg-[#0a0a0a]"
     >
-      {/* Top-left: stats */}
-      <div className="absolute top-2 left-2 z-10 bg-black/60 backdrop-blur-sm rounded px-2 py-1 text-[11px] font-mono text-zinc-300 pointer-events-none border border-zinc-700/50">
+      {/* Tool tab bar (30px high, top of viewport) */}
+      <div className="absolute top-0 left-0 right-0 h-[30px] z-10 flex items-center gap-1 px-2 bg-zinc-950/80 border-b border-zinc-800">
+        {/* Edit button */}
+        <button
+          onClick={() => {
+            const st = useEditor.getState();
+            if (st.selectedObjectId) {
+              let mesh = null;
+              window._viewportUserGroup?.traverse((o) => {
+                if (!mesh && o.isMesh && (String(o.userData?.nodeId) === String(st.selectedObjectId) || o.uuid === st.selectedObjectId)) mesh = o;
+              });
+              if (mesh && mesh.geometry) {
+                flipNormals(mesh.geometry);
+                st.bumpVersion();
+              }
+            }
+          }}
+          className="px-2 h-[22px] text-[10px] font-medium rounded border border-zinc-700/50 bg-black/40 text-zinc-400 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
+          title="Edit: flip normals"
+        >
+          Edit
+        </button>
+        {/* Flip normals */}
+        <button
+          onClick={() => {
+            const st = useEditor.getState();
+            if (st.selectedObjectId) {
+              let mesh = null;
+              window._viewportUserGroup?.traverse((o) => {
+                if (!mesh && o.isMesh && (String(o.userData?.nodeId) === String(st.selectedObjectId) || o.uuid === st.selectedObjectId)) mesh = o;
+              });
+              if (mesh && mesh.geometry) { flipNormals(mesh.geometry); st.bumpVersion(); }
+            }
+          }}
+          className="px-2 h-[22px] text-[10px] font-medium rounded border border-zinc-700/50 bg-black/40 text-zinc-400 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
+          title="Flip face normals (F)"
+        >
+          Flip
+        </button>
+        {/* Mirror X */}
+        <button
+          onClick={() => {
+            const st = useEditor.getState();
+            if (st.selectedObjectId) {
+              let mesh = null;
+              window._viewportUserGroup?.traverse((o) => {
+                if (!mesh && o.isMesh && (String(o.userData?.nodeId) === String(st.selectedObjectId) || o.uuid === st.selectedObjectId)) mesh = o;
+              });
+              if (mesh && mesh.geometry) { mirrorGeometry(mesh.geometry, "x"); st.bumpVersion(); }
+            }
+          }}
+          className="px-2 h-[22px] text-[10px] font-medium rounded border border-zinc-700/50 bg-black/40 text-zinc-400 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
+          title="Mirror X"
+        >
+          Mirror X
+        </button>
+        {/* Mirror Y */}
+        <button
+          onClick={() => {
+            const st = useEditor.getState();
+            if (st.selectedObjectId) {
+              let mesh = null;
+              window._viewportUserGroup?.traverse((o) => {
+                if (!mesh && o.isMesh && (String(o.userData?.nodeId) === String(st.selectedObjectId) || o.uuid === st.selectedObjectId)) mesh = o;
+              });
+              if (mesh && mesh.geometry) { mirrorGeometry(mesh.geometry, "y"); st.bumpVersion(); }
+            }
+          }}
+          className="px-2 h-[22px] text-[10px] font-medium rounded border border-zinc-700/50 bg-black/40 text-zinc-400 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
+          title="Mirror Y"
+        >
+          Mirror Y
+        </button>
+        {/* Mirror Z */}
+        <button
+          onClick={() => {
+            const st = useEditor.getState();
+            if (st.selectedObjectId) {
+              let mesh = null;
+              window._viewportUserGroup?.traverse((o) => {
+                if (!mesh && o.isMesh && (String(o.userData?.nodeId) === String(st.selectedObjectId) || o.uuid === st.selectedObjectId)) mesh = o;
+              });
+              if (mesh && mesh.geometry) { mirrorGeometry(mesh.geometry, "z"); st.bumpVersion(); }
+            }
+          }}
+          className="px-2 h-[22px] text-[10px] font-medium rounded border border-zinc-700/50 bg-black/40 text-zinc-400 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
+          title="Mirror Z"
+        >
+          Mirror Z
+        </button>
+        {/* Separator */}
+        <div className="w-px h-4 bg-zinc-700 mx-1" />
+        {/* Snap toggle */}
+        <button
+          onClick={() => {
+            const newVal = !snapEnabled;
+            setSnapEnabled(newVal);
+            if (snapperRef.current) snapperRef.current.enabled = newVal;
+          }}
+          className={`px-2 h-[22px] text-[10px] font-medium rounded border transition-colors ${
+            snapEnabled
+              ? "bg-cyan-500 text-black border-cyan-400"
+              : "bg-black/40 text-zinc-400 border-zinc-700/50 hover:text-zinc-200"
+          }`}
+          title="Toggle vertex snapping"
+        >
+          Snap
+        </button>
+        <div className="flex-1" />
+      </div>
+
+      {/* Top-left: stats (offset down by 30px for tool bar) */}
+      <div className="absolute top-8 left-2 z-10 bg-black/60 backdrop-blur-sm rounded px-2 py-1 text-[11px] font-mono text-zinc-300 pointer-events-none border border-zinc-700/50">
         <div>FPS: {stats.fps}</div>
         <div>Tris: {stats.triangles.toLocaleString()}</div>
         <div>Calls: {stats.drawCalls}</div>
       </div>
 
-      {/* Top-right: UI controls (HTML, same approach as stats) */}
-      <div className="absolute top-2 right-2 z-10 flex items-center gap-1.5">
+      {/* Top-right: UI controls (offset down by 30px for tool bar) */}
+      <div className="absolute top-8 right-2 z-10 flex items-center gap-1.5">
         {/* Isolate toggle */}
         <button
           onClick={() => useEditor.getState().setIsolateMode(!isolateMode)}
