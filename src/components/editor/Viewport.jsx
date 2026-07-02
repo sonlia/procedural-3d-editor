@@ -41,11 +41,6 @@ export function Viewport() {
   const displayMode = useEditor((s) => s.displayMode);
   const gizmoMode = useEditor((s) => s.gizmoMode);
   const displayFlags = useEditor((s) => s.displayFlags);
-  const isolateMode = useEditor((s) => s.isolateMode);
-  const setIsolateMode = useEditor((s) => s.setIsolateMode);
-  const activeCameraId = useEditor((s) => s.activeCameraId);
-  const setActiveCameraId = useEditor((s) => s.setActiveCameraId);
-  const version = useEditor((s) => s.version);
 
   const rendererRef = useRef(null);
   const sceneRef = useRef(null);
@@ -62,6 +57,7 @@ export function Viewport() {
   const clockRef = useRef(null);
   const defaultLightRef = useRef(null); // auto-managed default lights
   const axesGizmoRef = useRef(null); // corner axes gizmo preview
+  const uiOverlayRef = useRef(null); // Three.js UI overlay (Isolate/Display/Camera)
   const boxSelectStateRef = useRef({ active: false, startX: 0, startY: 0, shift: false });
   const loadersRef = useRef({});
   const navRef = useRef({
@@ -131,6 +127,32 @@ export function Viewport() {
     axesCam.position.set(0, 0, 5);
     axesScene.add(new THREE.AxesHelper(1));
     axesGizmoRef.current = { scene: axesScene, camera: axesCam };
+
+    // ---- Three.js UI overlay (Isolate / Display / Camera) ----
+    // Drawn on a 2D canvas, used as CanvasTexture on a plane,
+    // rendered via OrthographicCamera in the top-right corner.
+    const uiCanvas = document.createElement("canvas");
+    uiCanvas.width = 300;
+    uiCanvas.height = 40;
+    const uiCtx = uiCanvas.getContext("2d");
+    const uiTex = new THREE.CanvasTexture(uiCanvas);
+    uiTex.minFilter = THREE.LinearFilter;
+    uiTex.magFilter = THREE.LinearFilter;
+    const uiMat = new THREE.MeshBasicMaterial({ map: uiTex, transparent: true, depthTest: false });
+    const uiGeo = new THREE.PlaneGeometry(1, 1);
+    const uiMesh = new THREE.Mesh(uiGeo, uiMat);
+    uiMesh.renderOrder = 2000;
+    const uiScene = new THREE.Scene();
+    uiScene.add(uiMesh);
+    const uiCam = new THREE.OrthographicCamera(0, 300, 0, 40, -1, 1);
+    uiCam.position.z = 1;
+    // UI element layout (x, y, w, h in canvas pixels, y=0 is top)
+    const uiElements = [
+      { name: "isolate", x: 226, y: 8, w: 68, h: 24 },
+      { name: "display", x: 148, y: 8, w: 68, h: 24 },
+      { name: "camera", x: 6, y: 8, w: 132, h: 24 },
+    ];
+    uiOverlayRef.current = { canvas: uiCanvas, ctx: uiCtx, texture: uiTex, scene: uiScene, camera: uiCam, elements: uiElements };
     const defaultDirLight = new THREE.DirectionalLight(0xffffff, 1.0);
     defaultDirLight.position.set(5, 8, 4);
     defaultDirLight.userData.__isDefault = true;
@@ -307,6 +329,13 @@ export function Viewport() {
     };
 
     const onPointerDown = (e) => {
+      // Check if clicking on UI overlay first
+      const uiHit = hitTestUI(e.clientX, e.clientY);
+      if (uiHit) {
+        handleUIClick(uiHit);
+        e.preventDefault();
+        return;
+      }
       if (gizmoDraggingRef.current || tc.axis !== null) return;
       if (e.button === 0 && e.altKey) {
         // Alt + 左键 = 旋转
@@ -757,6 +786,112 @@ export function Viewport() {
       }
     };
 
+    // ---- Three.js UI overlay drawing + click handling ----
+    const displayModes = ["solid", "wireframe", "points", "xray", "normals"];
+    const displayLabels = { solid: "Solid", wireframe: "Wire", points: "Points", xray: "X-Ray", normals: "Normals" };
+
+    const drawUI = () => {
+      const ov = uiOverlayRef.current;
+      if (!ov) return;
+      const ctx = ov.ctx;
+      const st = useEditor.getState();
+      ctx.clearRect(0, 0, 300, 40);
+
+      for (const el of ov.elements) {
+        const active = (el.name === "isolate" && st.isolateMode);
+        // Background
+        ctx.fillStyle = active ? "rgba(34,211,238,0.9)" : "rgba(0,0,0,0.6)";
+        ctx.strokeStyle = active ? "#22d3ee" : "#3f3f46";
+        ctx.lineWidth = 1;
+        roundRect(ctx, el.x, el.y, el.w, el.h, 4);
+        ctx.fill();
+        ctx.stroke();
+        // Text
+        ctx.fillStyle = active ? "#000" : "#a1a1aa";
+        ctx.font = "10px Tahoma, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        let label = "";
+        if (el.name === "isolate") label = "Isolate";
+        else if (el.name === "display") label = displayLabels[st.displayMode] || st.displayMode;
+        else if (el.name === "camera") {
+          if (st.activeCameraId === "default" || !st.activeCameraId) label = "Default Cam";
+          else label = "Graph Cam";
+        }
+        ctx.fillText(label, el.x + el.w / 2, el.y + el.h / 2);
+      }
+      ov.texture.needsUpdate = true;
+    };
+
+    const hitTestUI = (clientX, clientY) => {
+      const ov = uiOverlayRef.current;
+      if (!ov) return null;
+      const rect = dom.getBoundingClientRect();
+      // UI canvas is 300px wide, anchored to top-right of viewport
+      const uiLeft = rect.right - 300;
+      const uiTop = rect.top;
+      const px = clientX - uiLeft;
+      const py = clientY - uiTop;
+      for (const el of ov.elements) {
+        if (px >= el.x && px <= el.x + el.w && py >= el.y && py <= el.y + el.h) {
+          return el.name;
+        }
+      }
+      return null;
+    };
+
+    const handleUIClick = (name) => {
+      const st = useEditor.getState();
+      if (name === "isolate") {
+        st.setIsolateMode(!st.isolateMode);
+      } else if (name === "display") {
+        const idx = displayModes.indexOf(st.displayMode);
+        const next = displayModes[(idx + 1) % displayModes.length];
+        st.setDisplayMode(next);
+      } else if (name === "camera") {
+        // Cycle: default → graph cameras → default
+        const graph = st.graph;
+        const camNodes = [];
+        if (graph) {
+          const nodes = graph._nodes || graph.nodes || [];
+          for (const n of nodes) {
+            if (n.type && n.type.includes("camera")) camNodes.push(n);
+            if (n.subgraph) {
+              const inner = n.subgraph._nodes || n.subgraph.nodes || [];
+              for (const innerN of inner) {
+                if (innerN.type && innerN.type.includes("camera")) camNodes.push(innerN);
+              }
+            }
+          }
+        }
+        if (st.activeCameraId === "default" || !st.activeCameraId) {
+          if (camNodes.length > 0) st.setActiveCameraId(camNodes[0].id);
+        } else {
+          const idx = camNodes.findIndex((c) => String(c.id) === String(st.activeCameraId));
+          if (idx >= 0 && idx < camNodes.length - 1) {
+            st.setActiveCameraId(camNodes[idx + 1].id);
+          } else {
+            st.setActiveCameraId("default");
+          }
+        }
+      }
+    };
+
+    // Helper: rounded rectangle
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
     const animate = () => {
       rafRef.current = requestAnimationFrame(animate);
       const clock = clockRef.current;
@@ -1161,17 +1296,18 @@ return {
         lastFpsTime = now;
       }
 
-      // ---- corner axes gizmo (render in bottom-left 80x80px area) ----
+      // ---- corner axes gizmo + UI overlay ----
+      const dpr = window.devicePixelRatio || 1;
+      const w = renderer.domElement.width;
+      const h = renderer.domElement.height;
+
+      // Corner axes gizmo (bottom-left 80x80px)
       if (axesGizmoRef.current) {
         const ag = axesGizmoRef.current;
         ag.camera.position.copy(camera.position).sub(nav.target).normalize().multiplyScalar(5);
         ag.camera.lookAt(0, 0, 0);
         ag.camera.up.copy(camera.up);
-        const w = renderer.domElement.width;
-        const h = renderer.domElement.height;
-        const dpr = window.devicePixelRatio || 1;
         const size = 80 * dpr;
-        // Don't clear the main scene's framebuffer — render on top
         renderer.autoClear = false;
         renderer.setScissorTest(true);
         renderer.setScissor(4 * dpr, 4 * dpr, size, size);
@@ -1179,6 +1315,25 @@ return {
         ag.camera.aspect = 1;
         ag.camera.updateProjectionMatrix();
         renderer.render(ag.scene, ag.camera);
+        renderer.setScissorTest(false);
+        renderer.setViewport(0, 0, w, h);
+        renderer.autoClear = true;
+      }
+
+      // Three.js UI overlay (top-right: Isolate/Display/Camera)
+      drawUI();
+      if (uiOverlayRef.current) {
+        const ov = uiOverlayRef.current;
+        const rect = dom.getBoundingClientRect();
+        const uiW = 300 * dpr;
+        const uiH = 40 * dpr;
+        const uiX = (rect.width - 300) * dpr;
+        const uiY = (rect.height - 40) * dpr;
+        renderer.autoClear = false;
+        renderer.setScissorTest(true);
+        renderer.setScissor(uiX, uiY, uiW, uiH);
+        renderer.setViewport(uiX, uiY, uiW, uiH);
+        renderer.render(ov.scene, ov.camera);
         renderer.setScissorTest(false);
         renderer.setViewport(0, 0, w, h);
         renderer.autoClear = true;
@@ -1230,43 +1385,6 @@ return {
         <div>Calls: {stats.drawCalls}</div>
       </div>
 
-      {/* Top-right: Display mode + Camera + Isolate */}
-      <div className="absolute top-2 right-2 z-10 flex flex-col items-end gap-1.5">
-        <div className="flex items-center gap-1.5">
-          {/* Isolate toggle */}
-          <button
-            onClick={() => setIsolateMode(!isolateMode)}
-            className={`px-2 py-1 text-[10px] font-medium rounded border transition-colors ${
-              isolateMode
-                ? "bg-cyan-500 text-black border-cyan-400"
-                : "bg-black/60 text-zinc-400 border-zinc-700/50 hover:text-zinc-200"
-            }`}
-            title="Isolate selected (dim others)"
-          >
-            Isolate
-          </button>
-          {/* Display mode dropdown */}
-          <select
-            value={displayMode}
-            onChange={(e) => useEditor.getState().setDisplayMode(e.target.value)}
-            className="h-7 bg-black/60 backdrop-blur-sm border border-zinc-700/50 rounded px-1.5 text-[10px] text-zinc-200 cursor-pointer"
-            title="Display mode"
-          >
-            <option value="solid">Solid</option>
-            <option value="wireframe">Wireframe</option>
-            <option value="points">Points</option>
-            <option value="xray">X-Ray</option>
-            <option value="normals">Normals</option>
-          </select>
-          {/* Camera selector */}
-          <CameraSelector
-            activeCameraId={activeCameraId}
-            setActiveCameraId={setActiveCameraId}
-            version={version}
-          />
-        </div>
-      </div>
-
       {/* Bottom-left: help text */}
       <div className="absolute bottom-2 left-2 z-10 bg-black/60 backdrop-blur-sm rounded px-2 py-1 text-[10px] font-mono text-zinc-400 pointer-events-none border border-zinc-700/50">
         LMB: select · Alt+LMB: orbit · Alt+RMB: pan · MMB: pan · Wheel: dolly · F: frame · A: frame all · W/E/R: gizmo · Space: play
@@ -1288,40 +1406,6 @@ return {
   );
 }
 
-// Camera selector — lists all Camera nodes in the graph + a "Default" option.
-function CameraSelector({ activeCameraId, setActiveCameraId, version }) {
-  void version;
-  const graph = useEditor((s) => s.graph);
-  const nodes = graph?.nodes ?? graph?._nodes ?? [];
-  // Also look inside subgraphs for camera nodes
-  const cameraNodes = [];
-  for (const n of nodes) {
-    if (n.type?.includes("camera")) cameraNodes.push(n);
-    if (n.subgraph) {
-      const inner = n.subgraph.nodes ?? n.subgraph._nodes ?? [];
-      for (const innerN of inner) {
-        if (innerN.type?.includes("camera")) {
-          cameraNodes.push({ ...innerN, _label: `${n.title} / ${innerN.title || innerN.type}` });
-        }
-      }
-    }
-  }
-  return (
-    <select
-      value={activeCameraId}
-      onChange={(e) => setActiveCameraId(e.target.value)}
-      className="h-7 bg-black/60 backdrop-blur-sm border border-zinc-700/50 rounded px-1.5 text-[10px] text-zinc-200 cursor-pointer"
-      title="Active camera"
-    >
-      <option value="default">Default Camera</option>
-      {cameraNodes.map((c) => (
-        <option key={c.id} value={c.id}>
-          {c._label || c.title || c.type?.split("/").pop()}
-        </option>
-      ))}
-    </select>
-  );
-}
 
 // Apply display mode (solid/wireframe/points/xray/normals) to all meshes in obj.
 function applyDisplayMode(obj, mode) {
